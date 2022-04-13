@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>SampleBlog.IdentityServer</RootNamespace>
+    <AssemblyName>SampleBlog.IdentityServer</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\Events\" />
+    <Folder Include="DependencyInjection\Extensions\" />
+    <Folder Include="Endpoints\Results\" />
+    <Folder Include="EntityFramework\" />
+    <Folder Include="Hosting\FederatedSignOut\" />
+    <Folder Include="Validation\Contexts\" />
+    <Folder Include="Validation\Results\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="IdentityModel" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="6.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SampleBlog.IdentityServer.Storage\IdentityServer.Storage.csproj" />
+  </ItemGroup>
+
+</Project>

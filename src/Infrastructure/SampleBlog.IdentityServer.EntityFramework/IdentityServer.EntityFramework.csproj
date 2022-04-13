@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<RootNamespace>SampleBlog.IdentityServer.EntityFramework</RootNamespace>
+	<AssemptyName>SampleBlog.IdentityServer.EntityFramework</AssemptyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SampleBlog.IdentityServer.EntityFramework.Storage\IdentityServer.EntityFramework.Storage.csproj" />
+    <ProjectReference Include="..\SampleBlog.IdentityServer\IdentityServer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Entities\" />
+  </ItemGroup>
+
+</Project>

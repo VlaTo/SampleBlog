@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<RootNamespace>SampleBlog.IdentityServer.EntityFramework.Storage</RootNamespace>
+	<AssemblyName>SampleBlog.IdentityServer.EntityFramework.Storage</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SampleBlog.IdentityServer.Storage\IdentityServer.Storage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Options\" />
+    <Folder Include="DbContexts\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="Stores\" />
+  </ItemGroup>
+
+</Project>

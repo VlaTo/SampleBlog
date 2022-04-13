@@ -1,0 +1,17 @@
+﻿@page "/blog"
+@using SampleBlog.Web.Client.Services
+@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+@inject BlogClient BlogClient
+
+<h3>Blog</h3>
+<PageTitle>Blog</PageTitle>
+
+<MudIconButton ButtonType=@ButtonType.Button Icon=@Icons.Material.Filled.DataObject OnClick=OnButtonClick>Execute</MudIconButton>
+@code {
+
+    private async void OnButtonClick(MouseEventArgs e)
+    {
+        await BlogClient.GetBlogAsync("101");
+    }
+
+}

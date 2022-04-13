@@ -1,0 +1,169 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SampleBlog.IdentityServer.EntityFramework.Storage.DbContexts;
+using SampleBlog.IdentityServer.EntityFramework.Storage.Options;
+
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Extensions;
+
+public static class ServiceCollectionExtensions
+{
+    /// <summary>
+    /// Add Configuration DbContext to the DI system.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="storeOptionsAction">The store options action.</param>
+    /// <returns></returns>
+    public static IServiceCollection AddConfigurationDbContext(
+        this IServiceCollection services,
+        Action<ConfigurationStoreOptions>? storeOptionsAction = null)
+    {
+        return services.AddConfigurationDbContext<ConfigurationDbContext>(storeOptionsAction);
+    }
+
+    /// <summary>
+    /// Add Configuration DbContext to the DI system.
+    /// </summary>
+    /// <typeparam name="TContext">The IConfigurationDbContext to use.</typeparam>
+    /// <param name="services"></param>
+    /// <param name="storeOptionsAction">The store options action.</param>
+    /// <returns></returns>
+    public static IServiceCollection AddConfigurationDbContext<TContext>(
+        this IServiceCollection services,
+        Action<ConfigurationStoreOptions>? storeOptionsAction = null)
+        where TContext : DbContext, IConfigurationDbContext
+    {
+        var options = new ConfigurationStoreOptions();
+
+        services.AddSingleton(options);
+        storeOptionsAction?.Invoke(options);
+
+        if (null != options.ResolveDbContextOptions)
+        {
+            if (options.EnablePooling)
+            {
+                if (options.PoolSize.HasValue)
+                {
+                    services.AddDbContextPool<TContext>(options.ResolveDbContextOptions, options.PoolSize.Value);
+                }
+                else
+                {
+                    services.AddDbContextPool<TContext>(options.ResolveDbContextOptions);
+                }
+            }
+            else
+            {
+                services.AddDbContext<TContext>(options.ResolveDbContextOptions);
+            }
+        }
+        else
+        {
+            if (options.EnablePooling)
+            {
+                if (options.PoolSize.HasValue)
+                {
+                    services.AddDbContextPool<TContext>(
+                        dbCtxBuilder => options.ConfigureDbContext?.Invoke(dbCtxBuilder),
+                        options.PoolSize.Value
+                    );
+                }
+                else
+                {
+                    services.AddDbContextPool<TContext>(
+                        dbCtxBuilder => options.ConfigureDbContext?.Invoke(dbCtxBuilder)
+                    );
+                }
+            }
+            else
+            {
+                services.AddDbContext<TContext>(dbCtxBuilder =>
+                {
+                    options.ConfigureDbContext?.Invoke(dbCtxBuilder);
+                });
+            }
+        }
+
+        services.AddScoped<IConfigurationDbContext, TContext>();
+
+        return services;
+    }
+
+    /// <summary>
+    /// Adds operational DbContext to the DI system.
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="storeOptionsAction">The store options action.</param>
+    /// <returns></returns>
+    public static IServiceCollection AddOperationalDbContext(
+        this IServiceCollection services,
+        Action<OperationalStoreOptions>? storeOptionsAction = null)
+    {
+        return services.AddOperationalDbContext<PersistedGrantDbContext>(storeOptionsAction);
+    }
+
+    /// <summary>
+    /// Adds operational DbContext to the DI system.
+    /// </summary>
+    /// <typeparam name="TContext">The IPersistedGrantDbContext to use.</typeparam>
+    /// <param name="services"></param>
+    /// <param name="storeOptionsAction">The store options action.</param>
+    /// <returns></returns>
+    public static IServiceCollection AddOperationalDbContext<TContext>(
+        this IServiceCollection services,
+        Action<OperationalStoreOptions>? storeOptionsAction = null)
+        where TContext : DbContext, IPersistedGrantDbContext
+    {
+        var storeOptions = new OperationalStoreOptions();
+
+        services.AddSingleton(storeOptions);
+        storeOptionsAction?.Invoke(storeOptions);
+
+        if (null != storeOptions.ResolveDbContextOptions)
+        {
+            if (storeOptions.EnablePooling)
+            {
+                if (storeOptions.PoolSize.HasValue)
+                {
+                    services.AddDbContextPool<TContext>(storeOptions.ResolveDbContextOptions,
+                        storeOptions.PoolSize.Value);
+                }
+                else
+                {
+                    services.AddDbContextPool<TContext>(storeOptions.ResolveDbContextOptions);
+                }
+            }
+            else
+            {
+                services.AddDbContext<TContext>(storeOptions.ResolveDbContextOptions);
+            }
+        }
+        else
+        {
+            if (storeOptions.EnablePooling)
+            {
+                if (storeOptions.PoolSize.HasValue)
+                {
+                    services.AddDbContextPool<TContext>(
+                        dbCtxBuilder => { storeOptions.ConfigureDbContext?.Invoke(dbCtxBuilder); },
+                        storeOptions.PoolSize.Value);
+                }
+                else
+                {
+                    services.AddDbContextPool<TContext>(
+                        dbCtxBuilder => { storeOptions.ConfigureDbContext?.Invoke(dbCtxBuilder); });
+                }
+            }
+            else
+            {
+                services.AddDbContext<TContext>(dbCtxBuilder =>
+                {
+                    storeOptions.ConfigureDbContext?.Invoke(dbCtxBuilder);
+                });
+            }
+        }
+
+        services.AddScoped<IPersistedGrantDbContext, TContext>();
+        services.AddTransient<TokenCleanupService>();
+
+        return services;
+    }
+}

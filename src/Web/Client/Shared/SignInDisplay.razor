@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+
+<AuthorizeView>
+    <Authorizing>
+        <MudLink Typo="Typo.caption" Color=@Color.Info>authorizing...</MudLink>
+    </Authorizing>
+    <Authorized>
+        <MudLink Typo="Typo.caption" Color=@Color.Info>Hello, @(context.User.Identity?.Name ?? "(no name)")!</MudLink>
+        <MudButton Variant=@Variant.Text Size=@Size.Small ButtonType=@ButtonType.Button Color=@Color.Info StartIcon=@Icons.Material.Outlined.Logout OnClick=BeginSignOut>Log out</MudButton>
+    </Authorized>
+    <NotAuthorized>
+        <a href="authentication/register">Register</a>
+        <a href="authentication/login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>

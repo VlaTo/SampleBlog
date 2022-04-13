@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MessageBroker": {
+      "commandName": "Project",
+      "commandLineArgs": "--environment=Development"
+    }
+  }
+}
