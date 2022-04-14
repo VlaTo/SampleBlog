@@ -39,7 +39,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.EntityFramew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.EntityFramework.Storage", "src\Infrastructure\SampleBlog.IdentityServer.EntityFramework.Storage\IdentityServer.EntityFramework.Storage.csproj", "{BAEC7E82-E4FF-4813-B184-181F176A0BCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer.Core", "src\Infrastructure\SampleBlog.IdentityServer.Core\IdentityServer.Core.csproj", "{42098077-A35D-4919-8EC9-413381FA134C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer.Core", "src\Infrastructure\SampleBlog.IdentityServer.Core\IdentityServer.Core.csproj", "{42098077-A35D-4919-8EC9-413381FA134C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1FF06988-A1D8-4328-A5BB-0B31BB9B4772}"
+	ProjectSection(SolutionItems) = preProject
+		sample-blog.png = sample-blog.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
