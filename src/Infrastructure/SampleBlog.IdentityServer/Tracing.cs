@@ -4,8 +4,8 @@ namespace SampleBlog.IdentityServer;
 
 internal static class Tracing
 {
-    //private static readonly Version? AssemblyVersion = typeof(Tracing).Assembly.GetName().Version;
-    //private static string ServiceVersion => $"{AssemblyVersion?.Major}.{AssemblyVersion?.Minor}.{AssemblyVersion?.Build}";
+    private static readonly Version? AssemblyVersion = typeof(Tracing).Assembly.GetName().Version;
+    private static string ServiceVersion => $"{AssemblyVersion?.Major}.{AssemblyVersion?.Minor}.{AssemblyVersion?.Build}";
 
     /// <summary>
     /// Base ActivitySource
@@ -50,7 +50,7 @@ internal static class Tracing
     static Tracing()
     {
         var assemblyVersion = typeof(Tracing).Assembly.GetName().Version;
-        var serviceVersion = assemblyVersion?.ToString(3) ?? ""; // $"{assemblyVersion?.Major}.{assemblyVersion?.Minor}.{assemblyVersion?.Build}";
+        var serviceVersion = assemblyVersion?.ToString(3) ?? $"{assemblyVersion?.Major}.{assemblyVersion?.Minor}.{assemblyVersion?.Build}";
 
         BasicActivitySource = new ActivitySource(TraceNames.Basic, serviceVersion);
         StoreActivitySource = new ActivitySource(TraceNames.Store, serviceVersion);
@@ -85,5 +85,23 @@ internal static class Tracing
         /// Service name for detailed validation traces
         /// </summary>
         public static string Validation => Basic + ".Validation";
+    }
+
+    public static class Properties
+    {
+        public const string EndpointType = "endpoint_type";
+
+        public const string ClientId = "client_id";
+        public const string GrantType = "grant_type";
+        public const string Scope = "scope";
+        public const string Resource = "resource";
+
+        public const string Origin = "origin";
+        public const string Scheme = "scheme";
+        public const string Type = "type";
+        public const string Id = "id";
+        public const string ScopeNames = "scope_names";
+        public const string ApiResourceNames = "api_resource_names";
+
     }
 }

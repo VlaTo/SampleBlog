@@ -2,5 +2,15 @@
 
 public sealed class TokenResponse
 {
-    
+    public string Token
+    {
+        init;
+        get;
+    }
+
+    public string RefreshToken
+    {
+        init;
+        get;
+    }
 }

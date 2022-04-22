@@ -57,11 +57,16 @@ public static class ApplicationBuilderExtensions
     internal static void Validate(this IApplicationBuilder app)
     {
         var loggerFactory = app.ApplicationServices.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
-        if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
+        if (null == loggerFactory)
+        {
+            throw new ArgumentNullException(nameof(loggerFactory));
+        }
 
         var logger = loggerFactory.CreateLogger("Duende.IdentityServer.Startup");
-        
-        logger.LogInformation("Starting Duende IdentityServer version {version} ({netversion})", typeof(IdentityServerMiddleware).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion, RuntimeInformation.FrameworkDescription);
+        var attribute = typeof(IdentityServerMiddleware).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+
+        logger.LogInformation("Starting Duende IdentityServer version {version} ({netversion})", attribute.InformationalVersion, RuntimeInformation.FrameworkDescription);
 
         var scopeFactory = app.ApplicationServices.GetService<IServiceScopeFactory>();
 
@@ -70,8 +75,13 @@ public static class ApplicationBuilderExtensions
             var serviceProvider = scope.ServiceProvider;
 
             var options = serviceProvider.GetRequiredService<IdentityServerOptions>();
-            var env = serviceProvider.GetRequiredService<IHostEnvironment>();
-            
+            var environment = serviceProvider.GetRequiredService<IHostEnvironment>();
+
+            if (environment.IsDevelopment())
+            {
+                ;
+            }
+
             //LicenseValidator.Initalize(loggerFactory, options, env.IsDevelopment());
             //LicenseValidator.ValidateLicense();
 
@@ -87,7 +97,6 @@ public static class ApplicationBuilderExtensions
             }*/
 
             ValidateOptions(options, logger);
-
             ValidateAsync(serviceProvider, logger).GetAwaiter().GetResult();
         }
     }
@@ -104,9 +113,9 @@ public static class ApplicationBuilderExtensions
         }
         else
         {
-            AuthenticationScheme authenticationScheme = null;
+            AuthenticationScheme? authenticationScheme = null;
 
-            if (options.Authentication.CookieAuthenticationScheme != null)
+            if (null != options.Authentication.CookieAuthenticationScheme)
             {
                 authenticationScheme = await schemes.GetSchemeAsync(options.Authentication.CookieAuthenticationScheme);
                 logger.LogInformation("Using explicitly configured authentication scheme {scheme} for IdentityServer", options.Authentication.CookieAuthenticationScheme);

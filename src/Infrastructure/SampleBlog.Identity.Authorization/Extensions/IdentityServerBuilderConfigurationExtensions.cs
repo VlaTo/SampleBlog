@@ -1,7 +1,6 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -15,6 +14,7 @@ using SampleBlog.IdentityServer.DependencyInjection.Extensions;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.EntityFramework.Extensions;
 using SampleBlog.IdentityServer.EntityFramework.Storage;
+using SampleBlog.IdentityServer.Hosting;
 using SampleBlog.IdentityServer.Storage.Models;
 using SampleBlog.IdentityServer.Validation;
 
@@ -286,6 +286,7 @@ namespace Microsoft.Extensions.DependencyInjection
             builder.Services.TryAddSingleton<IAbsoluteUrlFactory, AbsoluteUrlFactory>();
             builder.Services.AddSingleton<IRedirectUriValidator, RelativeRedirectUriValidator>();
             builder.Services.AddSingleton<IClientRequestParametersProvider, DefaultClientRequestParametersProvider>();
+            
             ReplaceEndSessionEndpoint(builder);
 
             return builder;
@@ -293,6 +294,10 @@ namespace Microsoft.Extensions.DependencyInjection
 
         private static void ReplaceEndSessionEndpoint(IIdentityServerBuilder builder)
         {
+            const string name = "Endsession";
+            const string path = "/connect/endsession";
+            var comparer = StringComparer.OrdinalIgnoreCase;
+
             // We don't have a better way to replace the end session endpoint as far as we know other than looking the descriptor up
             // on the container and replacing the instance. This is due to the fact that we chain on AddIdentityServer which configures the
             // list of endpoints by default.
@@ -300,8 +305,7 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 if (descriptor.ImplementationInstance is Endpoint endpoint)
                 {
-                    return String.Equals(endpoint.DisplayName, "Endsession", StringComparison.OrdinalIgnoreCase) &&
-                           String.Equals("/connect/endsession", endpoint.DisplayName, StringComparison.OrdinalIgnoreCase);
+                    return comparer.Equals(endpoint.Name, name) && comparer.Equals(endpoint.Path, path);
                 }
 
                 return false;
@@ -312,7 +316,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 ;
             }
 
-            builder.AddEndpoint<AutoRedirectEndSessionEndpoint>("EndSession", "/connect/endsession");
+            builder.AddEndpoint<AutoRedirectEndSessionEndpoint>(name, path);
         }
     }
 }

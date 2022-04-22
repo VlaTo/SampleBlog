@@ -5,10 +5,27 @@ namespace SampleBlog.Web.Server.Services;
 
 internal sealed class CurrentHttpUserProvider : ICurrentUserProvider
 {
-    public string? CurrentUserId { get; }
+    private readonly IHttpContextAccessor httpContextAccessor;
+    private bool fetched;
+    private string? currentUserId;
 
-    public CurrentHttpUserProvider(IHttpContextAccessor accessor)
+    public string? CurrentUserId
     {
-        CurrentUserId = accessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        get
+        {
+            if (false == fetched)
+            {
+                currentUserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                fetched = true;
+            }
+
+            return currentUserId;
+        }
+    }
+
+    public CurrentHttpUserProvider(IHttpContextAccessor httpContextAccessor)
+    {
+        this.httpContextAccessor = httpContextAccessor;
+        //CurrentUserId = httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

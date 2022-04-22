@@ -1,14 +1,58 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
-using SampleBlog.Core.Application.Models.Identity;
+﻿using SampleBlog.Core.Application.Models.Identity;
 
 namespace SampleBlog.Core.Application.Services;
 
+public record SignInResult
+{
+    private readonly SignStatus status;
+
+    public bool IsNotFound
+    {
+        init => status = value ? SignStatus.NotFound : SignStatus.Unknown;
+        get => SignStatus.NotFound == status;
+    }
+
+    public bool IsNotAllowed
+    {
+        init => status = value ? SignStatus.NotAllowed : SignStatus.Unknown;
+        get => SignStatus.NotAllowed == status;
+    }
+
+    public bool IsLockedOut
+    {
+        init => status = value ? SignStatus.LockedOut : SignStatus.Unknown;
+        get => SignStatus.LockedOut == status;
+    }
+
+    public bool IsSuccess
+    {
+        init => status = value ? SignStatus.Success : SignStatus.Unknown;
+        get => SignStatus.Success == status;
+    }
+
+    public BlogUser? User
+    {
+        init;
+        get;
+    }
+
+    public string? Token
+    {
+        init;
+        get;
+    }
+
+    private enum SignStatus
+    {
+        Unknown = -4,
+        NotFound,
+        NotAllowed,
+        LockedOut,
+        Success
+    }
+}
+
 public interface ISignInService
 {
-    Task<BlogUser?> FindUserAsync(string email);
-
-    Task<SignInResult> SignInAsync(BlogUser user, AuthenticationProperties? properties, string? authenticationMethod);
-
-    Task<SignInResult> ValidateCredentials(BlogUser user, string password);
+    Task<SignInResult> SignInAsync(string email, string password, bool rememberMe);
 }

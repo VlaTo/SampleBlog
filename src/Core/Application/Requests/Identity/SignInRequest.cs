@@ -1,24 +1,22 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace SampleBlog.Core.Application.Requests.Identity;
+﻿namespace SampleBlog.Core.Application.Requests.Identity;
 
 public class SignInRequest
 {
-    [Required]
-    [DataType(DataType.EmailAddress)]
     public string Email
     {
+        init;
         get;
-        set;
     }
 
-    [Required]
-    [PasswordPropertyText]
-    [DataType(DataType.Password)]
     public string Password
     {
+        init;
         get;
-        set;
+    }
+
+    public SignInRequest(string email, string password)
+    {
+        Email = email;
+        Password = password;
     }
 }

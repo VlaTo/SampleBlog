@@ -64,7 +64,12 @@ builder.Services.AddDbContext<BlogContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseSqlServer(connectionString);
 });
-builder.Services.AddControllers();
+//builder.Services.AddControllers();
+builder.Services.AddMvc(options =>
+{
+    options.EnableEndpointRouting = true;
+});
+
 builder.Services.AddRazorPages();
 builder.Services
     .AddMediatR(typeof(ApplicationOptions).Assembly)
@@ -84,7 +89,7 @@ builder.Services
     .AddSingleton<IMqttFactory, MqttFactory>()
     .AddSingleton<IEventQueueProvider, MqttEventQueueProvider>()
     .AddSingleton<IMakeBlogPathService, MakeBlogPathService>()
-    .AddTransient<ISignInService, EntityFrameworkSignInService>();
+    .AddTransient<ISignInService, SignInService>();
 
 var app = builder.Build();
 
@@ -113,5 +118,29 @@ app
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    try
+    {
+        var context = services.GetRequiredService<BlogContext>();
+
+        if (context.Database.IsSqlServer())
+        {
+            await context.Database.EnsureCreatedAsync();
+            await context.Database.MigrateAsync();
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+
+        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+
+        throw;
+    }
+}
 
 await app.RunAsync();

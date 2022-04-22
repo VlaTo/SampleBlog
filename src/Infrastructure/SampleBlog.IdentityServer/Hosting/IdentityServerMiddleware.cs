@@ -84,8 +84,8 @@ public class IdentityServerMiddleware
             {
                 var endpointType = endpoint.GetType().FullName;
 
-                //using var activity = Tracing.BasicActivitySource.StartActivity("IdentityServerProtocolRequest");
-                //activity?.SetTag(Tracing.Properties.EndpointType, endpointType);
+                using var activity = Tracing.BasicActivitySource.StartActivity("IdentityServerProtocolRequest");
+                activity?.SetTag(Tracing.Properties.EndpointType, endpointType);
 
                 //LicenseValidator.ValidateIssuer(await issuerNameService.GetCurrentAsync());
 
@@ -93,11 +93,9 @@ public class IdentityServerMiddleware
 
                 var result = await endpoint.ProcessAsync(context);
 
-                //if (null != result)
-                //{
-                    logger.LogTrace("Invoking result: {type}", result.GetType().FullName);
-                    await result.ExecuteAsync(context);
-                //}
+                logger.LogTrace("Invoking result: {type}", result.GetType().FullName);
+
+                await result.ExecuteAsync(context);
 
                 return;
             }

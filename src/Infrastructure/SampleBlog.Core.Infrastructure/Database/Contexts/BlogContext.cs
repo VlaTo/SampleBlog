@@ -12,4 +12,21 @@ public sealed class BlogContext : AuditableContext
     {
         this.currentUserProvider = currentUserProvider;
     }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        var userId = currentUserProvider.CurrentUserId;
+
+        if (String.IsNullOrEmpty(userId))
+        {
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        return SaveChangesAsync(userId, cancellationToken);
+    }
 }

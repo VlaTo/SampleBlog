@@ -1,0 +1,58 @@
+﻿@using SignInModel = SampleBlog.Web.Server.ViewModels.SignInModel
+
+@model SignInModel
+
+<div class="row d-flex justify-content-center align-content-center h-100">
+    <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image" />
+    </div>
+    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        <form asp-controller="authentication" asp-action="login" method="post">
+            <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+                <button type="button" class="btn btn-primary btn-floating mx-1 rounded-circle">
+                    <i class="bi bi-facebook"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-floating mx-1 rounded-circle">
+                    <i class="bi bi-twitter"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-floating mx-1 rounded-circle">
+                    <i class="bi bi-linkedin"></i>
+                </button>
+            </div>
+
+            <div class="divider d-flex align-items-center my-4">
+                <p class="text-center fw-bold mx-3 mb-0">Or</p>
+            </div>
+
+            <div class="form-outline mb-4">
+                <label class="form-label" asp-for="Email"></label>
+                <input
+                    asp-for="Email"
+                    class="form-control form-control-lg"
+                    placeholder="Enter a valid e-mail address"
+                />
+            </div>
+            <div class="form-outline mb-4">
+                <label class="form-label" asp-for="Password"></label>
+                <input
+                    asp-for="Password"
+                    class="form-control form-control-lg"
+                    placeholder="Enter a password"
+                />
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="form-check mb-0">
+                    <input class="form-check-input me-2" asp-for="RememberMe" />
+                    <label class="form-check-label" asp-for="RememberMe"></label>
+                </div>
+                <a href="#!" class="text-body">Forgot password?</a>
+            </div>
+
+            <div class="text-center text-lg-start mt-4 pt-2">
+                <button type="submit" class="btn btn-primary btn-lg shadow" style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
+                <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="#!" class="link-danger">Register</a></p>
+            </div>
+        </form>
+    </div>
+</div>

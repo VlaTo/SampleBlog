@@ -28,4 +28,16 @@ public sealed class AuthenticationOptions
         get;
         set;
     }
+
+    public TimeSpan RefreshTokenDuration
+    {
+        get;
+        set;
+    }
+
+    public TimeSpan SecurityTokenDuration
+    {
+        get;
+        set;
+    }
 }
