@@ -12,7 +12,6 @@
     <Folder Include="Core\Events\" />
     <Folder Include="DependencyInjection\Extensions\" />
     <Folder Include="Endpoints\Results\" />
-    <Folder Include="EntityFramework\" />
     <Folder Include="Hosting\FederatedSignOut\" />
     <Folder Include="Validation\Contexts\" />
     <Folder Include="Validation\Results\" />

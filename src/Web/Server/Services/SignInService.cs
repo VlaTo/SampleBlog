@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using SampleBlog.Core.Application.Configuration;
-using SampleBlog.Core.Application.Models.Identity;
 using SampleBlog.Core.Application.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using SampleBlog.Infrastructure.Models.Identity;
 
 namespace SampleBlog.Web.Server.Services;
 
@@ -17,12 +17,14 @@ internal sealed class SignInService : ISignInService
     private readonly UserManager<BlogUser> userManager;
     private readonly SignInManager<BlogUser> signInManager;
     private readonly RoleManager<BlogUserRole> roleManager;
+    //private readonly RoleManager<IdentityUserRole<string>> roleManager;
     private readonly IOptions<ApplicationOptions> applicationOptions;
 
     public SignInService(
         UserManager<BlogUser> userManager,
         SignInManager<BlogUser> signInManager,
         RoleManager<BlogUserRole> roleManager,
+        //RoleManager<IdentityUserRole<string>> roleManager,
         IOptions<ApplicationOptions> applicationOptions)
     {
         this.userManager = userManager;
@@ -117,34 +119,48 @@ internal sealed class SignInService : ISignInService
         return new SigningCredentials(new SymmetricSecurityKey(secret), SecurityAlgorithms.HmacSha256);
     }
 
-    private async Task<IEnumerable<Claim>> GetClaimsAsync(BlogUser user)
+    private async Task<IReadOnlyCollection<Claim>> GetClaimsAsync(BlogUser user)
     {
-        var roleNames = await userManager.GetRolesAsync(user);
-        var roleClaims = new List<Claim>();
-        var permissionClaims = new List<Claim>();
-
-        foreach (var roleName in roleNames)
+        var claims = new List<Claim>
         {
-            roleClaims.Add(new Claim(ClaimTypes.Role, roleName));
+            new(ClaimTypes.NameIdentifier, user.Id),
+            new(ClaimTypes.Name, user.UserName)
+        };
 
-            var userRole = await roleManager.FindByNameAsync(roleName);
-            var claims = await roleManager.GetClaimsAsync(userRole);
-
-            permissionClaims.AddRange(claims);
+        if (userManager.SupportsUserEmail)
+        {
+            claims.Add(new(ClaimTypes.Email, user.Email));
         }
 
-        var userClaims = await userManager.GetClaimsAsync(user);
+        if (userManager.SupportsUserPhoneNumber && false == String.IsNullOrEmpty(user.PhoneNumber))
+        {
+            claims.Add(new(ClaimTypes.MobilePhone, user.PhoneNumber));
+        }
 
-        return new List<Claim>
+        if (userManager.SupportsUserRole)
+        {
+            var permissions = new List<Claim>();
+            var roleNames = await userManager.GetRolesAsync(user);
+
+            foreach (var roleName in roleNames)
             {
-                new(ClaimTypes.NameIdentifier, user.Id),
-                new(ClaimTypes.Email, user.Email),
-                new(ClaimTypes.Name, user.UserName),
-                new(ClaimTypes.MobilePhone, user.PhoneNumber ?? String.Empty)
+                var userRole = await roleManager.FindByNameAsync(roleName);
+                var userRoleClaims = await roleManager.GetClaimsAsync(userRole);
+
+                claims.Add(new Claim(ClaimTypes.Role, roleName));
+                permissions.AddRange(userRoleClaims);
             }
-            .Union(userClaims)
-            .Union(roleClaims)
-            .Union(permissionClaims);
+
+            claims.AddRange(permissions);
+        }
+
+        if (userManager.SupportsUserClaim)
+        {
+            var userClaims = await userManager.GetClaimsAsync(user);
+            claims.AddRange(userClaims);
+        }
+
+        return claims;
     }
 
     private static string GenerateEncryptedToken(SigningCredentials signingCredentials, IEnumerable<Claim> claims, TimeSpan duration)

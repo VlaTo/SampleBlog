@@ -1,8 +1,11 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 
 /// <summary>
 /// Models storage for keys.
 /// </summary>
+[Table("Keys", Schema = "Identity")]
 public class Key
 {
     public string Id

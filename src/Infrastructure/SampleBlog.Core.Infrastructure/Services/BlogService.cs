@@ -9,8 +9,8 @@ public sealed class BlogService : IBlogService
     {
     }
 
-    public Task<Blog?> GetBlogAsync(long blogId, CancellationToken cancellationToken = default)
+    public Task<IBlog?> GetBlogAsync(long blogId, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult<Blog?>(new Blog(blogId));
+        return Task.FromResult<IBlog?>(null);
     }
 }

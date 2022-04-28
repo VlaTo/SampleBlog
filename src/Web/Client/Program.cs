@@ -1,4 +1,5 @@
 using Fluxor;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -23,10 +24,15 @@ builder.Services
             .UseRouting();
     })
     .AddOptions()
+    .AddAuthorizationCore(authorization =>
+    {
+        authorization.AddPolicy("blog-editor",new AuthorizationPolicy());
+    })
     .AddApiAuthorization(authorization =>
     {
         const string clientId = "blog.spa.client";
         authorization.ProviderOptions.ConfigurationEndpoint = $"{builder.HostEnvironment.BaseAddress}_configuration/authorization/{clientId}";
+        authorization.AuthenticationPaths.LogInPath = "/authentication/login";
     });
 builder.Services
     .AddScoped<AuthorizationMessageHandler, BaseAddressAuthorizationMessageHandler>()

@@ -22,7 +22,7 @@ public partial class SignInDisplay
     }
 
     [CascadingParameter]
-    public Task<AuthenticationStateProvider> AuthenticationStateTask
+    public Task<AuthenticationState> AuthenticationStateTask
     {
         get;
         set;

@@ -2,21 +2,21 @@
 
 namespace SampleBlog.Core.Domain.Entities;
 
-public interface IBlogUser : IEntity<string>
+public interface IBlog : IEntity<long>
 {
-    bool IsActive
+    string Title
     {
         get;
         set;
     }
 
-    string UserName
+    string Slug
     {
         get;
         set;
     }
 
-    string RefreshToken
+    IBlogUser Author
     {
         get;
         set;

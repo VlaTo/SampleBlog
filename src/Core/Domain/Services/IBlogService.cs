@@ -4,5 +4,5 @@ namespace SampleBlog.Core.Domain.Services;
 
 public interface IBlogService
 {
-    Task<Blog?> GetBlogAsync(long blogId, CancellationToken cancellationToken = default);
+    Task<IBlog?> GetBlogAsync(long blogId, CancellationToken cancellationToken = default);
 }

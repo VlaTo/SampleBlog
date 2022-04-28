@@ -2,10 +2,16 @@
 using SampleBlog.Core.Domain.Contracts;
 using SampleBlog.Core.Domain.Entities;
 
-namespace SampleBlog.Core.Application.Models.Identity;
+namespace SampleBlog.Infrastructure.Models.Identity;
 
-public sealed class BlogUser : IdentityUser<string>, IBlogUser, IAuditableEntity<string>
+public sealed class BlogUser : IdentityUser, IBlogUser, IAuditableEntity<string>
 {
+    public bool IsActive
+    {
+        get;
+        set;
+    }
+
     public DateTime Created
     {
         get;
@@ -18,19 +24,25 @@ public sealed class BlogUser : IdentityUser<string>, IBlogUser, IAuditableEntity
         set;
     }
 
-    public string RefreshToken
+    public string? RefreshToken
     {
         get;
         set;
     }
 
-    public DateTime RefreshTokenExpiryTime
+    public DateTime? RefreshTokenExpiryTime
     {
         get;
         set;
     }
 
     public BlogUser()
+        : base()
+    {
+    }
+
+    public BlogUser(string userName)
+        : base(userName)
     {
     }
 }

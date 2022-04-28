@@ -14,6 +14,8 @@ namespace SampleBlog.IdentityServer.DependencyInjection.Extensions;
 
 public static class ApplicationBuilderExtensions
 {
+    private const string Name = "SampleBlog IdentityServer";
+
     public static void ConfigureCors(this IApplicationBuilder app)
     {
         var options = app.ApplicationServices.GetRequiredService<IdentityServerOptions>();
@@ -63,10 +65,10 @@ public static class ApplicationBuilderExtensions
             throw new ArgumentNullException(nameof(loggerFactory));
         }
 
-        var logger = loggerFactory.CreateLogger("Duende.IdentityServer.Startup");
+        var logger = loggerFactory.CreateLogger("SampleBlog.IdentityServer.Startup");
         var attribute = typeof(IdentityServerMiddleware).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
 
-        logger.LogInformation("Starting Duende IdentityServer version {version} ({netversion})", attribute.InformationalVersion, RuntimeInformation.FrameworkDescription);
+        logger.LogInformation("Starting {name} version {version} ({netversion})", Name, attribute.InformationalVersion, RuntimeInformation.FrameworkDescription);
 
         var scopeFactory = app.ApplicationServices.GetService<IServiceScopeFactory>();
 
@@ -105,65 +107,95 @@ public static class ApplicationBuilderExtensions
     {
         var options = services.GetRequiredService<IdentityServerOptions>();
         var schemes = services.GetRequiredService<IAuthenticationSchemeProvider>();
-
-
-        if (await schemes.GetDefaultAuthenticateSchemeAsync() == null && options.Authentication.CookieAuthenticationScheme == null)
+        
+        if (null == await schemes.GetDefaultAuthenticateSchemeAsync() && null == options.Authentication.CookieAuthenticationScheme)
         {
             logger.LogWarning("No authentication scheme has been set. Setting either a default authentication scheme or a CookieAuthenticationScheme on IdentityServerOptions is required.");
+            return;
+        }
+
+        AuthenticationScheme? authenticationScheme = null;
+
+        if (null != options.Authentication.CookieAuthenticationScheme)
+        {
+            authenticationScheme = await schemes.GetSchemeAsync(options.Authentication.CookieAuthenticationScheme);
+            logger.LogInformation("Using explicitly configured authentication scheme {scheme} for {name}", options.Authentication.CookieAuthenticationScheme, Name);
         }
         else
         {
-            AuthenticationScheme? authenticationScheme = null;
-
-            if (null != options.Authentication.CookieAuthenticationScheme)
-            {
-                authenticationScheme = await schemes.GetSchemeAsync(options.Authentication.CookieAuthenticationScheme);
-                logger.LogInformation("Using explicitly configured authentication scheme {scheme} for IdentityServer", options.Authentication.CookieAuthenticationScheme);
-            }
-            else
-            {
-                authenticationScheme = await schemes.GetDefaultAuthenticateSchemeAsync();
-                logger.LogInformation("Using the default authentication scheme {scheme} for IdentityServer", authenticationScheme.Name);
-            }
-
-            if (!typeof(IAuthenticationSignInHandler).IsAssignableFrom(authenticationScheme.HandlerType))
-            {
-                logger.LogInformation("Authentication scheme {scheme} is configured for IdentityServer, but it is not a scheme that supports signin (like cookies). If you support interactive logins via the browser, then a cookie-based scheme should be used.", authenticationScheme.Name);
-            }
-
-            logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for authentication", (await schemes.GetDefaultAuthenticateSchemeAsync())?.Name);
-            logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for sign-in", (await schemes.GetDefaultSignInSchemeAsync())?.Name);
-            logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for sign-out", (await schemes.GetDefaultSignOutSchemeAsync())?.Name);
-            logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for challenge", (await schemes.GetDefaultChallengeSchemeAsync())?.Name);
-            logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for forbid", (await schemes.GetDefaultForbidSchemeAsync())?.Name);
+            authenticationScheme = await schemes.GetDefaultAuthenticateSchemeAsync();
+            logger.LogInformation("Using the default authentication scheme {scheme} for {name}", authenticationScheme.Name, Name);
         }
+
+        if (false == typeof(IAuthenticationSignInHandler).IsAssignableFrom(authenticationScheme.HandlerType))
+        {
+            logger.LogInformation("Authentication scheme {scheme} is configured for {name}, but it is not a scheme that supports signin (like cookies). If you support interactive logins via the browser, then a cookie-based scheme should be used.", authenticationScheme.Name, Name);
+        }
+
+        logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for authentication", (await schemes.GetDefaultAuthenticateSchemeAsync())?.Name);
+        logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for sign-in", (await schemes.GetDefaultSignInSchemeAsync())?.Name);
+        logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for sign-out", (await schemes.GetDefaultSignOutSchemeAsync())?.Name);
+        logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for challenge", (await schemes.GetDefaultChallengeSchemeAsync())?.Name);
+        logger.LogDebug("Using {scheme} as default ASP.NET Core scheme for forbid", (await schemes.GetDefaultForbidSchemeAsync())?.Name);
     }
 
     private static void ValidateOptions(IdentityServerOptions options, ILogger logger)
     {
-        if (options.IssuerUri.IsPresent()) logger.LogDebug("Custom IssuerUri set to {0}", options.IssuerUri);
+        if (options.IssuerUri.IsPresent())
+        {
+            logger.LogDebug("Custom IssuerUri set to {0}", options.IssuerUri);
+        }
 
         // todo: perhaps different logging messages?
         //if (options.UserInteraction.LoginUrl.IsMissing()) throw new InvalidOperationException("LoginUrl is not configured");
         //if (options.UserInteraction.LoginReturnUrlParameter.IsMissing()) throw new InvalidOperationException("LoginReturnUrlParameter is not configured");
         //if (options.UserInteraction.LogoutUrl.IsMissing()) throw new InvalidOperationException("LogoutUrl is not configured");
-        if (options.UserInteraction.LogoutIdParameter.IsMissing()) throw new InvalidOperationException("LogoutIdParameter is not configured");
-        if (options.UserInteraction.ErrorUrl.IsMissing()) throw new InvalidOperationException("ErrorUrl is not configured");
-        if (options.UserInteraction.ErrorIdParameter.IsMissing()) throw new InvalidOperationException("ErrorIdParameter is not configured");
-        if (options.UserInteraction.ConsentUrl.IsMissing()) throw new InvalidOperationException("ConsentUrl is not configured");
-        if (options.UserInteraction.ConsentReturnUrlParameter.IsMissing()) throw new InvalidOperationException("ConsentReturnUrlParameter is not configured");
-        if (options.UserInteraction.CustomRedirectReturnUrlParameter.IsMissing()) throw new InvalidOperationException("CustomRedirectReturnUrlParameter is not configured");
+        if (options.UserInteraction.LogoutIdParameter.IsMissing())
+        {
+            throw new InvalidOperationException("LogoutIdParameter is not configured");
+        }
 
-        if (options.Authentication.CheckSessionCookieName.IsMissing()) throw new InvalidOperationException("CheckSessionCookieName is not configured");
+        if (options.UserInteraction.ErrorUrl.IsMissing())
+        {
+            throw new InvalidOperationException("ErrorUrl is not configured");
+        }
 
-        if (options.Cors.CorsPolicyName.IsMissing()) throw new InvalidOperationException("CorsPolicyName is not configured");
+        if (options.UserInteraction.ErrorIdParameter.IsMissing())
+        {
+            throw new InvalidOperationException("ErrorIdParameter is not configured");
+        }
+
+        if (options.UserInteraction.ConsentUrl.IsMissing())
+        {
+            throw new InvalidOperationException("ConsentUrl is not configured");
+        }
+
+        if (options.UserInteraction.ConsentReturnUrlParameter.IsMissing())
+        {
+            throw new InvalidOperationException("ConsentReturnUrlParameter is not configured");
+        }
+
+        if (options.UserInteraction.CustomRedirectReturnUrlParameter.IsMissing())
+        {
+            throw new InvalidOperationException("CustomRedirectReturnUrlParameter is not configured");
+        }
+
+        if (options.Authentication.CheckSessionCookieName.IsMissing())
+        {
+            throw new InvalidOperationException("CheckSessionCookieName is not configured");
+        }
+
+        if (options.Cors.CorsPolicyName.IsMissing())
+        {
+            throw new InvalidOperationException("CorsPolicyName is not configured");
+        }
     }
 
-    internal static object TestService(IServiceProvider serviceProvider, Type service, ILogger logger, string message = null, bool doThrow = true)
+    internal static object? TestService(IServiceProvider serviceProvider, Type service, ILogger logger, string? message = null, bool doThrow = true)
     {
         var appService = serviceProvider.GetService(service);
 
-        if (appService == null)
+        if (null == appService)
         {
             var error = message ?? $"Required service {service.FullName} is not registered in the DI container. Aborting startup";
 

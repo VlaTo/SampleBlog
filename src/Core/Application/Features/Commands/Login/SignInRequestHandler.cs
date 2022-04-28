@@ -1,13 +1,6 @@
-﻿using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
+﻿using MediatR;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using SampleBlog.Core.Application.Configuration;
-using SampleBlog.Core.Application.Models.Identity;
 using SampleBlog.Core.Application.Responses.Identity;
 using SampleBlog.Core.Application.Services;
 using SampleBlog.Shared;
@@ -18,16 +11,16 @@ namespace SampleBlog.Core.Application.Features.Commands.Login;
 public sealed class SignInRequestHandler : IRequestHandler<SignInCommand, IResult<TokenResponse>>
 {
     private readonly ISignInService signInService;
-    private readonly IEventQueueProvider eventQueueProvider;
+    private readonly IEventQueue eventQueue;
     private readonly ApplicationOptions options;
 
     public SignInRequestHandler(
         ISignInService signInService,
         IOptions<ApplicationOptions> options,
-        IEventQueueProvider eventQueueProvider)
+        IEventQueue eventQueue)
     {
         this.signInService = signInService;
-        this.eventQueueProvider = eventQueueProvider;
+        this.eventQueue = eventQueue;
         this.options = options.Value;
     }
 
@@ -42,8 +35,6 @@ public sealed class SignInRequestHandler : IRequestHandler<SignInCommand, IResul
 
         if (null != signIn.User && null != signIn.Token)
         {
-            var eventQueue = await eventQueueProvider.GetQueueAsync();
-
             await eventQueue.UserSignedInAsync(signIn.User.UserName);
 
             return Result<TokenResponse>.Success(new TokenResponse

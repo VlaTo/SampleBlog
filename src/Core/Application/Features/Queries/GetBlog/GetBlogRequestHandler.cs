@@ -5,7 +5,7 @@ using SampleBlog.Shared;
 
 namespace SampleBlog.Core.Application.Features.Queries.GetBlog;
 
-public sealed class GetBlogRequestHandler : IRequestHandler<GetBlogQuery, IResult<Blog>>
+public sealed class GetBlogRequestHandler : IRequestHandler<GetBlogQuery, IResult<IBlog>>
 {
     private readonly IBlogService blogService;
 
@@ -14,15 +14,15 @@ public sealed class GetBlogRequestHandler : IRequestHandler<GetBlogQuery, IResul
         this.blogService = blogService;
     }
 
-    public async Task<IResult<Blog>> Handle(GetBlogQuery request, CancellationToken cancellationToken)
+    public async Task<IResult<IBlog>> Handle(GetBlogQuery request, CancellationToken cancellationToken)
     {
         var blog = await blogService.GetBlogAsync(request.Id, cancellationToken);
 
         if (null != blog)
         {
-            return Result<Blog>.Success(blog);
+            return Result<IBlog>.Success(blog);
         }
 
-        return Result<Blog>.Fail();
+        return Result<IBlog>.Fail();
     }
 }

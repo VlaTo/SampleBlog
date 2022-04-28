@@ -8,8 +8,7 @@ public sealed class SignInModel
     [Required]
     [DataType(DataType.EmailAddress)]
     [EmailAddress]
-    [DisplayName("Email address")]
-    [Description("Email address description")]
+    [Display(Name = "Email address", Description = "Email address description")]
     public string Email
     {
         get;
@@ -19,12 +18,14 @@ public sealed class SignInModel
     [Required]
     [PasswordPropertyText]
     [DataType(DataType.Password)]
+    [Display(Name = "Enter password", Description = "Password description")]
     public string Password
     {
         get;
         set;
     }
 
+    [Display(Name = "Remember me")]
     public bool RememberMe
     {
         get;

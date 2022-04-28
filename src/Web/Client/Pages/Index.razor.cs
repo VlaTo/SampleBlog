@@ -1,5 +1,4 @@
 ﻿using Fluxor;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
 using SampleBlog.Web.Client.Store.Identity;
 using SampleBlog.Web.Client.Store.Identity.Actions;

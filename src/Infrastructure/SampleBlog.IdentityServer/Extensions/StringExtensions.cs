@@ -14,7 +14,7 @@ internal static class StringExtensions
     }
 
     [DebuggerStepThrough]
-    public static bool IsMissing(this string value)
+    public static bool IsMissing(this string? value)
     {
         return string.IsNullOrWhiteSpace(value);
     }

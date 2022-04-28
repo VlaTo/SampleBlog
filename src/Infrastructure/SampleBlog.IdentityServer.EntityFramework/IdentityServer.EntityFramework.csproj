@@ -13,8 +13,4 @@
     <ProjectReference Include="..\SampleBlog.IdentityServer\IdentityServer.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Entities\" />
-  </ItemGroup>
-
 </Project>

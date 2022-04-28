@@ -1,14 +1,14 @@
-﻿using System.Net;
-using System.Net.Mime;
-using System.Reflection;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using SampleBlog.Shared;
 using SampleBlog.Shared.Contracts.Permissions;
 using SampleBlog.Web.Server.Configuration;
+using System.Net;
+using System.Reflection;
+using System.Security.Claims;
+using System.Text;
+using SampleBlog.Core.Application.Configuration;
+using SampleBlog.Core.Application.Extensions;
 
 namespace SampleBlog.Web.Server.Extensions;
 
@@ -30,9 +30,15 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, ServerOptions options)
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
     {
-        var key = Encoding.ASCII.GetBytes(options.Secret);
+        var options = services.GetApplicationOptions(configuration);
+        return AddJwtAuthentication(services, options);
+    }
+
+    public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, ApplicationOptions options)
+    {
+        var key = Encoding.ASCII.GetBytes(options.Authentication.Secret);
 
         services
             .AddAuthentication(authentication =>

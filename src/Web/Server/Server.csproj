@@ -6,6 +6,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>SampleBlog.Web.Server</RootNamespace>
 		<AssemblyName>SampleBlog.Web.Server</AssemblyName>
+		<UserSecretsId>6c3f0d29-5910-47e1-85e8-b7a45f50722c</UserSecretsId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -25,9 +26,12 @@
 		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
 		<PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.4" />
-		<PackageReference Include="MQTTnet" Version="3.1.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -45,6 +49,7 @@
 	  <Folder Include="Extensions\" />
 	  <Folder Include="Infrastructure\" />
 	  <Folder Include="ViewModels\" />
+	  <Folder Include="Data\" />
 	</ItemGroup>
 
 

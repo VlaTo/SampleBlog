@@ -6,6 +6,7 @@ using SampleBlog.Web.Server.ViewModels;
 
 namespace SampleBlog.Web.Server.Controllers.Identity
 {
+    [AllowAnonymous]
     [Route("[controller]")]
     public class AuthenticationController : Controller
     {
@@ -16,7 +17,6 @@ namespace SampleBlog.Web.Server.Controllers.Identity
             this.mediator = mediator;
         }
 
-        [AllowAnonymous]
         [HttpGet("login")]
         public IActionResult SignIn()
         {
@@ -24,7 +24,6 @@ namespace SampleBlog.Web.Server.Controllers.Identity
             return View("SignIn", signIn);
         }
 
-        [AllowAnonymous]
         [Consumes("application/x-www-form-urlencoded")]
         [HttpPost("login")]
         public async Task<IActionResult> SignIn([FromForm] SignInModel signIn)
@@ -48,6 +47,13 @@ namespace SampleBlog.Web.Server.Controllers.Identity
             }
 
             return View("SignIn", signIn);
+        }
+
+        [HttpGet("reset")]
+        public IActionResult ResetPassword()
+        {
+            var passwordModel = new ResetPasswordModel();
+            return View("ResetPassword", passwordModel);
         }
     }
 }

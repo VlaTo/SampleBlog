@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SampleBlog.Core.Application.Models.Identity;
 using SampleBlog.IdentityServer.EntityFramework.Storage;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using SampleBlog.Infrastructure.Models;
+using SampleBlog.Infrastructure.Models.Identity;
 
 namespace SampleBlog.Infrastructure.Database.Contexts;
 
-public abstract class AuditableContext :
-    IdentityDbContext<BlogUser, BlogUserRole, string, IdentityUserClaim<string>, IdentityUserRole<string>,
-        IdentityUserLogin<string>, BlogUserRoleClaim, IdentityUserToken<string>>, IPersistedGrantDbContext
+public abstract class AuditableContext : 
+    IdentityDbContext<BlogUser, BlogUserRole, string, IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, BlogUserRoleClaim, IdentityUserToken<string>>,
+    IPersistedGrantDbContext
 {
     public DbSet<PersistedGrant> PersistedGrants
     {

@@ -1,4 +1,4 @@
-﻿using SampleBlog.Core.Application.Models.Identity;
+﻿using SampleBlog.Core.Domain.Entities;
 
 namespace SampleBlog.Core.Application.Services;
 
@@ -30,7 +30,7 @@ public record SignInResult
         get => SignStatus.Success == status;
     }
 
-    public BlogUser? User
+    public IBlogUser? User
     {
         init;
         get;

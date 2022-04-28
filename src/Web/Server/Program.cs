@@ -1,29 +1,35 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MQTTnet;
 using SampleBlog.Core.Application.Configuration;
 using SampleBlog.Core.Application.Extensions;
-using SampleBlog.Core.Application.Models.Identity;
 using SampleBlog.Core.Application.Services;
 using SampleBlog.IdentityServer.DependencyInjection.Extensions;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.EntityFramework.Extensions;
 using SampleBlog.IdentityServer.Extensions;
+using SampleBlog.Infrastructure.Database;
 using SampleBlog.Infrastructure.Database.Contexts;
 using SampleBlog.Infrastructure.Extensions;
+using SampleBlog.Infrastructure.Models.Identity;
+using SampleBlog.Web.Server.Controllers.Identity;
 using SampleBlog.Web.Server.Extensions;
 using SampleBlog.Web.Server.Services;
 using SampleBlog.Web.Shared.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration
+    .AddEnvironmentVariables()
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{builder.Environment}.json", optional: true)
+    .AddUserSecrets<AuthenticationController>();
+
 // Add services to the container.
 builder.Services
     .AddServerOptions()
-    .AddJwtAuthentication(builder.GetServerOptions())
+    .AddJwtAuthentication(builder.Configuration)
     .AddIdentity<BlogUser, BlogUserRole>(options =>
     {
         options.Password.RequiredLength = 6;
@@ -31,7 +37,13 @@ builder.Services
     })
     .AddEntityFrameworkStores<BlogContext>()
     .AddDefaultTokenProviders();
+
 builder.Services
+    .AddDbContext<BlogContext>(options =>
+    {
+        var connectionString = builder.Configuration.GetConnectionString("Database");
+        options.UseSqlServer(connectionString);
+    })
     .AddIdentityServer(options =>
     {
         options.IssuerUri = "http://sampleblog.net";
@@ -59,37 +71,40 @@ builder.Services
     {
         options.DefaultSchema = "http://sampleblog.net/database/configuration";
     });
-builder.Services.AddDbContext<BlogContext>(options =>
+
+/*builder.Services.AddDbContext<BlogContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     options.UseSqlServer(connectionString);
-});
-//builder.Services.AddControllers();
+});*/
+
 builder.Services.AddMvc(options =>
 {
     options.EnableEndpointRouting = true;
 });
 
 builder.Services.AddRazorPages();
+
 builder.Services
     .AddMediatR(typeof(ApplicationOptions).Assembly)
     .AddApplicationOptions()
     .AddApplicationServices()
-    .AddInfrastructure()
-    ;
+    .AddInfrastructure();
+
 builder.Services.AddApiVersioning(options =>
 {
     options.DefaultApiVersion = new ApiVersion(1, 0);
     options.AssumeDefaultVersionWhenUnspecified = true;
     options.ReportApiVersions = true;
 });
+
 builder.Services
     .AddHttpContextAccessor()
     .AddScoped<ICurrentUserProvider, CurrentHttpUserProvider>()
-    .AddSingleton<IMqttFactory, MqttFactory>()
-    .AddSingleton<IEventQueueProvider, MqttEventQueueProvider>()
+    .AddSingleton<IEventQueue, LogEventQueue>()
     .AddSingleton<IMakeBlogPathService, MakeBlogPathService>()
-    .AddTransient<ISignInService, SignInService>();
+    .AddTransient<ISignInService, SignInService>()
+    .AddTransient<IDatabaseSeeder, BlogDatabaseSeeder>();
 
 var app = builder.Build();
 
@@ -131,6 +146,13 @@ using (var scope = app.Services.CreateScope())
         {
             await context.Database.EnsureCreatedAsync();
             await context.Database.MigrateAsync();
+
+            var seeder = scope.ServiceProvider.GetService<IDatabaseSeeder>();
+
+            if (null != seeder)
+            {
+                await seeder.SeedAsync();
+            }
         }
     }
     catch (Exception ex)
