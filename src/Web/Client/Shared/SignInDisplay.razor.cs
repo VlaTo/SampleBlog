@@ -33,4 +33,10 @@ public partial class SignInDisplay
         await SignOutManager.SetSignOutState();
         Navigation.NavigateTo("authentication/logout");
     }
+
+    private async Task BeginSignIn(MouseEventArgs args)
+    {
+        var state = await AuthenticationStateTask;
+        //state.User.
+    }
 }

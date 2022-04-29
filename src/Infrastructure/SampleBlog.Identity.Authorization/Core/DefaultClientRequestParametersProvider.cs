@@ -33,8 +33,6 @@ internal sealed class DefaultClientRequestParametersProvider : IClientRequestPar
 
     public async Task<IDictionary<string, string>> GetClientParametersAsync(HttpContext context, string clientId)
     {
-        //var authority = context.GetIdentityServerIssuerUri();
-
         var authority = await issuerNameService.GetCurrentAsync();
         var client = Options.Value.Clients[clientId];
 

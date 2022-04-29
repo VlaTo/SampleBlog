@@ -292,6 +292,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return builder;
         }
 
+        // Adding OpenIdConnectHandler
+        // https://github.com/dotnet/aspnetcore/blob/c85baf8db0c72ae8e68643029d514b2e737c9fae/src/Security/Authentication/OpenIdConnect/src/OpenIdConnectHandler.cs
+
         private static void ReplaceEndSessionEndpoint(IIdentityServerBuilder builder)
         {
             const string name = "Endsession";

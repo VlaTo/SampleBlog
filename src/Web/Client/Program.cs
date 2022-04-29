@@ -1,5 +1,4 @@
 using Fluxor;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -7,6 +6,7 @@ using MudBlazor.Services;
 using SampleBlog.Web.Client;
 using SampleBlog.Web.Client.Middlewares;
 using SampleBlog.Web.Client.Services;
+using SampleBlog.Web.Shared.Extensions;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -26,7 +26,10 @@ builder.Services
     .AddOptions()
     .AddAuthorizationCore(authorization =>
     {
-        authorization.AddPolicy("blog-editor",new AuthorizationPolicy());
+        authorization.AddPolicy(
+            "blog-editor",
+            policy => policy.RequirePermission("Permissions.Blog.Create", "Permissions.Blog.Edit", "Permissions.Blog.View")
+        );
     })
     .AddApiAuthorization(authorization =>
     {

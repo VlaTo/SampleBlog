@@ -46,8 +46,6 @@ builder.Services
     })
     .AddIdentityServer(options =>
     {
-        options.IssuerUri = "http://sampleblog.net";
-
         options.Events = new EventsOptions
         {
             RaiseErrorEvents = true,
@@ -71,12 +69,6 @@ builder.Services
     {
         options.DefaultSchema = "http://sampleblog.net/database/configuration";
     });
-
-/*builder.Services.AddDbContext<BlogContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseSqlServer(connectionString);
-});*/
 
 builder.Services.AddMvc(options =>
 {
@@ -127,8 +119,8 @@ app
     .UseStaticFiles()
     .UseRouting()
     .UseIdentityServer()
-    .UseAuthorization()
-    .UseAuthentication();
+    .UseAuthentication()
+    .UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();

@@ -89,7 +89,7 @@ public class IdentityServerMiddleware
 
                 //LicenseValidator.ValidateIssuer(await issuerNameService.GetCurrentAsync());
 
-                logger.LogInformation("Invoking IdentityServer endpoint: {endpointType} for {url}", endpointType, context.Request.Path.ToString());
+                logger.LogInformation("Invoking SampleBlog.IdentityServer endpoint: {endpointType} for {url}", endpointType, context.Request.Path.ToString());
 
                 var result = await endpoint.ProcessAsync(context);
 
