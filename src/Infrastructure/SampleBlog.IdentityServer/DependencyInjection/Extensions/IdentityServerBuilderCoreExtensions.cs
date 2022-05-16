@@ -11,7 +11,11 @@ using Microsoft.Extensions.Options;
 using SampleBlog.IdentityServer.Contexts;
 using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
+using SampleBlog.IdentityServer.Endpoints;
+using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Hosting;
+using SampleBlog.IdentityServer.ResponseHandling;
+using SampleBlog.IdentityServer.ResponseHandling.Defaults;
 using SampleBlog.IdentityServer.Services;
 using SampleBlog.IdentityServer.Storage.Services;
 using SampleBlog.IdentityServer.Storage.Stores;
@@ -76,6 +80,20 @@ public static class IdentityServerBuilderCoreExtensions
     }
 
     /// <summary>
+    /// Adds the extension grant validator.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="builder">The builder.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddExtensionGrantValidator<T>(this IIdentityServerBuilder builder)
+        where T : class, IExtensionGrantValidator
+    {
+        builder.Services.AddTransient<IExtensionGrantValidator, T>();
+
+        return builder;
+    }
+
+    /// <summary>
     /// Adds the default cookie handlers and corresponding configuration
     /// </summary>
     /// <param name="builder">The builder.</param>
@@ -111,9 +129,9 @@ public static class IdentityServerBuilderCoreExtensions
     {
         builder.Services.AddTransient<IServerUrls, DefaultServerUrls>();
         builder.Services.AddTransient<IIssuerNameService, DefaultIssuerNameService>();
-        //builder.Services.AddTransient<ISecretsListParser, SecretParser>();
+        builder.Services.AddTransient<ISecretsListParser, SecretParser>();
         //builder.Services.AddTransient<ISecretsListValidator, SecretValidator>();
-        //builder.Services.AddTransient<ExtensionGrantValidator>();
+        builder.Services.AddTransient<ExtensionGrantValidator>();
         //builder.Services.AddTransient<BearerTokenUsageValidator>();
         builder.Services.AddTransient<IJwtRequestValidator, JwtRequestValidator>();
 
@@ -165,13 +183,27 @@ public static class IdentityServerBuilderCoreExtensions
         //builder.AddEndpoint<CheckSessionEndpoint>(EndpointNames.CheckSession, ProtocolRoutePaths.CheckSession.EnsureLeadingSlash());
         //builder.AddEndpoint<DeviceAuthorizationEndpoint>(EndpointNames.DeviceAuthorization, ProtocolRoutePaths.DeviceAuthorization.EnsureLeadingSlash());
         //builder.AddEndpoint<DiscoveryKeyEndpoint>(EndpointNames.Discovery, ProtocolRoutePaths.DiscoveryWebKeys.EnsureLeadingSlash());
-        //builder.AddEndpoint<DiscoveryEndpoint>(EndpointNames.Discovery, ProtocolRoutePaths.DiscoveryConfiguration.EnsureLeadingSlash());
+        builder.AddEndpoint<DiscoveryEndpoint>(Constants.EndpointNames.Discovery, Constants.ProtocolRoutePaths.DiscoveryConfiguration.EnsureLeadingSlash());
         //builder.AddEndpoint<EndSessionCallbackEndpoint>(EndpointNames.EndSession, ProtocolRoutePaths.EndSessionCallback.EnsureLeadingSlash());
         //builder.AddEndpoint<EndSessionEndpoint>(EndpointNames.EndSession, ProtocolRoutePaths.EndSession.EnsureLeadingSlash());
         //builder.AddEndpoint<IntrospectionEndpoint>(EndpointNames.Introspection, ProtocolRoutePaths.Introspection.EnsureLeadingSlash());
         //builder.AddEndpoint<TokenRevocationEndpoint>(EndpointNames.Revocation, ProtocolRoutePaths.Revocation.EnsureLeadingSlash());
         //builder.AddEndpoint<TokenEndpoint>(EndpointNames.Token, ProtocolRoutePaths.Token.EnsureLeadingSlash());
         //builder.AddEndpoint<UserInfoEndpoint>(EndpointNames.UserInfo, ProtocolRoutePaths.UserInfo.EnsureLeadingSlash());
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds the secret parser.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="builder">The builder.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddSecretParser<T>(this IIdentityServerBuilder builder)
+        where T : class, ISecretParser
+    {
+        builder.Services.AddTransient<ISecretParser, T>();
 
         return builder;
     }
@@ -364,6 +396,39 @@ public static class IdentityServerBuilderCoreExtensions
         });
 
         return httpBuilder;
+    }
+
+    /// <summary>
+    /// Adds the response generators.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddResponseGenerators(this IIdentityServerBuilder builder)
+    {
+        //builder.Services.TryAddTransient<ITokenResponseGenerator, TokenResponseGenerator>();
+        //builder.Services.TryAddTransient<IUserInfoResponseGenerator, UserInfoResponseGenerator>();
+        //builder.Services.TryAddTransient<IIntrospectionResponseGenerator, IntrospectionResponseGenerator>();
+        //builder.Services.TryAddTransient<IAuthorizeInteractionResponseGenerator, AuthorizeInteractionResponseGenerator>();
+        builder.Services.TryAddTransient<IAuthorizeResponseGenerator, AuthorizeResponseGenerator>();
+        builder.Services.TryAddTransient<IDiscoveryResponseGenerator, DiscoveryResponseGenerator>();
+        //builder.Services.TryAddTransient<ITokenRevocationResponseGenerator, TokenRevocationResponseGenerator>();
+        //builder.Services.TryAddTransient<IDeviceAuthorizationResponseGenerator, DeviceAuthorizationResponseGenerator>();
+        //builder.Services.TryAddTransient<IBackchannelAuthenticationResponseGenerator, BackchannelAuthenticationResponseGenerator>();
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds the default secret parsers.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddDefaultSecretParsers(this IIdentityServerBuilder builder)
+    {
+        builder.Services.AddTransient<ISecretParser, BasicAuthenticationSecretParser>();
+        builder.Services.AddTransient<ISecretParser, PostBodySecretParser>();
+
+        return builder;
     }
 
     internal static void AddTransientDecorator<TService, TImplementation>(this IServiceCollection services)

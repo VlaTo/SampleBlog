@@ -4,34 +4,10 @@ using SampleBlog.IdentityServer.Validation.Results;
 namespace SampleBlog.IdentityServer.Validation.Contexts;
 
 /// <summary>
-/// Class describing the resource owner password validation context
+/// Class describing the extension grant validation context
 /// </summary>
-public class ResourceOwnerPasswordValidationContext
+public class ExtensionGrantValidationContext
 {
-    /// <summary>
-    /// Gets or sets the name of the user.
-    /// </summary>
-    /// <value>
-    /// The name of the user.
-    /// </value>
-    public string? UserName
-    {
-        get;
-        init;
-    }
-
-    /// <summary>
-    /// Gets or sets the password.
-    /// </summary>
-    /// <value>
-    /// The password.
-    /// </value>
-    public string? Password
-    {
-        get;
-        init;
-    }
-
     /// <summary>
     /// Gets or sets the request.
     /// </summary>
@@ -56,10 +32,8 @@ public class ResourceOwnerPasswordValidationContext
         private set;
     }
 
-    public ResourceOwnerPasswordValidationContext(string? userName, string? password, ValidatedTokenRequest request)
+    public ExtensionGrantValidationContext(ValidatedTokenRequest request)
     {
-        UserName = userName;
-        Password = password;
         Request = request;
         Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant);
     }

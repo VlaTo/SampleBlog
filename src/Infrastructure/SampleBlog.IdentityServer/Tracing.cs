@@ -4,8 +4,8 @@ namespace SampleBlog.IdentityServer;
 
 internal static class Tracing
 {
-    private static readonly Version? AssemblyVersion = typeof(Tracing).Assembly.GetName().Version;
-    private static string ServiceVersion => $"{AssemblyVersion?.Major}.{AssemblyVersion?.Minor}.{AssemblyVersion?.Build}";
+    private static readonly Version? AssemblyVersion;
+    private static readonly string ServiceVersion;
 
     /// <summary>
     /// Base ActivitySource
@@ -47,16 +47,32 @@ internal static class Tracing
         get;
     }
 
+    /// <summary>
+    /// Standard ActivitySource for IdentityServer
+    /// </summary>
+    public static ActivitySource ActivitySource
+    {
+        get;
+    }
+
+    /// <summary>
+    /// Service name
+    /// </summary>
+    public static readonly string ServiceName = "SampleBlog.IdentityServer";
+
     static Tracing()
     {
         var assemblyVersion = typeof(Tracing).Assembly.GetName().Version;
         var serviceVersion = assemblyVersion?.ToString(3) ?? $"{assemblyVersion?.Major}.{assemblyVersion?.Minor}.{assemblyVersion?.Build}";
 
+        AssemblyVersion = assemblyVersion;
+        ServiceVersion = serviceVersion;
         BasicActivitySource = new ActivitySource(TraceNames.Basic, serviceVersion);
         StoreActivitySource = new ActivitySource(TraceNames.Store, serviceVersion);
         CacheActivitySource = new ActivitySource(TraceNames.Cache, serviceVersion);
         ServiceActivitySource = new ActivitySource(TraceNames.Services, serviceVersion);
         ValidationActivitySource = new ActivitySource(TraceNames.Validation, serviceVersion);
+        ActivitySource = new(ServiceName, serviceVersion);
     }
 
     public static class TraceNames

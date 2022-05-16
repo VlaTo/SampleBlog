@@ -61,6 +61,18 @@ public class IdentityServerOptions
     }
 
     /// <summary>
+    /// Gets or sets the discovery endpoint configuration.
+    /// </summary>
+    /// <value>
+    /// The discovery endpoint configuration.
+    /// </value>
+    public DiscoveryOptions Discovery
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// Gets or sets the authentication options.
     /// </summary>
     /// <value>
@@ -168,6 +180,7 @@ public class IdentityServerOptions
         LowerCaseIssuerUri = true;
         AccessTokenJwtType = "at+jwt";
         Endpoints = new EndpointsOptions();
+        Discovery = new DiscoveryOptions();
         Authentication = new AuthenticationOptions();
         Events = new EventsOptions();
         MutualTls = new MutualTlsOptions();

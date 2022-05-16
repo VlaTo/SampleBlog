@@ -21,7 +21,9 @@ public static class ServiceCollectionExtensions
             .AddRequiredPlatformServices()
             .AddCookieAuthentication()
             .AddCoreServices()
-            .AddDefaultEndpoints();
+            .AddDefaultEndpoints()
+            .AddResponseGenerators()
+            .AddDefaultSecretParsers();
 
         return builder;
     }

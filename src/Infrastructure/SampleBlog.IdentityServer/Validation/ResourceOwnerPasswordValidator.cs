@@ -53,7 +53,7 @@ public class ResourceOwnerPasswordValidator<TUser> : IResourceOwnerPasswordValid
 
                 logger.LogInformation("Credentials validated for username: {username}", context.UserName);
 
-                context.Result = new GrantValidationResult(userId, OidcConstants.AuthenticationMethods.Password);
+                context.SetResult(new GrantValidationResult(userId, OidcConstants.AuthenticationMethods.Password));
 
                 return;
             }
@@ -76,6 +76,6 @@ public class ResourceOwnerPasswordValidator<TUser> : IResourceOwnerPasswordValid
             logger.LogInformation("No user found matching username: {username}", context.UserName);
         }
 
-        context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant);
+        context.SetResult(new GrantValidationResult(TokenRequestErrors.InvalidGrant));
     }
 }

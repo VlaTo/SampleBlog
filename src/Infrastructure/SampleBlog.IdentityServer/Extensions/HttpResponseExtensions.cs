@@ -3,6 +3,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 
 namespace SampleBlog.IdentityServer.Extensions;
@@ -101,6 +102,21 @@ internal static class HttpResponseExtensions
         response.ContentType = contentType.ToString();
         
         await response.WriteAsync(html, encoding);
+        await response.Body.FlushAsync();
+    }
+
+    public static async Task WriteJsonAsync(this HttpResponse response, object obj, string? contentType = null)
+    {
+        var encoding = Encoding.UTF8;
+        var json = ObjectSerializer.ToString(obj);
+        var ct = new ContentType(contentType ?? MediaTypeNames.Application.Json)
+        {
+            CharSet = encoding.HeaderName
+        };
+
+        response.ContentType = ct.ToString();
+
+        await response.WriteAsync(json, encoding);
         await response.Body.FlushAsync();
     }
 }

@@ -55,7 +55,7 @@ public class Resources
         OfflineAccess = false;
     }
 
-    private Resources(
+    internal Resources(
         IEnumerable<IdentityResource> identityResources,
         IEnumerable<ApiResource> apiResources,
         IEnumerable<ApiScope> apiScopes,

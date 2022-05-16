@@ -13,6 +13,7 @@
     <Folder Include="DependencyInjection\Extensions\" />
     <Folder Include="Endpoints\Results\" />
     <Folder Include="Hosting\FederatedSignOut\" />
+    <Folder Include="ResponseHandling\Defaults\" />
     <Folder Include="Validation\Contexts\" />
     <Folder Include="Validation\Results\" />
   </ItemGroup>
