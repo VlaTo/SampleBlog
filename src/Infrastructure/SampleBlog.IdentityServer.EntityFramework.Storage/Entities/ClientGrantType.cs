@@ -1,7 +1,13 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+[Table(Database.Tables.ClientGrantType, Schema = Database.Schemas.Identity)]
 public class ClientGrantType
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id
     {
         get;
@@ -20,6 +26,7 @@ public class ClientGrantType
         set;
     }
 
+    [ForeignKey(nameof(ClientId))]
     public Client Client
     {
         get;

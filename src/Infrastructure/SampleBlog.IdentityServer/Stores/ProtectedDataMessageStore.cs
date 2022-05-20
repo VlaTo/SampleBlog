@@ -1,9 +1,9 @@
-﻿using System.Text;
-using IdentityModel;
+﻿using IdentityModel;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.Models;
+using System.Text;
 
 namespace SampleBlog.IdentityServer.Stores;
 

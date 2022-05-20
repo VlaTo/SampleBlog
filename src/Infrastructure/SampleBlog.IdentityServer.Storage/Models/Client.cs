@@ -306,7 +306,7 @@ public sealed class Client
     /// <summary>
     /// Lifetime of a user consent in seconds. Defaults to null (no expiration)
     /// </summary>
-    public int? ConsentLifetime
+    public TimeSpan? ConsentLifetime
     {
         get;
         set;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Extensions;
 using SampleBlog.IdentityServer.Storage.Models;
 using SampleBlog.IdentityServer.Storage.Services;
@@ -35,7 +36,10 @@ public class ResourceStore : IResourceStore
     /// <param name="logger">The logger.</param>
     /// <param name="cancellationTokenProvider"></param>
     /// <exception cref="ArgumentNullException">context</exception>
-    public ResourceStore(IConfigurationDbContext context, ILogger<ResourceStore> logger, ICancellationTokenProvider cancellationTokenProvider)
+    public ResourceStore(
+        IConfigurationDbContext context,
+        ILogger<ResourceStore> logger,
+        ICancellationTokenProvider cancellationTokenProvider)
     {
         Context = context ?? throw new ArgumentNullException(nameof(context));
         Logger = logger;
@@ -49,7 +53,7 @@ public class ResourceStore : IResourceStore
     /// <returns></returns>
     public virtual async Task<IEnumerable<ApiResource>> FindApiResourcesByNameAsync(IEnumerable<string> apiResourceNames)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.FindApiResourcesByName");
+        using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.FindApiResourcesByName");
         //activity?.SetTag(Tracing.Properties.ApiResourceNames, apiResourceNames.ToSpaceSeparatedString());
 
         //if (apiResourceNames == null) throw new ArgumentNullException(nameof(apiResourceNames));
@@ -97,7 +101,7 @@ public class ResourceStore : IResourceStore
 
     public async Task<Resources> GetAllResourcesAsync()
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.GetAllResources");
+        using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.GetAllResources");
 
         var identity = await Context.IdentityResources
             .Include(x => x.UserClaims)
@@ -142,7 +146,7 @@ public class ResourceStore : IResourceStore
     /// <returns></returns>
     public async Task<IEnumerable<IdentityResource>> FindIdentityResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.FindIdentityResourcesByScopeName");
+        using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.FindIdentityResourcesByScopeName");
         //activity?.SetTag(Tracing.Properties.ScopeNames, scopeNames.ToSpaceSeparatedString());
 
         var scopes = scopeNames.ToArray();
@@ -169,7 +173,7 @@ public class ResourceStore : IResourceStore
 
     public async Task<IEnumerable<ApiScope>> FindApiScopesByNameAsync(IEnumerable<string> scopeNames)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.FindApiScopesByName");
+        using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.FindApiScopesByName");
         //activity?.SetTag(Tracing.Properties.ScopeNames, scopeNames.ToSpaceSeparatedString());
 
         var scopes = scopeNames.ToArray();
@@ -201,7 +205,7 @@ public class ResourceStore : IResourceStore
     /// <returns></returns>
     public virtual async Task<IEnumerable<ApiResource>> FindApiResourcesByScopeNameAsync(IEnumerable<string> scopeNames)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.FindApiResourcesByScopeName");
+        using var activity = Tracing.StoreActivitySource.StartActivity("ResourceStore.FindApiResourcesByScopeName");
         //activity?.SetTag(Tracing.Properties.ScopeNames, scopeNames.ToSpaceSeparatedString());
 
         var names = scopeNames.ToArray();

@@ -9,6 +9,7 @@ using SampleBlog.IdentityServer.Storage.Models;
 using SampleBlog.IdentityServer.Validation.Contexts;
 using SampleBlog.IdentityServer.Validation.Results;
 using System.Security.Claims;
+using SampleBlog.IdentityServer.Core;
 
 namespace SampleBlog.IdentityServer.Validation;
 

@@ -1,4 +1,5 @@
-﻿using SampleBlog.IdentityServer.DependencyInjection.Options;
+﻿using SampleBlog.IdentityServer.Core;
+using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Validation.Contexts;
 
 namespace SampleBlog.IdentityServer.Validation;

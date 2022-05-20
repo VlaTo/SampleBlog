@@ -1,4 +1,5 @@
-﻿using SampleBlog.IdentityServer.Models;
+﻿using SampleBlog.IdentityServer.Core;
+using SampleBlog.IdentityServer.Models;
 
 namespace SampleBlog.IdentityServer.Services;
 
@@ -23,14 +24,15 @@ public class ReturnUrlParser
     /// </summary>
     /// <param name="returnUrl">The return URL.</param>
     /// <returns></returns>
-    public virtual async Task<AuthorizationRequest> ParseAsync(string returnUrl)
+    public virtual async Task<AuthorizationRequest?> ParseAsync(string returnUrl)
     {
         using var activity = Tracing.ValidationActivitySource.StartActivity("ReturnUrlParser.Parse");
 
         foreach (var parser in parsers)
         {
             var result = await parser.ParseAsync(returnUrl);
-            if (result != null)
+
+            if (null != result)
             {
                 return result;
             }

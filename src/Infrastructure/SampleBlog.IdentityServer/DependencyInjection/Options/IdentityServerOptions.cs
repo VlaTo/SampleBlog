@@ -116,6 +116,15 @@ public class IdentityServerOptions
     }
 
     /// <summary>
+    /// Specifies if a user's tenant claim is compared to the tenant acr_values parameter value to determine if the login page is displayed. Defaults to false.
+    /// </summary>
+    public bool ValidateTenantOnAuthorization
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// Gets or sets the mutual TLS options.
     /// </summary>
     public MutualTlsOptions MutualTls

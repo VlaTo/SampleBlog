@@ -325,28 +325,28 @@ public class ConfigurationStoreOptions
     public ConfigurationStoreOptions()
     {
         DefaultSchema = null;
-        IdentityResource = new TableConfiguration("IdentityResources");
-        IdentityResourceClaim = new TableConfiguration("IdentityResourceClaims");
-        IdentityResourceProperty = new TableConfiguration("IdentityResourceProperties");
-        ApiResource = new TableConfiguration("ApiResources");
-        ApiResourceSecret = new TableConfiguration("ApiResourceSecrets");
-        ApiResourceScope = new TableConfiguration("ApiResourceScopes");
-        ApiResourceClaim = new TableConfiguration("ApiResourceClaims");
-        ApiResourceProperty = new TableConfiguration("ApiResourceProperties");
-        Client = new TableConfiguration("Clients");
-        ClientGrantType = new TableConfiguration("ClientGrantTypes");
-        ClientRedirectUri = new TableConfiguration("ClientRedirectUris");
-        ClientPostLogoutRedirectUri = new TableConfiguration("ClientPostLogoutRedirectUris");
-        ClientScopes = new TableConfiguration("ClientScopes");
-        ClientSecret = new TableConfiguration("ClientSecrets");
-        ClientClaim = new TableConfiguration("ClientClaims");
-        ClientIdPRestriction = new TableConfiguration("ClientIdPRestrictions");
-        ClientCorsOrigin = new TableConfiguration("ClientCorsOrigins");
-        ClientProperty = new TableConfiguration("ClientProperties");
-        ApiScope = new TableConfiguration("ApiScopes");
-        ApiScopeClaim = new TableConfiguration("ApiScopeClaims");
-        ApiScopeProperty = new TableConfiguration("ApiScopeProperties");
-        IdentityProvider = new TableConfiguration("IdentityProviders");
+        IdentityResource = new TableConfiguration("IdentityResources", Database.Schemas.Identity);
+        IdentityResourceClaim = new TableConfiguration("IdentityResourceClaims", Database.Schemas.Identity);
+        IdentityResourceProperty = new TableConfiguration("IdentityResourceProperties", Database.Schemas.Identity);
+        ApiResource = new TableConfiguration("ApiResources", Database.Schemas.Identity);
+        ApiResourceSecret = new TableConfiguration("ApiResourceSecrets", Database.Schemas.Identity);
+        ApiResourceScope = new TableConfiguration("ApiResourceScopes", Database.Schemas.Identity);
+        ApiResourceClaim = new TableConfiguration("ApiResourceClaims", Database.Schemas.Identity);
+        ApiResourceProperty = new TableConfiguration("ApiResourceProperties", Database.Schemas.Identity);
+        Client = new TableConfiguration("Clients", Database.Schemas.Identity);
+        ClientGrantType = new TableConfiguration("ClientGrantTypes", Database.Schemas.Identity);
+        ClientRedirectUri = new TableConfiguration("ClientRedirectUris", Database.Schemas.Identity);
+        ClientPostLogoutRedirectUri = new TableConfiguration("ClientPostLogoutRedirectUris", Database.Schemas.Identity);
+        ClientScopes = new TableConfiguration("ClientScopes", Database.Schemas.Identity);
+        ClientSecret = new TableConfiguration("ClientSecrets", Database.Schemas.Identity);
+        ClientClaim = new TableConfiguration("ClientClaims", Database.Schemas.Identity);
+        ClientIdPRestriction = new TableConfiguration("ClientIdPRestrictions", Database.Schemas.Identity);
+        ClientCorsOrigin = new TableConfiguration("ClientCorsOrigins", Database.Schemas.Identity);
+        ClientProperty = new TableConfiguration("ClientProperties", Database.Schemas.Identity);
+        ApiScope = new TableConfiguration("ApiScopes", Database.Schemas.Identity);
+        ApiScopeClaim = new TableConfiguration("ApiScopeClaims", Database.Schemas.Identity);
+        ApiScopeProperty = new TableConfiguration("ApiScopeProperties", Database.Schemas.Identity);
+        IdentityProvider = new TableConfiguration("IdentityProviders", Database.Schemas.Identity);
         EnablePooling = false;
     }
 }

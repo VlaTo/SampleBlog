@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Extensions;
 using SampleBlog.IdentityServer.Storage;
@@ -49,7 +50,7 @@ public class PersistedGrantStore : IPersistedGrantStore
     /// <inheritdoc/>
     public virtual async Task StoreAsync(IdentityServer.Storage.Models.PersistedGrant grant)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.Store");
+        using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.StoreAsync");
 
         var existing = await Context.PersistedGrants
             .Where(x => x.Key == grant.Key)
@@ -84,7 +85,7 @@ public class PersistedGrantStore : IPersistedGrantStore
     /// <inheritdoc/>
     public virtual async Task<IdentityServer.Storage.Models.PersistedGrant?> GetAsync(string key)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.Get");
+        using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.GetAsync");
 
         var persistedGrant = await Context.PersistedGrants
             .Where(x => x.Key == key)
@@ -107,7 +108,7 @@ public class PersistedGrantStore : IPersistedGrantStore
     /// <inheritdoc/>
     public async Task<IEnumerable<IdentityServer.Storage.Models.PersistedGrant>> GetAllAsync(PersistedGrantFilter filter)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.GetAll");
+        using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.GetAllAsync");
 
         filter.Validate();
 
@@ -126,7 +127,7 @@ public class PersistedGrantStore : IPersistedGrantStore
     /// <inheritdoc/>
     public virtual async Task RemoveAsync(string key)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.Remove");
+        using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.RemoveAsync");
 
         var persistedGrant = (await Context.PersistedGrants.Where(x => x.Key == key)
                 .ToArrayAsync(CancellationTokenProvider.CancellationToken))
@@ -155,7 +156,7 @@ public class PersistedGrantStore : IPersistedGrantStore
     /// <inheritdoc/>
     public async Task RemoveAllAsync(PersistedGrantFilter filter)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.RemoveAll");
+        using var activity = Tracing.StoreActivitySource.StartActivity("PersistedGrantStore.RemoveAllAsync");
 
         filter.Validate();
 
@@ -178,9 +179,9 @@ public class PersistedGrantStore : IPersistedGrantStore
     }
 
 
-    private IQueryable<PersistedGrant> Filter(IQueryable<PersistedGrant> query, PersistedGrantFilter filter)
+    private static IQueryable<PersistedGrant> Filter(IQueryable<PersistedGrant> query, PersistedGrantFilter filter)
     {
-        if (filter.ClientIds != null)
+        if (null != filter.ClientIds)
         {
             var ids = filter.ClientIds.ToList();
             if (!String.IsNullOrWhiteSpace(filter.ClientId))
@@ -203,7 +204,7 @@ public class PersistedGrantStore : IPersistedGrantStore
             query = query.Where(x => x.SubjectId == filter.SubjectId);
         }
 
-        if (filter.Types != null)
+        if (null != filter.Types)
         {
             var types = filter.Types.ToList();
             if (!String.IsNullOrWhiteSpace(filter.Type))

@@ -2,7 +2,7 @@
 
 namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 
-[Table("PersistedGrants", Schema = "Identity")]
+[Table("PersistedGrants", Schema = Database.Schemas.Identity)]
 public class PersistedGrant
 {
     public long Id

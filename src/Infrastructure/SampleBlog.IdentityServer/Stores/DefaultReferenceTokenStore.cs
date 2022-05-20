@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.Services;
 using SampleBlog.IdentityServer.Storage.Models;
 using SampleBlog.IdentityServer.Storage.Stores;

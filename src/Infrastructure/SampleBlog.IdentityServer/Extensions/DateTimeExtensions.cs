@@ -9,4 +9,16 @@ internal static class DateTimeExtensions
     {
         return now > (creationTime + timeout);
     }
+
+    [DebuggerStepThrough]
+    public static bool HasExpired(this DateTime? expirationTime, DateTime now)
+    {
+        return expirationTime.HasValue && expirationTime.Value.HasExpired(now);
+    }
+
+    [DebuggerStepThrough]
+    public static bool HasExpired(this DateTime expirationTime, DateTime now)
+    {
+        return now > expirationTime;
+    }
 }

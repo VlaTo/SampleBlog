@@ -6,6 +6,11 @@ using SampleBlog.Shared;
 using SampleBlog.Shared.Contracts;
 using SampleBlog.Shared.Contracts.Permissions;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+using SampleBlog.IdentityServer.EntityFramework.Storage.Stores;
+using SampleBlog.IdentityServer.Storage.Models;
+using SampleBlog.Infrastructure.Database.Contexts;
 
 namespace SampleBlog.Infrastructure.Database;
 
@@ -13,24 +18,30 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
 {
     private readonly UserManager<BlogUser> userManager;
     private readonly RoleManager<BlogUserRole> roleManager;
-    //private readonly BlogContext context;
+
+    private readonly ClientStore clientStore;
+
+    private readonly BlogContext context;
     private readonly ILogger<BlogDatabaseSeeder> logger;
 
     public BlogDatabaseSeeder(
         UserManager<BlogUser> userManager,
         RoleManager<BlogUserRole> roleManager,
-        //BlogContext context,
+        BlogContext context,
+        ClientStore clientStore,
         ILogger<BlogDatabaseSeeder> logger)
     {
         this.userManager = userManager;
         this.roleManager = roleManager;
-        //this.context = context;
+        this.clientStore = clientStore;
+        this.context = context;
         this.logger = logger;
     }
 
     public async Task SeedAsync()
     {
         await TryAddAdministratorAsync();
+        await TryAddClientsAsync();
     }
 
     private async Task TryAddAdministratorAsync()
@@ -121,6 +132,32 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
                     throw new Exception();
                 }
             }
+        }
+    }
+
+    private async Task TryAddClientsAsync()
+    {
+        const string clientId = "blog.spa.client";
+
+        var exists = context.Clients
+            .Where(client => client.ClientId == clientId)
+            .AsNoTracking()
+            .Any();
+
+        if (!exists)
+        {
+            var client = new Client
+            {
+                AccessTokenType = AccessTokenType.Jwt,
+                ClientClaimsPrefix = "sample_blog_",
+                ClientId = clientId,
+                ClientName = "Sample Blog SPA Client",
+                ClientUri = "http://localhost:5000"
+            };
+
+            var result = await context.Clients.AddAsync(client);
+
+            await context.SaveChangesAsync();
         }
     }
 

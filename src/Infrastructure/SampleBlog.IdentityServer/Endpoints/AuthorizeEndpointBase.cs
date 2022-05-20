@@ -1,17 +1,19 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using IdentityModel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using SampleBlog.IdentityServer.DependencyInjection.Options;
-using SampleBlog.IdentityServer.Extensions;
-using SampleBlog.IdentityServer.Hosting;
-using SampleBlog.IdentityServer.Services;
-using SampleBlog.IdentityServer.Stores;
-using System.Collections.Specialized;
-using System.Security.Claims;
-using IdentityModel;
 using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.Core.Events;
+using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Endpoints.Results;
+using SampleBlog.IdentityServer.Extensions;
+using SampleBlog.IdentityServer.Hosting;
+using SampleBlog.IdentityServer.Models;
+using SampleBlog.IdentityServer.ResponseHandling;
+using SampleBlog.IdentityServer.Services;
+using SampleBlog.IdentityServer.Stores;
 using SampleBlog.IdentityServer.Validation.Requests;
+using System.Collections.Specialized;
+using System.Security.Claims;
 
 namespace SampleBlog.IdentityServer.Endpoints;
 
@@ -20,9 +22,9 @@ internal abstract class AuthorizeEndpointBase : IEndpointHandler
     private readonly IAuthorizeResponseGenerator authorizeResponseGenerator;
     private readonly IEventService events;
     private readonly IdentityServerOptions options;
-    //private readonly IAuthorizeInteractionResponseGenerator _interactionGenerator;
+    private readonly IAuthorizeInteractionResponseGenerator interactionGenerator;
     private readonly IAuthorizeRequestValidator validator;
-    //private readonly IConsentMessageStore _consentResponseStore;
+    private readonly IConsentMessageStore consentResponseStore;
     private readonly IAuthorizationParametersMessageStore? authorizationParametersMessageStore;
 
     protected ILogger Logger
@@ -40,26 +42,27 @@ internal abstract class AuthorizeEndpointBase : IEndpointHandler
         ILogger<AuthorizeEndpointBase> logger,
         IdentityServerOptions options,
         IAuthorizeRequestValidator validator,
-        //IAuthorizeInteractionResponseGenerator interactionGenerator,
+        IAuthorizeInteractionResponseGenerator interactionGenerator,
         IAuthorizeResponseGenerator authorizeResponseGenerator,
         IUserSession userSession,
-        //IConsentMessageStore consentResponseStore,
+        IConsentMessageStore consentResponseStore,
         IAuthorizationParametersMessageStore? authorizationParametersMessageStore = null)
     {
         this.events = events;
         this.options = options;
-        Logger = logger;
         this.validator = validator;
-        //_interactionGenerator = interactionGenerator;
+        this.interactionGenerator = interactionGenerator;
         this.authorizeResponseGenerator = authorizeResponseGenerator;
-        UserSession = userSession;
-        //_consentResponseStore = consentResponseStore;
+        this.consentResponseStore = consentResponseStore;
         this.authorizationParametersMessageStore = authorizationParametersMessageStore;
+        
+        Logger = logger;
+        UserSession = userSession;
     }
 
-    public abstract Task<IEndpointResult> ProcessAsync(HttpContext context);
+    public abstract Task<IEndpointResult?> ProcessAsync(HttpContext context);
 
-    internal async Task<IEndpointResult> ProcessAuthorizeRequestAsync(
+    internal async Task<IEndpointResult?> ProcessAuthorizeRequestAsync(
         NameValueCollection parameters,
         ClaimsPrincipal? user,
         bool checkConsentResponse = false)
@@ -95,45 +98,51 @@ internal abstract class AuthorizeEndpointBase : IEndpointHandler
                 result.ErrorDescription);
         }
 
-        string consentRequestId = null;
+        string? consentRequestId = null;
 
         try
         {
-            /*Message<ConsentResponse> consent = null;
+            Message<ConsentResponse>? consent = null;
 
             if (checkConsentResponse)
             {
                 var consentRequest = new ConsentRequest(result.ValidatedRequest.Raw, user?.GetSubjectId());
+                
                 consentRequestId = consentRequest.Id;
-                consent = await _consentResponseStore.ReadAsync(consentRequestId);
 
-                if (consent != null && consent.Data == null)
+                consent = await consentResponseStore.ReadAsync(consentRequestId);
+
+                if (consent is { Data: null })
                 {
                     return await CreateErrorResultAsync("consent message is missing data");
                 }
-            }*/
+            }
 
             var request = result.ValidatedRequest;
             //LogRequest(request);
 
             // determine user interaction
-            /*var interactionResult = await _interactionGenerator.ProcessInteractionAsync(request, consent?.Data);
+            var interactionResult = await interactionGenerator.ProcessInteractionAsync(request, consent?.Data);
+
             if (interactionResult.IsError)
             {
                 return await CreateErrorResultAsync("Interaction generator error", request, interactionResult.Error, interactionResult.ErrorDescription, false);
             }
+
             if (interactionResult.IsLogin)
             {
                 return new LoginPageResult(request);
             }
+
             if (interactionResult.IsConsent)
             {
                 return new ConsentPageResult(request);
             }
+
             if (interactionResult.IsRedirect)
             {
                 return new CustomRedirectResult(request, interactionResult.RedirectUrl);
-            }*/
+            }
 
             var response = await authorizeResponseGenerator.CreateResponseAsync(request);
 
@@ -145,17 +154,17 @@ internal abstract class AuthorizeEndpointBase : IEndpointHandler
         }
         finally
         {
-            /*if (null != consentRequestId)
+            if (null != consentRequestId)
             {
                 await consentResponseStore.DeleteAsync(consentRequestId);
-            }*/
+            }
         }
     }
 
     protected async Task<IEndpointResult> CreateErrorResultAsync(
         string logMessage,
         ValidatedAuthorizeRequest? request = null,
-        string error = OidcConstants.AuthorizeErrors.ServerError,
+        string? error = OidcConstants.AuthorizeErrors.ServerError,
         string? errorDescription = null,
         bool logError = true)
     {

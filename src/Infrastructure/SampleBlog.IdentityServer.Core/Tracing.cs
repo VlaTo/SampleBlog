@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 
-namespace SampleBlog.IdentityServer;
+namespace SampleBlog.IdentityServer.Core;
 
-internal static class Tracing
+public static class Tracing
 {
     private static readonly Version? AssemblyVersion;
     private static readonly string ServiceVersion;

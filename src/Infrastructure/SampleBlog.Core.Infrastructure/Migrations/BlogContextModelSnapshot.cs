@@ -22,6 +22,166 @@ namespace SampleBlog.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<TimeSpan>("AbsoluteRefreshTokenLifetime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("AccessTokenLifetime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("AccessTokenType")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("AllowAccessTokensViaBrowser")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowOfflineAccess")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowPlainTextPkce")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AllowRememberConsent")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("AllowedIdentityTokenSigningAlgorithms")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("AlwaysSendClientClaims")
+                        .HasColumnType("bit");
+
+                    b.Property<TimeSpan>("AuthorizationCodeLifetime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("BackChannelLogoutSessionRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("BackChannelLogoutUri")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("CibaLifetime")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ClientClaimsPrefix")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientUri")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ConsentLifetime")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("DeviceCodeLifetime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("EnableLocalLogin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("FrontChannelLogoutSessionRequired")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("FrontChannelLogoutUri")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<TimeSpan>("IdentityTokenLifetime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("IncludeJwtId")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LogoUri")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PairWiseSubjectSalt")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PollingInterval")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProtocolType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RefreshTokenExpiration")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RefreshTokenUsage")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("RequireClientSecret")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequireConsent")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequirePkce")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequireRequestObject")
+                        .HasColumnType("bit");
+
+                    b.Property<TimeSpan>("SlidingRefreshTokenLifetime")
+                        .HasColumnType("time");
+
+                    b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserCodeType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("UserSsoLifetime")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clients", "Identity");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -101,6 +261,617 @@ namespace SampleBlog.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserTokens", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AllowedAccessTokenSigningAlgorithms")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RequireResourceIndicator")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowInDiscoveryDocument")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApiResources", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResourceClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ApiResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiResourceId");
+
+                    b.ToTable("ApiResourceClaims", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResourceProperty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ApiResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiResourceId");
+
+                    b.ToTable("ApiResourceProperties", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResourceScope", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ApiResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiResourceId");
+
+                    b.ToTable("ApiResourceScopes", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResourceSecret", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ApiResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApiResourceId");
+
+                    b.ToTable("ApiResourceSecrets", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiScope", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Emphasize")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Required")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowInDiscoveryDocument")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApiScopes", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiScopeClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ScopeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScopeId");
+
+                    b.ToTable("ApiScopeClaims", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiScopeProperty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ScopeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ScopeId");
+
+                    b.ToTable("ApiScopeProperties", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientClaims", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientCorsOrigin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientCorsOrigins", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientGrantType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GrantType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientGrantTypes", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientIdPRestriction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Provider")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientIdPRestrictions", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientPostSignOutRedirectUri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PostLogoutRedirectUri")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientPostLogoutRedirectUris", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientProperty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientProperties", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientRedirectUri", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RedirectUri")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientRedirectUris", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientScope", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Scope")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientScopes", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientSecret", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Expiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientSecrets", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastAccessed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Properties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Scheme")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityProviders", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityResource", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Emphasize")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("NonEditable")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("Required")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("ShowInDiscoveryDocument")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("IdentityResources", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityResourceClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("IdentityResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityResourceId");
+
+                    b.ToTable("IdentityResourceClaims", "Identity");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityResourceProperty", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("IdentityResourceId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentityResourceId");
+
+                    b.ToTable("IdentityResourceProperties", "Identity");
                 });
 
             modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.Key", b =>
@@ -410,6 +1181,193 @@ namespace SampleBlog.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResourceClaim", b =>
+                {
+                    b.HasOne("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResource", "ApiResource")
+                        .WithMany("UserClaims")
+                        .HasForeignKey("ApiResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApiResource");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResourceProperty", b =>
+                {
+                    b.HasOne("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResource", "ApiResource")
+                        .WithMany("Properties")
+                        .HasForeignKey("ApiResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApiResource");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResourceScope", b =>
+                {
+                    b.HasOne("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResource", "ApiResource")
+                        .WithMany("Scopes")
+                        .HasForeignKey("ApiResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApiResource");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResourceSecret", b =>
+                {
+                    b.HasOne("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResource", "ApiResource")
+                        .WithMany("Secrets")
+                        .HasForeignKey("ApiResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApiResource");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiScopeClaim", b =>
+                {
+                    b.HasOne("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiScope", "Scope")
+                        .WithMany("UserClaims")
+                        .HasForeignKey("ScopeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Scope");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiScopeProperty", b =>
+                {
+                    b.HasOne("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiScope", "Scope")
+                        .WithMany("Properties")
+                        .HasForeignKey("ScopeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Scope");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientClaim", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("Claims")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientCorsOrigin", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("AllowedCorsOrigins")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientGrantType", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("AllowedGrantTypes")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientIdPRestriction", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("IdentityProviderRestrictions")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientPostSignOutRedirectUri", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("PostLogoutRedirectUris")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientProperty", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("Properties")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientRedirectUri", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("RedirectUris")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientScope", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("AllowedScopes")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientSecret", b =>
+                {
+                    b.HasOne("Client", "Client")
+                        .WithMany("ClientSecrets")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityResourceClaim", b =>
+                {
+                    b.HasOne("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityResource", "IdentityResource")
+                        .WithMany("UserClaims")
+                        .HasForeignKey("IdentityResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityResource");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityResourceProperty", b =>
+                {
+                    b.HasOne("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityResource", "IdentityResource")
+                        .WithMany("Properties")
+                        .HasForeignKey("IdentityResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("IdentityResource");
+                });
+
             modelBuilder.Entity("SampleBlog.Infrastructure.Models.Identity.Blog", b =>
                 {
                     b.HasOne("SampleBlog.Infrastructure.Models.Identity.BlogUser", "Author")
@@ -430,6 +1388,52 @@ namespace SampleBlog.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("Client", b =>
+                {
+                    b.Navigation("AllowedCorsOrigins");
+
+                    b.Navigation("AllowedGrantTypes");
+
+                    b.Navigation("AllowedScopes");
+
+                    b.Navigation("Claims");
+
+                    b.Navigation("ClientSecrets");
+
+                    b.Navigation("IdentityProviderRestrictions");
+
+                    b.Navigation("PostLogoutRedirectUris");
+
+                    b.Navigation("Properties");
+
+                    b.Navigation("RedirectUris");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResource", b =>
+                {
+                    b.Navigation("Properties");
+
+                    b.Navigation("Scopes");
+
+                    b.Navigation("Secrets");
+
+                    b.Navigation("UserClaims");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiScope", b =>
+                {
+                    b.Navigation("Properties");
+
+                    b.Navigation("UserClaims");
+                });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.IdentityResource", b =>
+                {
+                    b.Navigation("Properties");
+
+                    b.Navigation("UserClaims");
                 });
 
             modelBuilder.Entity("SampleBlog.Infrastructure.Models.Identity.BlogUserRole", b =>

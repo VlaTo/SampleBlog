@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;

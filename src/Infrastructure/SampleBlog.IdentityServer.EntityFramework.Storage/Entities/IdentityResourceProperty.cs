@@ -1,5 +1,8 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+[Table(Database.Tables.IdentityResourceProperty, Schema = Database.Schemas.Identity)]
 public class IdentityResourceProperty : Property
 {
     public int IdentityResourceId
@@ -8,6 +11,7 @@ public class IdentityResourceProperty : Property
         set;
     }
 
+    [ForeignKey(nameof(IdentityResourceId))]
     public IdentityResource IdentityResource
     {
         get;

@@ -4,6 +4,7 @@ using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using SampleBlog.IdentityServer.Contexts;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Services;

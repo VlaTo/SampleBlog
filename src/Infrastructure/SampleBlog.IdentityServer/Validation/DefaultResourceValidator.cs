@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;
 using SampleBlog.IdentityServer.Storage.Models;
@@ -36,13 +37,13 @@ public class DefaultResourceValidator : IResourceValidator
     {
         using var activity = Tracing.ValidationActivitySource.StartActivity("DefaultResourceValidator.ValidateRequestedResources");
 
-        //activity?.SetTag(Tracing.Properties.Scope, request.Scopes.ToSpaceSeparatedString());
-        //activity?.SetTag(Tracing.Properties.Resource, request.ResourceIndicators.ToSpaceSeparatedString());
+        activity?.SetTag(Tracing.Properties.Scope, request.Scopes.ToSpaceSeparatedString());
+        activity?.SetTag(Tracing.Properties.Resource, request.ResourceIndicators.ToSpaceSeparatedString());
 
-        if (null == request)
+        /*if (null == request)
         {
             throw new ArgumentNullException(nameof(request));
-        }
+        }*/
 
         var result = new ResourceValidationResult();
         var parsedScopesResult = scopeParser.ParseScopeValues(request.Scopes);
@@ -58,12 +59,17 @@ public class DefaultResourceValidator : IResourceValidator
             return result;
         }
 
-        var scopeNames = parsedScopesResult.ParsedScopes.Select(x => x.ParsedName).Distinct().ToArray();
+        var scopeNames = parsedScopesResult.ParsedScopes
+            .Select(x => x.ParsedName)
+            .Distinct()
+            .ToArray();
+
         // todo: this API might want to pass resource indicators to better filter
         var scopeResourcesFromStore = await store.FindEnabledResourcesByScopeAsync(scopeNames);
-        Resources? scopeResources = null;
+        
+        Resources? scopeResources;
 
-        if (request.ResourceIndicators.Any() == true)
+        if (request.ResourceIndicators.Any())
         {
             // remove isolated API resources not included in the requested resource indicators
             var apiResources = scopeResourcesFromStore.ApiResources

@@ -120,14 +120,16 @@ public class DefaultGrantStore<T>
     /// </summary>
     /// <param name="key">The key.</param>
     /// <returns></returns>
-    protected virtual async Task<T> GetItemAsync(string key)
+    protected virtual async Task<T?> GetItemAsync(string key)
     {
         var hashedKey = GetHashedKey(key);
         var item = await GetItemByHashedKeyAsync(hashedKey);
-        if (item == null)
+
+        if (null == item)
         {
             Logger.LogDebug("{grantType} grant with value: {key} not found in store.", GrantType, key);
         }
+
         return item;
     }
 

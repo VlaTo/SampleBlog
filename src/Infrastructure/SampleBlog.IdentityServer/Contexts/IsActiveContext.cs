@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Storage.Models;
 
 namespace SampleBlog.IdentityServer.Contexts;
@@ -62,7 +61,7 @@ public class IsActiveContext
     /// </summary>
     public IsActiveContext(ClaimsPrincipal subject, Client client, string caller)
     {
-        if (null == subject)
+        /*if (null == subject)
         {
             throw new ArgumentNullException(nameof(subject));
         }
@@ -75,7 +74,7 @@ public class IsActiveContext
         if (caller.IsMissing())
         {
             throw new ArgumentNullException(nameof(caller));
-        }
+        }*/
 
         Subject = subject;
         Client = client;

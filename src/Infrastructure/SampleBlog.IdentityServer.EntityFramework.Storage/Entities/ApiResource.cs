@@ -1,14 +1,24 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+[Table(Database.Tables.ApiResource, Schema = Database.Schemas.Identity)]
 public class ApiResource
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id
     {
         get;
         set;
     }
 
-    public bool Enabled { get; set; } = true;
+    public bool Enabled
+    {
+        get;
+        set;
+    }
 
     public string Name
     {
@@ -34,7 +44,11 @@ public class ApiResource
         set;
     }
 
-    public bool ShowInDiscoveryDocument { get; set; } = true;
+    public bool ShowInDiscoveryDocument
+    {
+        get;
+        set;
+    }
 
     public bool RequireResourceIndicator
     {
@@ -66,7 +80,11 @@ public class ApiResource
         set;
     }
 
-    public DateTime Created { get; set; } = DateTime.UtcNow;
+    public DateTime Created
+    {
+        get;
+        set;
+    }
 
     public DateTime? Updated
     {
@@ -84,5 +102,12 @@ public class ApiResource
     {
         get;
         set;
+    }
+
+    public ApiResource()
+    {
+        Enabled = true;
+        ShowInDiscoveryDocument = true;
+        //Created = DateTime.UtcNow;
     }
 }

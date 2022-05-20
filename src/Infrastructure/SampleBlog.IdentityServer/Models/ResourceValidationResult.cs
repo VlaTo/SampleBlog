@@ -9,9 +9,56 @@ namespace SampleBlog.IdentityServer.Models;
 public class ResourceValidationResult
 {
     /// <summary>
+    /// Indicates if the result was successful.
+    /// </summary>
+    public bool Succeeded => ParsedScopes.Any() && !InvalidScopes.Any() && !InvalidResourceIndicators.Any();
+
+    /// <summary>
+    /// The resources of the result.
+    /// </summary>
+    public Resources Resources
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// The parsed scopes represented by the result.
+    /// </summary>
+    public IList<ParsedScopeValue> ParsedScopes
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// The original (raw) scope values represented by the validated result.
+    /// </summary>
+    public IEnumerable<string> RawScopeValues => ParsedScopes.Select(x => x.RawValue);
+
+    /// <summary>
+    /// The requested resource indicators that are invalid.
+    /// </summary>
+    public ICollection<string> InvalidResourceIndicators
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// The requested scopes that are invalid.
+    /// </summary>
+    public ICollection<string> InvalidScopes
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// Ctor
     /// </summary>
     public ResourceValidationResult()
+        : this(new Resources(), new HashSet<ParsedScopeValue>())
     {
     }
 
@@ -20,9 +67,8 @@ public class ResourceValidationResult
     /// </summary>
     /// <param name="resources"></param>
     public ResourceValidationResult(Resources resources)
+        : this(resources, resources.ToScopeNames().Select(x => new ParsedScopeValue(x)))
     {
-        Resources = resources;
-        ParsedScopes = resources.ToScopeNames().Select(x => new ParsedScopeValue(x)).ToList();
     }
 
     /// <summary>
@@ -34,37 +80,9 @@ public class ResourceValidationResult
     {
         Resources = resources;
         ParsedScopes = parsedScopeValues.ToList();
+        InvalidResourceIndicators = new HashSet<string>();
+        InvalidScopes = new HashSet<string>();
     }
-
-    /// <summary>
-    /// Indicates if the result was successful.
-    /// </summary>
-    public bool Succeeded => ParsedScopes.Any() && !InvalidScopes.Any() && !InvalidResourceIndicators.Any();
-
-    /// <summary>
-    /// The resources of the result.
-    /// </summary>
-    public Resources Resources { get; set; } = new Resources();
-
-    /// <summary>
-    /// The parsed scopes represented by the result.
-    /// </summary>
-    public ICollection<ParsedScopeValue> ParsedScopes { get; set; } = new HashSet<ParsedScopeValue>();
-
-    /// <summary>
-    /// The original (raw) scope values represented by the validated result.
-    /// </summary>
-    public IEnumerable<string> RawScopeValues => ParsedScopes.Select(x => x.RawValue);
-
-    /// <summary>
-    /// The requested resource indicators that are invalid.
-    /// </summary>
-    public ICollection<string> InvalidResourceIndicators { get; set; } = new HashSet<string>();
-
-    /// <summary>
-    /// The requested scopes that are invalid.
-    /// </summary>
-    public ICollection<string> InvalidScopes { get; set; } = new HashSet<string>();
 
     /// <summary>
     /// Returns new result filted by the scope values.
@@ -122,7 +140,7 @@ public class ResourceValidationResult
                 .SelectMany(resource => resource.Scopes)
                 .Select(resource => resource)
                 .ToArray();
-            
+
             apiScopesToKeep = Resources.ApiScopes
                 .Where(x => scopeNamesToKeep.Contains(x.Name))
                 .ToArray();
@@ -130,7 +148,7 @@ public class ResourceValidationResult
             // filter ParsedScopes to those matching the apiScopesToKeep
             var parsedScopesToKeepList = ParsedScopes
                 .Where(x => scopeNamesToKeep.Contains(x.ParsedName))
-                .ToHashSet();
+                .ToList();
 
             if (Resources.OfflineAccess)
             {

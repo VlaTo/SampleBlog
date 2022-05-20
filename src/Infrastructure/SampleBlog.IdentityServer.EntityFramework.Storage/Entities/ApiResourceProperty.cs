@@ -1,5 +1,8 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+[Table(Database.Tables.ApiResourceProperty, Schema = Database.Schemas.Identity)]
 public class ApiResourceProperty : Property
 {
     public int ApiResourceId
@@ -8,6 +11,7 @@ public class ApiResourceProperty : Property
         set;
     }
 
+    [ForeignKey(nameof(ApiResourceId))]
     public ApiResource ApiResource
     {
         get;

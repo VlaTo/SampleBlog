@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using SampleBlog.IdentityServer.Contexts;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;

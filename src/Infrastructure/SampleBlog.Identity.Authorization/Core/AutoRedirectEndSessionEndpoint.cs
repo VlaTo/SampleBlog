@@ -34,7 +34,7 @@ internal class AutoRedirectEndSessionEndpoint : IEndpointHandler
         this.validator = validator;
     }
 
-    public async Task<IEndpointResult> ProcessAsync(HttpContext ctx)
+    public async Task<IEndpointResult?> ProcessAsync(HttpContext ctx)
     {
         var validateRequest = ValidateRequest(ctx.Request);
 

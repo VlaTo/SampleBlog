@@ -1,14 +1,24 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+[Table(Database.Tables.IdentityResource, Schema = Database.Schemas.Identity)]
 public class IdentityResource
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id
     {
         get;
         set;
     }
 
-    public bool Enabled { get; set; } = true;
+    public bool Enabled
+    {
+        get;
+        set;
+    }
 
     public string Name
     {
@@ -40,7 +50,11 @@ public class IdentityResource
         set;
     }
 
-    public bool ShowInDiscoveryDocument { get; set; } = true;
+    public bool ShowInDiscoveryDocument
+    {
+        get;
+        set;
+    }
 
     public List<IdentityResourceClaim> UserClaims
     {
@@ -54,7 +68,11 @@ public class IdentityResource
         set;
     }
 
-    public DateTime Created { get; set; } = DateTime.UtcNow;
+    public DateTime Created
+    {
+        get;
+        set;
+    }
 
     public DateTime? Updated
     {
@@ -66,5 +84,12 @@ public class IdentityResource
     {
         get;
         set;
+    }
+
+    public IdentityResource()
+    {
+        Enabled = true;
+        ShowInDiscoveryDocument = true;
+        //Created = DateTime.UtcNow;
     }
 }

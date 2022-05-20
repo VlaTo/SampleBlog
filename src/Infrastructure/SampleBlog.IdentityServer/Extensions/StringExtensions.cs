@@ -20,7 +20,7 @@ internal static class StringExtensions
     }
 
     [DebuggerStepThrough]
-    public static string CleanUrlPath(this string url)
+    public static string CleanUrlPath(this string? url)
     {
         if (String.IsNullOrWhiteSpace(url))
         {
@@ -67,6 +67,27 @@ internal static class StringExtensions
         }
 
         return url;
+    }
+
+    public static List<string> ParseScopesString(this string? scopes)
+    {
+        var parsedScopes = new List<string>();
+
+        if (false == scopes.IsMissing())
+        {
+            parsedScopes.AddRange(scopes
+                .Trim()
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Distinct()
+            );
+
+            if (0 < parsedScopes.Count)
+            {
+                parsedScopes.Sort();
+            }
+        }
+
+        return parsedScopes;
     }
 
     [DebuggerStepThrough]

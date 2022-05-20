@@ -13,7 +13,7 @@ public static class ModelBuilderExtensions
     /// <param name="options">The store options.</param>
     public static void ConfigureClientContext(this ModelBuilder modelBuilder, ConfigurationStoreOptions options)
     {
-        if (String.IsNullOrWhiteSpace(options.DefaultSchema))
+        if (false == String.IsNullOrWhiteSpace(options.DefaultSchema))
         {
             modelBuilder.HasDefaultSchema(options.DefaultSchema);
         }

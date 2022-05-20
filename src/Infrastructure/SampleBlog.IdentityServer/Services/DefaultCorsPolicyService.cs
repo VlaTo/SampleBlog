@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 
 namespace SampleBlog.IdentityServer.Services;
 

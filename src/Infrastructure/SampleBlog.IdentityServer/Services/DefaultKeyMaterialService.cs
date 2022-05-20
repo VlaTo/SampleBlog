@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;
 

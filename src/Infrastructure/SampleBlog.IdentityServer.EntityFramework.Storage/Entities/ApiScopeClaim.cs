@@ -1,5 +1,8 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+[Table(Database.Tables.ApiScopeClaim, Schema = Database.Schemas.Identity)]
 public class ApiScopeClaim : UserClaim
 {
     public int ScopeId
@@ -8,6 +11,7 @@ public class ApiScopeClaim : UserClaim
         set;
     }
 
+    [ForeignKey(nameof(ScopeId))]
     public ApiScope Scope
     {
         get;

@@ -1,7 +1,13 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+[Table(Database.Tables.ApiScope, Schema = Database.Schemas.Identity)]
 public class ApiScope
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id
     {
         get;
@@ -12,7 +18,7 @@ public class ApiScope
     {
         get;
         set;
-    } = true;
+    }
 
     public string Name
     {
@@ -44,7 +50,11 @@ public class ApiScope
         set;
     }
 
-    public bool ShowInDiscoveryDocument { get; set; } = true;
+    public bool ShowInDiscoveryDocument
+    {
+        get;
+        set;
+    }
 
     public List<ApiScopeClaim> UserClaims
     {
@@ -58,7 +68,11 @@ public class ApiScope
         set;
     }
 
-    public DateTime Created { get; set; } = DateTime.UtcNow;
+    public DateTime Created
+    {
+        get;
+        set;
+    }
 
     public DateTime? Updated
     {
@@ -76,5 +90,12 @@ public class ApiScope
     {
         get;
         set;
+    }
+
+    public ApiScope()
+    {
+        Enabled = true;
+        ShowInDiscoveryDocument = true;
+        Created = DateTime.UtcNow;
     }
 }

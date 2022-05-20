@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Collections.Specialized;
+using System.Security.Cryptography;
 using System.Text;
 using IdentityModel;
 using SampleBlog.IdentityServer.Validation.Requests;
@@ -103,5 +104,69 @@ public static class ValidatedAuthorizeRequestExtensions
         {
             request.Raw.Remove(OidcConstants.AuthorizeRequest.AcrValues);
         }
+    }
+    
+    public static string ToOptimizedQueryString(this ValidatedAuthorizeRequest request)
+    {
+        return request.ToOptimizedRawValues().ToQueryString();
+    }
+
+    public static IDictionary<string, string[]> ToOptimizedFullDictionary(this ValidatedAuthorizeRequest request)
+    {
+        return request.ToOptimizedRawValues().ToFullDictionary();
+    }
+    
+    public static void RemovePrompt(this ValidatedAuthorizeRequest request)
+    {
+        var suppress = new StringBuilder();
+
+        if (request.PromptModes.Contains(OidcConstants.PromptModes.Login))
+        {
+            suppress.Append(OidcConstants.PromptModes.Login);
+        }
+
+        if (request.PromptModes.Contains(OidcConstants.PromptModes.SelectAccount))
+        {
+            if (0 < suppress.Length)
+            {
+                suppress.Append(' ');
+            }
+
+            suppress.Append(OidcConstants.PromptModes.SelectAccount);
+        }
+
+        request.Raw.Add(Constants.SuppressedPrompt, suppress.ToString());
+        request.PromptModes = request.PromptModes
+            .Except(new[]
+            {
+                OidcConstants.PromptModes.Login,
+                OidcConstants.PromptModes.SelectAccount
+            })
+            .ToArray();
+    }
+
+    private static NameValueCollection ToOptimizedRawValues(this ValidatedAuthorizeRequest request)
+    {
+        if (request.Raw.AllKeys.Contains(OidcConstants.AuthorizeRequest.Request))
+        {
+            // if we already have a request object in the URL, then we can filter out the duplicate entries in the Raw collection
+            var collection = new NameValueCollection();
+
+            foreach (var key in request.Raw.AllKeys)
+            {
+                // https://openid.net/specs/openid-connect-core-1_0.html#JWTRequests 
+                // requires client id and response type to always be in URL
+                if (key == OidcConstants.AuthorizeRequest.ClientId ||
+                    key == OidcConstants.AuthorizeRequest.ResponseType ||
+                    request.RequestObjectValues.All(x => x.Type != key))
+                {
+                    collection.Add(key, request.Raw[key]);
+                }
+            }
+
+            return collection;
+        }
+
+        return request.Raw;
     }
 }

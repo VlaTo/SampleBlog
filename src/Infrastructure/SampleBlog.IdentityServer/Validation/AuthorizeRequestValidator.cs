@@ -1,7 +1,6 @@
-﻿using System.Collections.Specialized;
-using System.Security.Claims;
-using IdentityModel;
+﻿using IdentityModel;
 using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;
@@ -9,6 +8,8 @@ using SampleBlog.IdentityServer.Services;
 using SampleBlog.IdentityServer.Storage.Stores;
 using SampleBlog.IdentityServer.Validation.Contexts;
 using SampleBlog.IdentityServer.Validation.Requests;
+using System.Collections.Specialized;
+using System.Security.Claims;
 
 namespace SampleBlog.IdentityServer.Validation;
 
@@ -55,7 +56,7 @@ internal sealed class AuthorizeRequestValidator : IAuthorizeRequestValidator
 
     public async Task<AuthorizeRequestValidationResult> ValidateAsync(NameValueCollection parameters, ClaimsPrincipal? subject = null)
     {
-        //using var activity = Tracing.BasicActivitySource.StartActivity("AuthorizeRequestValidator.Validate");
+        using var activity = Tracing.BasicActivitySource.StartActivity("AuthorizeRequestValidator.Validate");
 
         logger.LogDebug("Start authorize request protocol validation");
 

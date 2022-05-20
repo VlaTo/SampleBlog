@@ -12,17 +12,69 @@ public abstract class AuditableContext :
     IdentityDbContext<BlogUser, BlogUserRole, string, IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, BlogUserRoleClaim, IdentityUserToken<string>>,
     IPersistedGrantDbContext
 {
+    #region IPersistedGrantDbContext implementation
+
+    /// <inheritdoc />
     public DbSet<PersistedGrant> PersistedGrants
     {
         get;
         set;
     }
 
+    /// <inheritdoc />
     public DbSet<Key> Keys
     {
         get;
         set;
     }
+
+    #endregion
+
+    #region IConfigurationDbContext implementation
+
+    /// <inheritdoc />
+    public DbSet<Client> Clients
+    {
+        get;
+        set;
+    }
+
+    /// <inheritdoc />
+    public DbSet<ClientCorsOrigin> ClientCorsOrigins
+    {
+        get;
+        set;
+    }
+
+    /// <inheritdoc />
+    public DbSet<IdentityResource> IdentityResources
+    {
+        get;
+        set;
+    }
+
+    /// <inheritdoc />
+    public DbSet<ApiResource> ApiResources
+    {
+        get;
+        set;
+    }
+
+    /// <inheritdoc />
+    public DbSet<ApiScope> ApiScopes
+    {
+        get;
+        set;
+    }
+
+    /// <inheritdoc />
+    public DbSet<IdentityProvider> IdentityProviders
+    {
+        get;
+        set;
+    }
+
+    #endregion
 
     protected AuditableContext(DbContextOptions options)
         : base(options)

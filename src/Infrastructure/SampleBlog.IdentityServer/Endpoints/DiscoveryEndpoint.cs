@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Endpoints.Results;
 using SampleBlog.IdentityServer.Hosting;
@@ -31,14 +32,14 @@ internal sealed class DiscoveryEndpoint : IEndpointHandler
         this.logger = logger;
     }
 
-    public async Task<IEndpointResult> ProcessAsync(HttpContext context)
+    public async Task<IEndpointResult?> ProcessAsync(HttpContext context)
     {
-        //using var activity = Tracing.ActivitySource.StartActivity(Constants.EndpointNames.Discovery + "Endpoint");
+        using var activity = Tracing.ActivitySource.StartActivity(Constants.EndpointNames.Discovery + "Endpoint");
 
         logger.LogTrace("Processing discovery request.");
 
         // validate HTTP
-        if (!HttpMethods.IsGet(context.Request.Method))
+        if (false == HttpMethods.IsGet(context.Request.Method))
         {
             logger.LogWarning("Discovery endpoint only supports GET requests");
             return new StatusCodeResult(HttpStatusCode.MethodNotAllowed);
@@ -46,7 +47,7 @@ internal sealed class DiscoveryEndpoint : IEndpointHandler
 
         logger.LogDebug("Start discovery request");
 
-        if (!options.Endpoints.EnableDiscoveryEndpoint)
+        if (false == options.Endpoints.EnableDiscoveryEndpoint)
         {
             logger.LogInformation("Discovery endpoint disabled. 404.");
             return new StatusCodeResult(HttpStatusCode.NotFound);

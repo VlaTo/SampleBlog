@@ -19,6 +19,17 @@ internal static class ClaimsPrincipalExtensions
     }
 
     /// <summary>
+    /// Gets the tenant.
+    /// </summary>
+    /// <param name="principal">The principal.</param>
+    /// <returns></returns>
+    [DebuggerStepThrough]
+    public static string? GetTenant(this ClaimsPrincipal? principal)
+    {
+        return principal?.FindFirst(IdentityServerConstants.ClaimTypes.Tenant)?.Value;
+    }
+
+    /// <summary>
     /// Gets the name.
     /// </summary>
     /// <param name="principal">The principal.</param>

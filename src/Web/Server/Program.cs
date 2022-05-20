@@ -8,7 +8,9 @@ using SampleBlog.Core.Application.Services;
 using SampleBlog.IdentityServer.DependencyInjection.Extensions;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.EntityFramework.Extensions;
+using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using SampleBlog.IdentityServer.Extensions;
+using SampleBlog.IdentityServer.Models;
 using SampleBlog.Infrastructure.Database;
 using SampleBlog.Infrastructure.Database.Contexts;
 using SampleBlog.Infrastructure.Extensions;
@@ -67,7 +69,15 @@ builder.Services
     })
     .AddConfigurationStore(options =>
     {
-        options.DefaultSchema = "http://sampleblog.net/database/configuration";
+        /*options.DefaultSchema = "http://sampleblog.net/database/configuration";
+        options.IdentityResource.Name = nameof(IdentityResources);
+        options.IdentityResourceClaim.Name = nameof(IdentityResourceClaim);
+        options.IdentityResourceProperty.Name = nameof(IdentityResourceProperty);*/
+        options.ConfigureDbContext = (db) =>
+        {
+            var connectionString = builder.Configuration.GetConnectionString("Database");
+            db.UseSqlServer(connectionString);
+        };
     });
 
 builder.Services.AddMvc(options =>
@@ -137,7 +147,7 @@ using (var scope = app.Services.CreateScope())
         if (context.Database.IsSqlServer())
         {
             await context.Database.EnsureCreatedAsync();
-            await context.Database.MigrateAsync();
+            //await context.Database.MigrateAsync();
 
             var seeder = scope.ServiceProvider.GetService<IDatabaseSeeder>();
 

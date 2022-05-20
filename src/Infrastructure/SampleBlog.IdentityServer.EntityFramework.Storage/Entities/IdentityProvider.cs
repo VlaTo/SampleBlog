@@ -1,13 +1,19 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 
 /// <summary>
 /// Models storage for identity providers.
 /// </summary>
+[Table(Database.Tables.IdentityProvider, Schema = Database.Schemas.Identity)]
 public class IdentityProvider
 {
     /// <summary>
     /// Primary key used for EF
     /// </summary>
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id
     {
         get;
@@ -86,6 +92,6 @@ public class IdentityProvider
     public IdentityProvider()
     {
         Enabled = true;
-        Created = DateTime.UtcNow;
+        //Created = DateTime.UtcNow;
     }
 }

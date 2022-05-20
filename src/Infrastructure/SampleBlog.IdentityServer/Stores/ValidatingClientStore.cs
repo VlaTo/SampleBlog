@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.Core.Events;
 using SampleBlog.IdentityServer.Services;
 using SampleBlog.IdentityServer.Storage.Models;
@@ -51,24 +52,26 @@ public class ValidatingClientStore<T> : IClientStore
 
         var client = await store.FindClientByIdAsync(clientId);
 
-        if (null != client)
+        if (null == client)
         {
-            logger.LogTrace("Calling into client configuration validator: {validatorType}", _validatorType);
-
-            var context = new ClientConfigurationValidationContext(client);
-            
-            await validator.ValidateAsync(context);
-
-            if (context.IsValid)
-            {
-                logger.LogDebug("client configuration validation for client {clientId} succeeded.", client.ClientId);
-                return client;
-            }
-
-            logger.LogError("Invalid client configuration for client {clientId}: {errorMessage}", client.ClientId, context.ErrorMessage);
-            
-            await events.RaiseAsync(new InvalidClientConfigurationEvent(client, context.ErrorMessage));
+            return null;
         }
+
+        logger.LogTrace("Calling into client configuration validator: {validatorType}", _validatorType);
+
+        var context = new ClientConfigurationValidationContext(client);
+            
+        await validator.ValidateAsync(context);
+
+        if (context.IsValid)
+        {
+            logger.LogDebug("client configuration validation for client {clientId} succeeded.", client.ClientId);
+            return client;
+        }
+
+        logger.LogError("Invalid client configuration for client {clientId}: {errorMessage}", client.ClientId, context.ErrorMessage);
+            
+        await events.RaiseAsync(new InvalidClientConfigurationEvent(client, context.ErrorMessage));
 
         return null;
     }
