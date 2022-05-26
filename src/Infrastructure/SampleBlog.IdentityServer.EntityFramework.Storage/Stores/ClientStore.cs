@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Extensions;
 using SampleBlog.IdentityServer.Storage.Services;
 using SampleBlog.IdentityServer.Storage.Stores;
@@ -53,8 +54,9 @@ public class ClientStore : IClientStore
     /// </returns>
     public virtual async Task<IdentityServer.Storage.Models.Client?> FindClientByIdAsync(string clientId)
     {
-        //using var activity = Tracing.StoreActivitySource.StartActivity("ClientStore.FindClientById");
-        //activity?.SetTag(Tracing.Properties.ClientId, clientId);
+        using var activity = Tracing.StoreActivitySource.StartActivity("ClientStore.FindClientById");
+        
+        activity?.SetTag(Tracing.Properties.ClientId, clientId);
 
         var query = Context.Clients
             .Where(x => x.ClientId == clientId)
@@ -70,9 +72,6 @@ public class ClientStore : IClientStore
             .AsNoTracking()
             .AsSplitQuery();
 
-        //var client = await query.ToArrayAsync(CancellationTokenProvider.CancellationToken)
-        //    .SingleOrDefault(x => x.ClientId == clientId);
-
         var client = await query.SingleOrDefaultAsync(CancellationTokenProvider.CancellationToken);
 
         if (null == client)
@@ -82,7 +81,7 @@ public class ClientStore : IClientStore
 
         var model = client.ToModel();
 
-        Logger.LogDebug("{clientId} found in database: {clientIdFound}", clientId, model != null);
+        Logger.LogDebug("Client {clientId} found in database", clientId);
 
         return model;
     }

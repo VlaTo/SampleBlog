@@ -15,6 +15,8 @@ namespace SampleBlog.Infrastructure.Migrations
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
+            var timeSpanConvertion = new TimeSpanToTicksConverter();
+
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "6.0.4")
@@ -31,10 +33,12 @@ namespace SampleBlog.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<TimeSpan>("AbsoluteRefreshTokenLifetime")
-                        .HasColumnType("time");
+                        //.HasColumnType("time")
+                        .HasConversion(timeSpanConvertion);
 
                     b.Property<TimeSpan>("AccessTokenLifetime")
-                        .HasColumnType("time");
+                        //.HasColumnType("time")
+                        .HasConversion(timeSpanConvertion);
 
                     b.Property<int>("AccessTokenType")
                         .HasColumnType("int");
@@ -62,7 +66,8 @@ namespace SampleBlog.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<TimeSpan>("AuthorizationCodeLifetime")
-                        .HasColumnType("time");
+                        //.HasColumnType("time")
+                        .HasConversion(timeSpanConvertion);
 
                     b.Property<bool>("BackChannelLogoutSessionRequired")
                         .HasColumnType("bit");
@@ -101,7 +106,8 @@ namespace SampleBlog.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeSpan>("DeviceCodeLifetime")
-                        .HasColumnType("time");
+                        //.HasColumnType("time")
+                        .HasConversion(timeSpanConvertion);
 
                     b.Property<bool>("EnableLocalLogin")
                         .HasColumnType("bit");
@@ -117,7 +123,8 @@ namespace SampleBlog.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeSpan>("IdentityTokenLifetime")
-                        .HasColumnType("time");
+                        //.HasColumnType("time")
+                        .HasConversion(timeSpanConvertion);
 
                     b.Property<bool>("IncludeJwtId")
                         .HasColumnType("bit");
@@ -162,7 +169,8 @@ namespace SampleBlog.Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<TimeSpan>("SlidingRefreshTokenLifetime")
-                        .HasColumnType("time");
+                        //.HasColumnType("time")
+                        .HasConversion(timeSpanConvertion);
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
                         .HasColumnType("bit");

@@ -1,5 +1,6 @@
 ﻿using SampleBlog.Identity.Authorization.Configuration;
 using SampleBlog.IdentityServer;
+using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using SampleBlog.IdentityServer.Models;
 
 namespace SampleBlog.Identity.Authorization.Options;
@@ -152,7 +153,7 @@ public class ClientBuilder
     /// </summary>
     /// <param name="clientSecret">The client secret to add.</param>
     /// <returns>The <see cref="ClientBuilder"/>.</returns>
-    internal ClientBuilder WithClientSecret(string clientSecret)
+    public ClientBuilder WithClientSecret(string clientSecret)
     {
         client.ClientSecrets.Add(new IdentityServer.Storage.Models.Secret(clientSecret));
         client.RequireClientSecret = true;

@@ -393,7 +393,7 @@ internal sealed class AuthorizeRequestValidator : IAuthorizeRequestValidator
         //////////////////////////////////////////////////////////
         var responseType = request.Raw?.Get(OidcConstants.AuthorizeRequest.ResponseType);
 
-        if (null != responseType)
+        if (String.IsNullOrEmpty(responseType))
         {
             LogError("Missing response_type", request);
             return Invalid(request, OidcConstants.AuthorizeErrors.UnsupportedResponseType, "Missing response_type");
@@ -427,7 +427,7 @@ internal sealed class AuthorizeRequestValidator : IAuthorizeRequestValidator
         //////////////////////////////////////////////////////////
         // check if flow is allowed at authorize endpoint
         //////////////////////////////////////////////////////////
-        if (!Constants.AllowedGrantTypesForAuthorizeEndpoint.Contains(request.GrantType))
+        if (false == Constants.AllowedGrantTypesForAuthorizeEndpoint.Contains(request.GrantType))
         {
             LogError("Invalid grant type", request.GrantType, request);
             return Invalid(request, description: "Invalid response_type");
@@ -456,7 +456,8 @@ internal sealed class AuthorizeRequestValidator : IAuthorizeRequestValidator
         //////////////////////////////////////////////////////////
 
         // check if response_mode parameter is present and valid
-        var responseMode = request.Raw.Get(OidcConstants.AuthorizeRequest.ResponseMode);
+        var responseMode = request.Raw?.Get(OidcConstants.AuthorizeRequest.ResponseMode);
+
         if (responseMode.IsPresent())
         {
             if (Constants.SupportedResponseModes.Contains(responseMode))
@@ -477,12 +478,11 @@ internal sealed class AuthorizeRequestValidator : IAuthorizeRequestValidator
                 return Invalid(request, OidcConstants.AuthorizeErrors.UnsupportedResponseType, description: "Invalid response_mode");
             }
         }
-
-
+        
         //////////////////////////////////////////////////////////
         // check if grant type is allowed for client
         //////////////////////////////////////////////////////////
-        if (!request.Client.AllowedGrantTypes.Contains(request.GrantType))
+        if (false == request.Client.AllowedGrantTypes.Contains(request.GrantType))
         {
             LogError("Invalid grant type for client", request.GrantType, request);
             return Invalid(request, OidcConstants.AuthorizeErrors.UnauthorizedClient, "Invalid grant type for client");
@@ -511,7 +511,7 @@ internal sealed class AuthorizeRequestValidator : IAuthorizeRequestValidator
         var fail = Invalid(request);
         var codeChallenge = request.Raw?.Get(OidcConstants.AuthorizeRequest.CodeChallenge);
 
-        if (null != codeChallenge)
+        if (String.IsNullOrEmpty(codeChallenge))
         {
             if (request.Client is { RequirePkce: true })
             {
@@ -539,10 +539,10 @@ internal sealed class AuthorizeRequestValidator : IAuthorizeRequestValidator
 
         var codeChallengeMethod = request.Raw?.Get(OidcConstants.AuthorizeRequest.CodeChallengeMethod);
 
-        if (null != codeChallengeMethod)
+        if (String.IsNullOrEmpty(codeChallengeMethod))
         {
-            logger.LogDebug("Missing code_challenge_method, defaulting to plain");
             codeChallengeMethod = OidcConstants.CodeChallengeMethods.Plain;
+            logger.LogDebug($"Missing code_challenge_method, assuming defaulting {codeChallengeMethod}");
         }
 
         if (false == Constants.SupportedCodeChallengeMethods.Contains(codeChallengeMethod))

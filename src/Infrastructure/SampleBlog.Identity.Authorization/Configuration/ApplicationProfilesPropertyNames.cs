@@ -1,4 +1,6 @@
-﻿namespace SampleBlog.Identity.Authorization.Configuration;
+﻿using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+namespace SampleBlog.Identity.Authorization.Configuration;
 
 /// <summary>
 /// Constants used for storing information about application profiles in the <see cref="Client.Properties"/> or <see cref="Resource.Properties"/>

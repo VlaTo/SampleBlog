@@ -1,5 +1,6 @@
 ﻿using SampleBlog.IdentityServer.Storage.Models;
 using ApiResource = SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ApiResource;
+using Client = SampleBlog.IdentityServer.EntityFramework.Storage.Entities.Client;
 
 namespace SampleBlog.IdentityServer.EntityFramework.Storage.Extensions;
 
@@ -15,16 +16,14 @@ internal static class EntityFrameworkEntityExtensions
             Description = source.Description,
             Enabled = source.Enabled,
             ProtocolType = source.ProtocolType,
-            RequireClientSecret = source.RequireClientSecret,
-            ClientSecrets = source.ClientSecrets
-                .Select(
-                    secret => new Secret(secret.Value, secret.Description, secret.Expiration)
-                )
-                .ToArray(),
-            //Properties = 
+            RequireClientSecret = source.RequireClientSecret
         };
 
-        client.UseProperties(client.Properties);
+        client
+            .UseClientSecrets(source.ClientSecrets)
+            .UseAllowedGrantTypes(source.AllowedGrantTypes)
+            .UseRedirectUris(source.RedirectUris);
+        client.UseProperties(source.Properties);
         client.UseClaims(source.Claims);
 
         return client;

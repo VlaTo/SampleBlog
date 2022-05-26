@@ -35,7 +35,12 @@ builder.Services
     {
         const string clientId = "blog.spa.client";
         authorization.ProviderOptions.ConfigurationEndpoint = $"{builder.HostEnvironment.BaseAddress}_configuration/authorization/{clientId}";
+
+        authorization.UserOptions.AuthenticationType = "SampleBlog.IdentityServer";
+
         authorization.AuthenticationPaths.LogInPath = "/authentication/login";
+        authorization.AuthenticationPaths.LogInCallbackPath = "/authentication/cb";
+        authorization.AuthenticationPaths.ProfilePath = "/authentication/profile";
     });
 builder.Services
     .AddScoped<AuthorizationMessageHandler, BaseAddressAuthorizationMessageHandler>()

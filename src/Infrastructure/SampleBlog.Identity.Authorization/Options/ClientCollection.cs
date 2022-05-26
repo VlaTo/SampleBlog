@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 
 namespace SampleBlog.Identity.Authorization.Options;
 

@@ -1,4 +1,6 @@
-﻿namespace SampleBlog.Identity.Authorization.Configuration;
+﻿using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+
+namespace SampleBlog.Identity.Authorization.Configuration;
 
 /// <summary>
 /// Constants for special values defined for specific <see cref="ApplicationProfilesPropertyNames" /> keys.

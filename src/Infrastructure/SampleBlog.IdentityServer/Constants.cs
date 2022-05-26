@@ -55,7 +55,7 @@ internal static class Constants
         Identity
     }
 
-    public static readonly Dictionary<string, ScopeRequirement> ResponseTypeToScopeRequirement = new Dictionary<string, ScopeRequirement>
+    public static readonly Dictionary<string, ScopeRequirement> ResponseTypeToScopeRequirement = new()
     {
         { OidcConstants.ResponseTypes.Code, ScopeRequirement.None },
         { OidcConstants.ResponseTypes.Token, ScopeRequirement.ResourceOnly },
@@ -66,7 +66,7 @@ internal static class Constants
         { OidcConstants.ResponseTypes.CodeIdTokenToken, ScopeRequirement.Identity }
     };
 
-    public static readonly Dictionary<string, IEnumerable<string>> AllowedResponseModesForGrantType = new Dictionary<string, IEnumerable<string>>
+    public static readonly Dictionary<string, IEnumerable<string>> AllowedResponseModesForGrantType = new()
     {
         { GrantType.AuthorizationCode, new[] { OidcConstants.ResponseModes.Query, OidcConstants.ResponseModes.FormPost, OidcConstants.ResponseModes.Fragment } },
         { GrantType.Hybrid, new[] { OidcConstants.ResponseModes.Fragment, OidcConstants.ResponseModes.FormPost }},

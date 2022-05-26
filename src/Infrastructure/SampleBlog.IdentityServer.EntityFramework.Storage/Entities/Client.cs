@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using SampleBlog.IdentityServer.EntityFramework.Storage;
-using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using SampleBlog.IdentityServer.Storage.Models;
-using ClientClaim = SampleBlog.IdentityServer.EntityFramework.Storage.Entities.ClientClaim;
+
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 
 [Table(Database.Tables.Client, Schema = Database.Schemas.Identity)]
 public class Client
@@ -166,6 +165,7 @@ public class Client
         set;
     }
 
+    [Column(TypeName = "bigint")]
     public TimeSpan IdentityTokenLifetime
     {
         get;
@@ -178,12 +178,14 @@ public class Client
         set;
     }
 
+    [Column(TypeName = "bigint")]
     public TimeSpan AccessTokenLifetime
     {
         get;
         set;
     }
 
+    [Column(TypeName = "bigint")]
     public TimeSpan AuthorizationCodeLifetime
     {
         get;
@@ -196,12 +198,14 @@ public class Client
         set;
     }
 
+    [Column(TypeName = "bigint")]
     public TimeSpan AbsoluteRefreshTokenLifetime
     {
         get;
         set;
     }
 
+    [Column(TypeName = "bigint")]
     public TimeSpan SlidingRefreshTokenLifetime
     {
         get;
@@ -345,22 +349,25 @@ public class Client
         Enabled = true;
         ProtocolType = "oidc";
         RequireClientSecret = true;
+        AllowedIdentityTokenSigningAlgorithms = String.Empty;
+        //AllowedGrantTypes=
         //RequireConsent = false;
         AllowRememberConsent = true;
         RequirePkce = true;
         FrontChannelLogoutSessionRequired = true;
         BackChannelLogoutSessionRequired = true;
-        IdentityTokenLifetime = TimeSpan.FromSeconds(300);
-        AccessTokenLifetime = TimeSpan.FromSeconds(3600);
-        AuthorizationCodeLifetime = TimeSpan.FromSeconds(300);
-        AbsoluteRefreshTokenLifetime = TimeSpan.FromSeconds(2592000);
-        SlidingRefreshTokenLifetime = TimeSpan.FromSeconds(1296000);
+        IdentityTokenLifetime = TimeSpan.FromMinutes(5.0d);
+        AccessTokenLifetime = TimeSpan.FromHours(1.0d);
+        AuthorizationCodeLifetime = TimeSpan.FromMinutes(5.0d);
+        AbsoluteRefreshTokenLifetime = TimeSpan.FromDays(30.0d);
+        SlidingRefreshTokenLifetime = TimeSpan.FromDays(15.0d);
         RefreshTokenUsage = TokenUsage.OneTimeOnly;
         RefreshTokenExpiration = TokenExpiration.Absolute;
         AccessTokenType = AccessTokenType.Jwt;
         EnableLocalLogin = true;
         ClientClaimsPrefix = "client_";
-        DeviceCodeLifetime = TimeSpan.FromSeconds(300);
+        DeviceCodeLifetime = TimeSpan.FromMinutes(5.0d);
+        ClientSecrets = new List<ClientSecret>();
         //Created = DateTime.UtcNow;
     }
 }

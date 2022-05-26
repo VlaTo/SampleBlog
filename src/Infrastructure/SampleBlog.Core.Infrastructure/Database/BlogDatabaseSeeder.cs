@@ -9,8 +9,10 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Stores;
+using SampleBlog.IdentityServer.Storage;
 using SampleBlog.IdentityServer.Storage.Models;
 using SampleBlog.Infrastructure.Database.Contexts;
+using Client = SampleBlog.IdentityServer.EntityFramework.Storage.Entities.Client;
 
 namespace SampleBlog.Infrastructure.Database;
 
@@ -148,12 +150,51 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
         {
             var client = new Client
             {
-                AccessTokenType = AccessTokenType.Jwt,
-                ClientClaimsPrefix = "sample_blog_",
                 ClientId = clientId,
                 ClientName = "Sample Blog SPA Client",
-                ClientUri = "http://localhost:5000"
+                ClientUri = "http://localhost:5000",
+                AllowedIdentityTokenSigningAlgorithms = "RS256",
+                AccessTokenType = AccessTokenType.Jwt,
+                ClientClaimsPrefix = "sample_blog_",
+                Description = "Sample Blog SPA Client",
+                BackChannelLogoutUri = "http://localhost:5000/back-logout",
+                FrontChannelLogoutUri = "http://localhost:5000/front-logout",
+                LogoUri = "http://localhost:5000/logo.png",
+                PairWiseSubjectSalt = "k356hr3k45h6rl32kh456lk536h3k4lhr",
+                UserCodeType = "Numeric"
             };
+
+            client.AllowedGrantTypes = new List<ClientGrantType>(new[]
+            {
+                new ClientGrantType { Client = client, GrantType = "authorization_code" },
+                new ClientGrantType { Client = client, GrantType = "client_credentials" },
+                new ClientGrantType { Client = client, GrantType = "refresh_token" }
+            });
+
+            client.AllowedScopes = new List<ClientScope>(new[]
+            {
+                new ClientScope{Client = client,Scope = "openid"},
+                new ClientScope{Client = client,Scope = "profile"},
+                new ClientScope{Client = client,Scope = "email"},
+                new ClientScope{Client = client,Scope = "address"}
+            });
+
+            client.RedirectUris = new List<ClientRedirectUri>(new[]
+            {
+                new ClientRedirectUri{Client = client, RedirectUri = "http://localhost:5000/redirect"}
+            });
+
+            client.ClientSecrets = new List<ClientSecret>(new[]
+            {
+                new ClientSecret
+                {
+                    Client = client,
+                    Type = "SharedSecret",
+                    Value = "4u56hk435uk324h23jk4hrk2j34",
+                    Created = DateTime.UtcNow,
+                    Description = "Sample user secret"
+                }
+            });
 
             var result = await context.Clients.AddAsync(client);
 

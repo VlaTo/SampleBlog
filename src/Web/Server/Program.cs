@@ -41,10 +41,10 @@ builder.Services
     .AddDefaultTokenProviders();
 
 builder.Services
-    .AddDbContext<BlogContext>(options =>
+    .AddDbContext<BlogContext>(db =>
     {
         var connectionString = builder.Configuration.GetConnectionString("Database");
-        options.UseSqlServer(connectionString);
+        db.UseSqlServer(connectionString);
     })
     .AddIdentityServer(options =>
     {
@@ -61,10 +61,15 @@ builder.Services
         options.Clients.AddSPA("blog.spa.client", client =>
         {
             client
-                .WithScopes(DefinedScopes.Blog.Api.Blogs, DefinedScopes.Blog.Api.Comments, "profile", "id")
+                .WithScopes(
+                    DefinedScopes.Blog.Api.Blogs,
+                    DefinedScopes.Blog.Api.Comments,
+                    SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.OpenId,
+                    SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.Profile
+                )
                 .WithRedirectUri("/redirect")
                 .WithLogoutRedirectUri("/logout")
-                ;
+                .WithClientSecret("4u56hk435uk324h23jk4hrk2j34");
         });
     })
     .AddConfigurationStore(options =>
@@ -73,7 +78,7 @@ builder.Services
         options.IdentityResource.Name = nameof(IdentityResources);
         options.IdentityResourceClaim.Name = nameof(IdentityResourceClaim);
         options.IdentityResourceProperty.Name = nameof(IdentityResourceProperty);*/
-        options.ConfigureDbContext = (db) =>
+        options.ConfigureDbContext = db =>
         {
             var connectionString = builder.Configuration.GetConnectionString("Database");
             db.UseSqlServer(connectionString);
