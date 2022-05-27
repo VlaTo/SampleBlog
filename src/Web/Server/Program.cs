@@ -8,14 +8,11 @@ using SampleBlog.Core.Application.Services;
 using SampleBlog.IdentityServer.DependencyInjection.Extensions;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.EntityFramework.Extensions;
-using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using SampleBlog.IdentityServer.Extensions;
-using SampleBlog.IdentityServer.Models;
 using SampleBlog.Infrastructure.Database;
 using SampleBlog.Infrastructure.Database.Contexts;
 using SampleBlog.Infrastructure.Extensions;
 using SampleBlog.Infrastructure.Models.Identity;
-using SampleBlog.Web.Server.Controllers.Identity;
 using SampleBlog.Web.Server.Extensions;
 using SampleBlog.Web.Server.Services;
 using SampleBlog.Web.Shared.Core;
@@ -26,7 +23,8 @@ builder.Configuration
     .AddEnvironmentVariables()
     .AddJsonFile("appsettings.json")
     .AddJsonFile($"appsettings.{builder.Environment}.json", optional: true)
-    .AddUserSecrets<AuthenticationController>();
+    //.AddUserSecrets<AuthenticationController>()
+    ;
 
 // Add services to the container.
 builder.Services
@@ -59,7 +57,6 @@ builder.Services
     .AddApiAuthorization<BlogUser, BlogContext>(options =>
     {
         options.Clients.AddSPA("blog.spa.client", client =>
-        {
             client
                 .WithScopes(
                     DefinedScopes.Blog.Api.Blogs,
@@ -69,8 +66,8 @@ builder.Services
                 )
                 .WithRedirectUri("/redirect")
                 .WithLogoutRedirectUri("/logout")
-                .WithClientSecret("4u56hk435uk324h23jk4hrk2j34");
-        });
+                .WithClientSecret("4u56hk435uk324h23jk4hrk2j34")
+        );
     })
     .AddConfigurationStore(options =>
     {
@@ -135,7 +132,16 @@ app
     .UseRouting()
     .UseIdentityServer()
     .UseAuthentication()
-    .UseAuthorization();
+    .UseAuthorization()
+    /*.UseMvc(routes =>
+    {
+        routes.MapAreaRoute(
+            name: "",
+            areaName: "Authentication",
+            template: "Authentication/{controller=Home}/{action=Index}/{id?}"
+        );
+    })*/
+    ;
 
 app.MapRazorPages();
 app.MapControllers();

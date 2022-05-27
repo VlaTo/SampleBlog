@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using SampleBlog.IdentityServer.Core;
 
 namespace SampleBlog.IdentityServer.Storage.Models;
 
@@ -28,14 +27,6 @@ public class IdentityResource : Resource
         get;
         set;
     }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="IdentityResource"/> class.
-    /// </summary>
-    /*public IdentityResource()
-        : base()
-    {
-    }*/
 
     /// <summary>
     /// Initializes a new instance of the <see cref="IdentityResource"/> class.

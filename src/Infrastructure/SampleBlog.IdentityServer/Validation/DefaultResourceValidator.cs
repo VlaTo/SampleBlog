@@ -40,11 +40,6 @@ public class DefaultResourceValidator : IResourceValidator
         activity?.SetTag(Tracing.Properties.Scope, request.Scopes.ToSpaceSeparatedString());
         activity?.SetTag(Tracing.Properties.Resource, request.ResourceIndicators.ToSpaceSeparatedString());
 
-        /*if (null == request)
-        {
-            throw new ArgumentNullException(nameof(request));
-        }*/
-
         var result = new ResourceValidationResult();
         var parsedScopesResult = scopeParser.ParseScopeValues(request.Scopes);
 

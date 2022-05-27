@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +7,8 @@ using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Hosting;
 using SampleBlog.IdentityServer.Storage.Stores;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace SampleBlog.IdentityServer.DependencyInjection.Extensions;
 
@@ -91,9 +91,9 @@ public static class ApplicationBuilderExtensions
             TestService(serviceProvider, typeof(IClientStore), logger, "No storage mechanism for clients specified. Use the 'AddInMemoryClients' extension method to register a development version.");
             TestService(serviceProvider, typeof(IResourceStore), logger, "No storage mechanism for resources specified. Use the 'AddInMemoryIdentityResources' or 'AddInMemoryApiResources' extension method to register a development version.");
 
-            /*var persistedGrants = serviceProvider.GetService(typeof(IPersistedGrantStore));
+            var persistedGrants = serviceProvider.GetService(typeof(IPersistedGrantStore));
 
-            if (persistedGrants.GetType().FullName == typeof(InMemoryPersistedGrantStore).FullName)
+            /*if (persistedGrants.GetType().FullName == typeof(InMemoryPersistedGrantStore).FullName)
             {
                 logger.LogInformation("You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.");
             }*/

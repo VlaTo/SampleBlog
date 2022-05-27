@@ -61,4 +61,17 @@ internal static class ClientExtensions
 
         return client;
     }
+
+    public static Client UseAllowedScopes(this Client client, IList<ClientScope> scopes)
+    {
+        client.AllowedScopes = new HashSet<string>(scopes.Count);
+
+        for (var index = 0; index < scopes.Count; index++)
+        {
+            var scope = scopes[index];
+            client.AllowedScopes.Add(scope.Scope);
+        }
+
+        return client;
+    }
 }

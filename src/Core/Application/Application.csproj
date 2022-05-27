@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <Folder Include="Extensions\" />
-    <Folder Include="Features\Commands\AddBlog\" />
+    <Folder Include="Features\Queries\" />
     <Folder Include="Responses\Identity\" />
   </ItemGroup>
 

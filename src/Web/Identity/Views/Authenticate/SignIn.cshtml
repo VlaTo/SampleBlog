@@ -1,0 +1,55 @@
+﻿@using SignInModel = SampleBlog.Web.Identity.ViewModels.SignInModel
+
+@model SignInModel
+
+<div class="row d-flex justify-content-center align-content-center h-100">
+    <div class="col-md-9 col-lg-6 col-xl-5">
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image" />
+    </div>
+    <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+        @Html.ValidationSummary()
+        <form asp-controller="Authenticate" asp-action="SignIn" method="post">
+            <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
+                <p class="lead fw-normal mb-0 me-3">Sign in with</p>
+                <button type="button" class="btn btn-primary btn-floating mx-1 rounded-circle">
+                    <i class="bi bi-facebook" role="image" aria-label="Facebook"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-floating mx-1 rounded-circle">
+                    <i class="bi bi-twitter" role="image" aria-label="Twitter"></i>
+                </button>
+                <button type="button" class="btn btn-primary btn-floating mx-1 rounded-circle">
+                    <i class="bi bi-linkedin" role="image" aria-label="Linked In"></i>
+                </button>
+            </div>
+
+            <div class="divider d-flex align-items-center my-4">
+                <p class="text-center fw-bold mx-3 mb-0">Or</p>
+            </div>
+
+            <fieldset>
+                <div class="form-outline mb-3">
+                    <input asp-for="Email" class="form-control form-control-lg" tabindex="0" placeholder="Enter email" autofocus/>
+                    <span asp-for="Email" class="form-text text-muted">We'll never share your email with anyone else.</span>
+                    @Html.ValidationMessageFor(model => model.Email, null, new { @class = "form-text form-danger" })
+                </div>
+                <div class="form-outline mb-4">
+                    <input asp-for="Password" class="form-control form-control-lg" tabindex="1" placeholder="Password"/>
+                    <span asp-for="Password" class="form-text text-muted">Password must be at least 6 characters</span>
+                    @Html.ValidationMessageFor(model => model.Password, null, new { @class = "form-text form-danger" })
+                </div>
+                <div class="d-flex justify-content-between align-items-center fs-5">
+                    <div class="form-check mb-0">
+                        <input class="form-check-input me-2" asp-for="RememberMe" tabindex="2"/>
+                        <label class="form-check-label" asp-for="RememberMe"></label>
+                    </div>
+                    <a asp-controller="Authenticate" asp-action="ResetPassword" class="text-body" tabindex="3">Forgot password?</a>
+                </div>
+            </fieldset>
+
+            <div class="text-center text-lg-start mt-4 pt-2">
+                <button type="submit" class="btn btn-primary btn-lg shadow" style="padding-left: 2.5rem; padding-right: 2.5rem;" tabindex="4">Login</button>
+                <p class="small fw-bold mt-2 pt-1 mb-0 fs-6">Don't have an account? <a href="#!" class="link-danger">Register</a></p>
+            </div>
+        </form>
+    </div>
+</div>

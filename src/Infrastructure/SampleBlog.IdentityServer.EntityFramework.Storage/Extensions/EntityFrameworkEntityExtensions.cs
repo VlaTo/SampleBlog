@@ -22,7 +22,8 @@ internal static class EntityFrameworkEntityExtensions
         client
             .UseClientSecrets(source.ClientSecrets)
             .UseAllowedGrantTypes(source.AllowedGrantTypes)
-            .UseRedirectUris(source.RedirectUris);
+            .UseRedirectUris(source.RedirectUris)
+            .UseAllowedScopes(source.AllowedScopes);
         client.UseProperties(source.Properties);
         client.UseClaims(source.Claims);
 
@@ -34,18 +35,15 @@ internal static class EntityFrameworkEntityExtensions
         var resource = new IdentityServer.Storage.Models.ApiResource(source.Name, source.DisplayName)
         {
             Enabled = source.Enabled,
-            Scopes = source.Scopes
-                .Select(scope => scope.Scope)
-                .ToArray(),
-            ApiSecrets = source.Secrets
-                .Select(secret => new Secret(secret.Value, secret.Description, secret.Expiration))
-                .ToArray(),
             Description = source.Description,
             RequireResourceIndicator = source.RequireResourceIndicator,
-            ShowInDiscoveryDocument = source.ShowInDiscoveryDocument,
-            AllowedAccessTokenSigningAlgorithms = source.AllowedAccessTokenSigningAlgorithms
-                .Split(' ')
+            ShowInDiscoveryDocument = source.ShowInDiscoveryDocument
         };
+
+        resource
+            .UseScopes(source.Scopes)
+            .UseApiSecrets(source.Secrets)
+            .UseAllowedAccessTokenSigningAlgorithms(source.AllowedAccessTokenSigningAlgorithms);
 
         resource.UseProperties(source.Properties);
         resource.UseClaims(source.UserClaims);

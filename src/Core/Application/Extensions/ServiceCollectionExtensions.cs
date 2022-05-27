@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using SampleBlog.Core.Application.Configuration;
+using SampleBlog.Core.Application.Services;
 
 namespace SampleBlog.Core.Application.Extensions;
 
@@ -26,6 +28,9 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        services.TryAddTransient<ICurrentUserProvider, CurrentHttpUserProvider>();
+        //services.TryAddSingleton<IEventQueue, LogEventQueue>();
+
         return services;
     }
 

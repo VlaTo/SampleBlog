@@ -143,7 +143,8 @@ public class ResourceStore : IResourceStore
             .Include(resource => resource.UserClaims)
             .Include(resource => resource.Properties)
             .AsNoTracking()
-            .ToArrayAsync(CancellationTokenProvider.CancellationToken);
+            .ToArrayAsync(CancellationTokenProvider.CancellationToken)
+            ;
 
         Logger.LogDebug("Found {scopes} identity scopes in database", resources.Select(x => x.Name));
 
@@ -165,7 +166,8 @@ public class ResourceStore : IResourceStore
             .Include(x => x.UserClaims)
             .Include(x => x.Properties)
             .AsNoTracking()
-            .ToArrayAsync(CancellationTokenProvider.CancellationToken);
+            .ToArrayAsync(CancellationTokenProvider.CancellationToken)
+            ;
 
         Logger.LogDebug("Found {scopes} scopes in database", resources.Select(x => x.Name));
 
