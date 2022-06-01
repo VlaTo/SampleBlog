@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SampleBlog.Core.Application.Extensions;
 using SampleBlog.Core.Application.Services;
+using SampleBlog.IdentityServer.DependencyInjection.Extensions;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.EntityFramework.Extensions;
 using SampleBlog.IdentityServer.Extensions;
@@ -10,6 +11,7 @@ using SampleBlog.Infrastructure.Database;
 using SampleBlog.Infrastructure.Database.Contexts;
 using SampleBlog.Infrastructure.Extensions;
 using SampleBlog.Infrastructure.Models.Identity;
+using SampleBlog.Web.Identity.Core;
 using SampleBlog.Web.Identity.Core.Extensions;
 using SampleBlog.Web.Identity.Core.Services;
 using SampleBlog.Web.Shared.Core;
@@ -24,13 +26,9 @@ builder.Configuration
     .AddUserSecrets<IdentityOptions>();
 
 builder.Services
-    //.AddTransient<ISignInService, SignInService>()
-    //.AddScoped<ICurrentUserProvider, CurrentHttpUserProvider>()
     .AddSingleton<IEventQueue, EventQueueLogger>()
-    //.AddSingleton<IMakeBlogPathService, MakeBlogPathService>()
     .AddTransient<ISignInService, SignInService>()
     .AddTransient<IDatabaseSeeder, BlogDatabaseSeeder>()
-    //.AddApplicationOptions()
     .AddApplicationServices()
     .AddIdentityOptions()
     .AddInfrastructure();
@@ -53,6 +51,9 @@ builder.Services
     })
     .AddIdentityServer(options =>
     {
+        //options.Cors.CorsPolicyName = Constants.ClientPolicy;
+        options.UserInteraction.LoginUrl = "http://localhost:5276/Authenticate/login";
+        //options.UserInteraction.ErrorUrl = "http://localhost:5001/error";
         options.Events = new EventsOptions
         {
             RaiseErrorEvents = true,
@@ -63,6 +64,17 @@ builder.Services
     })
     .AddApiAuthorization<BlogUser, BlogContext>(options =>
     {
+        /*options.Clients.AddSPA("blog.spa.client", client =>
+            client
+                .WithScopes(
+                    DefinedScopes.Blog.Api.Blogs,
+                    DefinedScopes.Blog.Api.Comments,
+                    SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.OpenId,
+                    SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.Profile
+                )
+                .WithRedirectUri($"{builder.Environment.WebRootPath}/redirect")
+                .WithLogoutRedirectUri($"{builder.Environment.WebRootPath}/logout")
+        );*/
         options.Clients.AddSPA("blog.spa.client", client =>
             client
                 .WithScopes(
@@ -71,22 +83,37 @@ builder.Services
                     SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.OpenId,
                     SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.Profile
                 )
-                .WithRedirectUri("/redirect")
-                .WithLogoutRedirectUri("/logout")
-                .WithClientSecret("4u56hk435uk324h23jk4hrk2j34")
+                //.WithRedirectUri("https://localhost:5001/redirect")
+                //.WithLogoutRedirectUri("https://localhost:5001/logout")
         );
     })
     .AddConfigurationStore(options =>
     {
-        /*options.DefaultSchema = "http://sampleblog.net/database/configuration";
+        /*
+        options.DefaultSchema = "http://sampleblog.net/database/configuration";
         options.IdentityResource.Name = nameof(IdentityResources);
         options.IdentityResourceClaim.Name = nameof(IdentityResourceClaim);
-        options.IdentityResourceProperty.Name = nameof(IdentityResourceProperty);*/
+        options.IdentityResourceProperty.Name = nameof(IdentityResourceProperty);
+        */
         options.ConfigureDbContext = db =>
         {
             var connectionString = builder.Configuration.GetConnectionString("Database");
             db.UseSqlServer(connectionString);
         };
+    });
+
+builder.Services
+    .AddCors(options =>
+    {
+        options.AddPolicy(
+            name: Constants.ClientPolicy,
+            configurePolicy: policy =>
+            {
+                policy
+                    .WithOrigins("https://localhost:5001")
+                    .AllowAnyMethod();
+            }
+        );
     });
 
 builder.Services
@@ -108,8 +135,11 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
 }
 
-//app.UseAuthorization();
 app
+    .UseCors()
+    .UseIdentityServer()
+    .UseAuthentication()
+    .UseAuthorization()
     .UseStaticFiles()
     .UseRouting()
     .UseMvc();
@@ -120,11 +150,11 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        /*var context = services.GetRequiredService<BlogContext>();
+        var context = services.GetRequiredService<BlogContext>();
 
         if (context.Database.IsSqlServer())
         {
-            await context.Database.EnsureCreatedAsync();
+            /*await context.Database.EnsureCreatedAsync();
             //await context.Database.MigrateAsync();
 
             var seeder = scope.ServiceProvider.GetService<IDatabaseSeeder>();
@@ -132,8 +162,8 @@ using (var scope = app.Services.CreateScope())
             if (null != seeder)
             {
                 await seeder.SeedAsync();
-            }
-        }*/
+            }*/
+        }
     }
     catch (Exception ex)
     {

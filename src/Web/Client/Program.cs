@@ -23,7 +23,15 @@ builder.Services
             .AddMiddleware<LoggingMiddleware>()
             .UseRouting();
     })
-    .AddOptions()
+    .AddOptions();
+
+builder.Services
+    .AddOidcAuthentication(options =>
+    {
+        builder.Configuration.Bind("Local", options.ProviderOptions);
+    });
+
+/*builder.Services
     .AddAuthorizationCore(authorization =>
     {
         authorization.AddPolicy(
@@ -34,25 +42,28 @@ builder.Services
     .AddApiAuthorization(authorization =>
     {
         const string clientId = "blog.spa.client";
-        authorization.ProviderOptions.ConfigurationEndpoint = $"{builder.HostEnvironment.BaseAddress}_configuration/authorization/{clientId}";
+        //authorization.ProviderOptions.ConfigurationEndpoint = $"{builder.HostEnvironment.BaseAddress}_configuration/authorization/{clientId}";
+        authorization.ProviderOptions.ConfigurationEndpoint = $"http://localhost:5276/_configuration/authorization/{clientId}";
 
         authorization.UserOptions.AuthenticationType = "SampleBlog.IdentityServer";
 
         authorization.AuthenticationPaths.LogInPath = "/authentication/login";
         authorization.AuthenticationPaths.LogInCallbackPath = "/authentication/cb";
         authorization.AuthenticationPaths.ProfilePath = "/authentication/profile";
-    });
+    })
+    ;*/
+
 builder.Services
     .AddScoped<AuthorizationMessageHandler, BaseAddressAuthorizationMessageHandler>()
     .AddHttpClient<BlogClient>(client =>
     {
-        client.BaseAddress = new Uri("https://localhost:5001/api/v1");
+        client.BaseAddress = new Uri("http://localhost:5026/api/v1");
     })
     .AddHttpMessageHandler(services =>
     {
         var handler = services.GetRequiredService<AuthorizationMessageHandler>();
         handler.ConfigureHandler(
-            authorizedUrls: new[] { "https://localhost:5001" },
+            authorizedUrls: new[] { "http://localhost:5026/api/" },
             scopes: new[] { "blog.api.blogs", "blog.api.comments" }
         );
         return handler;

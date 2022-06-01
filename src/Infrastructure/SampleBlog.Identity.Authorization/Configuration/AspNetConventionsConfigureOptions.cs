@@ -12,7 +12,7 @@ internal class AspNetConventionsConfigureOptions : IConfigureOptions<IdentitySer
         //options.Events.RaiseInformationEvents = true;
         //options.Events.RaiseFailureEvents = true;
         //options.Events.RaiseSuccessEvents = true;
-        options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
-        options.UserInteraction.ErrorUrl = "/Home";
+        //options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
+        //options.UserInteraction.ErrorUrl = "/Home";
     }
 }

@@ -9,6 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="wwwroot\appsettings.Development.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Fluxor" Version="5.2.0" />
 		<PackageReference Include="Fluxor.Blazor.Web" Version="5.2.0" />
 		<PackageReference Include="Fluxor.Persist" Version="2.2.0" />

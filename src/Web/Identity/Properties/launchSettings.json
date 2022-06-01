@@ -9,10 +9,9 @@
     }
   },
   "profiles": {
-    "WebApplication10": {
+    "Identity": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "authenticate/login",
+      "launchUrl": "_configuration/authorization/blog.spa.client",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

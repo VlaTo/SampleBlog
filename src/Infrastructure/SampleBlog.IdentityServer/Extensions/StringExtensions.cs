@@ -111,7 +111,7 @@ internal static class StringExtensions
         if (url[0] == '/')
         {
             // url is exactly "/"
-            if (url.Length == 1)
+            if (1 == url.Length)
             {
                 return true;
             }
@@ -129,7 +129,7 @@ internal static class StringExtensions
         if (url[0] == '~' && url.Length > 1 && url[1] == '/')
         {
             // url is exactly "~/"
-            if (url.Length == 2)
+            if (2 == url.Length)
             {
                 return true;
             }
@@ -149,11 +149,11 @@ internal static class StringExtensions
     [DebuggerStepThrough]
     public static string AddQueryString(this string url, string query)
     {
-        if (!url.Contains("?"))
+        if (false == url.Contains("?"))
         {
             url += "?";
         }
-        else if (!url.EndsWith("&"))
+        else if (false == url.EndsWith("&"))
         {
             url += "&";
         }
@@ -164,7 +164,7 @@ internal static class StringExtensions
     [DebuggerStepThrough]
     public static string AddQueryString(this string url, string name, string? value)
     {
-        return null == value
+        return null != value
             ? url.AddQueryString(name + "=" + UrlEncoder.Default.Encode(value))
             : url;
     }

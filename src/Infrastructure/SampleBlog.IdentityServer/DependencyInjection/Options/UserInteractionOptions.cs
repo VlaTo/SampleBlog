@@ -13,7 +13,11 @@ public class UserInteractionOptions
     /// <value>
     /// The login URL.
     /// </value>
-    public string? LoginUrl { get; set; } //= Constants.UIConstants.DefaultRoutePaths.Login.EnsureLeadingSlash();
+    public string? LoginUrl
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the login return URL parameter.
@@ -21,7 +25,11 @@ public class UserInteractionOptions
     /// <value>
     /// The login return URL parameter.
     /// </value>
-    public string? LoginReturnUrlParameter { get; set; } //= Constants.UIConstants.DefaultRoutePathParams.Login;
+    public string? LoginReturnUrlParameter
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the logout URL. If a local URL, the value must start with a leading slash.
@@ -29,7 +37,11 @@ public class UserInteractionOptions
     /// <value>
     /// The logout URL.
     /// </value>
-    public string? LogoutUrl { get; set; } //= Constants.UIConstants.DefaultRoutePaths.Logout.EnsureLeadingSlash();
+    public string? LogoutUrl
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the logout identifier parameter.
@@ -37,7 +49,11 @@ public class UserInteractionOptions
     /// <value>
     /// The logout identifier parameter.
     /// </value>
-    public string? LogoutIdParameter { get; set; } = Constants.UIConstants.DefaultRoutePathParams.Logout;
+    public string? LogoutIdParameter
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the consent URL. If a local URL, the value must start with a leading slash.
@@ -45,7 +61,11 @@ public class UserInteractionOptions
     /// <value>
     /// The consent URL.
     /// </value>
-    public string? ConsentUrl { get; set; } = Constants.UIConstants.DefaultRoutePaths.Consent.EnsureLeadingSlash();
+    public string? ConsentUrl
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the consent return URL parameter.
@@ -53,7 +73,11 @@ public class UserInteractionOptions
     /// <value>
     /// The consent return URL parameter.
     /// </value>
-    public string? ConsentReturnUrlParameter { get; set; } = Constants.UIConstants.DefaultRoutePathParams.Consent;
+    public string? ConsentReturnUrlParameter
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the error URL. If a local URL, the value must start with a leading slash.
@@ -61,7 +85,11 @@ public class UserInteractionOptions
     /// <value>
     /// The error URL.
     /// </value>
-    public string? ErrorUrl { get; set; } = Constants.UIConstants.DefaultRoutePaths.Error.EnsureLeadingSlash();
+    public string? ErrorUrl
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the error identifier parameter.
@@ -69,7 +97,11 @@ public class UserInteractionOptions
     /// <value>
     /// The error identifier parameter.
     /// </value>
-    public string? ErrorIdParameter { get; set; } = Constants.UIConstants.DefaultRoutePathParams.Error;
+    public string? ErrorIdParameter
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the custom redirect return URL parameter.
@@ -77,7 +109,11 @@ public class UserInteractionOptions
     /// <value>
     /// The custom redirect return URL parameter.
     /// </value>
-    public string? CustomRedirectReturnUrlParameter { get; set; } = Constants.UIConstants.DefaultRoutePathParams.Custom;
+    public string? CustomRedirectReturnUrlParameter
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the cookie message threshold. This limits how many cookies are created, and older ones will be purged.
@@ -85,7 +121,11 @@ public class UserInteractionOptions
     /// <value>
     /// The cookie message threshold.
     /// </value>
-    public int CookieMessageThreshold { get; set; } = Constants.UIConstants.CookieMessageThreshold;
+    public int CookieMessageThreshold
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the device verification URL.  If a local URL, the value must start with a leading slash.
@@ -93,7 +133,11 @@ public class UserInteractionOptions
     /// <value>
     /// The device verification URL.
     /// </value>
-    public string? DeviceVerificationUrl { get; set; } = Constants.UIConstants.DefaultRoutePaths.DeviceVerification;
+    public string? DeviceVerificationUrl
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the device verification user code parameter.
@@ -101,10 +145,35 @@ public class UserInteractionOptions
     /// <value>
     /// The device verification user code parameter.
     /// </value>
-    public string? DeviceVerificationUserCodeParameter { get; set; } = Constants.UIConstants.DefaultRoutePathParams.UserCode;
+    public string? DeviceVerificationUserCodeParameter
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Flag that allows return URL validation to accept full URL that includes the IdentityServer origin. Defaults to false.
     /// </summary>
-    public bool AllowOriginInReturnUrl { get; set; } = false;
+    public bool AllowOriginInReturnUrl
+    {
+        get;
+        set;
+    }
+
+    public UserInteractionOptions()
+    {
+        LoginUrl = Constants.UIConstants.DefaultRoutePaths.Login.EnsureLeadingSlash();
+        LogoutUrl = Constants.UIConstants.DefaultRoutePaths.Logout.EnsureLeadingSlash();
+        ConsentUrl = Constants.UIConstants.DefaultRoutePaths.Consent.EnsureLeadingSlash();
+        ErrorUrl = Constants.UIConstants.DefaultRoutePaths.Error.EnsureLeadingSlash();
+        LoginReturnUrlParameter = Constants.UIConstants.DefaultRoutePathParams.Login;
+        LogoutIdParameter = Constants.UIConstants.DefaultRoutePathParams.Logout;
+        ConsentReturnUrlParameter = Constants.UIConstants.DefaultRoutePathParams.Consent;
+        ErrorIdParameter = Constants.UIConstants.DefaultRoutePathParams.Error;
+        CustomRedirectReturnUrlParameter = Constants.UIConstants.DefaultRoutePathParams.Custom;
+        CookieMessageThreshold = Constants.UIConstants.CookieMessageThreshold;
+        DeviceVerificationUrl = Constants.UIConstants.DefaultRoutePaths.DeviceVerification;
+        DeviceVerificationUserCodeParameter = Constants.UIConstants.DefaultRoutePathParams.UserCode;
+        AllowOriginInReturnUrl = false;
+    }
 }

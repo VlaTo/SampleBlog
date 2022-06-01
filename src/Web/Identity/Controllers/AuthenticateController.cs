@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SampleBlog.Core.Application.Features.Commands.Login;
 using SampleBlog.Web.Identity.ViewModels;
 using SignInCommand = SampleBlog.Web.Identity.Core.Features.Commands.SignIn.SignInCommand;
 

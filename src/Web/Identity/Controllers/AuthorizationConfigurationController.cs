@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using SampleBlog.Identity.Authorization.Core;
+using SampleBlog.Web.Identity.Core;
 
-namespace SampleBlog.Web.Server.Controllers.Identity
+namespace SampleBlog.Web.Identity.Controllers
 {
     [Route("_configuration/authorization")]
     [ApiController]
@@ -18,6 +20,7 @@ namespace SampleBlog.Web.Server.Controllers.Identity
             this.logger = logger;
         }
 
+        [EnableCors(Constants.ClientPolicy)]
         [HttpGet("{clientId:required}")]
         public async Task<IActionResult> Get([FromRoute] string clientId)
         {

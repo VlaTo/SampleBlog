@@ -42,6 +42,7 @@ namespace SampleBlog.Web.APi.Blog.Controllers.v1
             {
                 var blogId = numbers[0];
                 var query = new GetBlogQuery(blogId, currentUserProvider.CurrentUserId);
+                
                 var result = await mediator.Send(query, HttpContext.RequestAborted);
 
                 if (result.Succeeded)
@@ -70,6 +71,7 @@ namespace SampleBlog.Web.APi.Blog.Controllers.v1
             }
 
             var command = new AddBlogCommand(currentUserProvider.CurrentUserId, content);
+
             var result = await mediator.Send(command, HttpContext.RequestAborted);
 
             if (result.Succeeded)

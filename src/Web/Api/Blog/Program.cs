@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SampleBlog.Core.Application.Extensions;
 using SampleBlog.Core.Application.Services;
 using SampleBlog.Core.Domain.Services;
+using SampleBlog.Infrastructure.Database.Contexts;
+using SampleBlog.Infrastructure.Repositories;
 using SampleBlog.Web.APi.Blog.Configuration;
 using SampleBlog.Web.APi.Blog.Controllers.v1;
 using SampleBlog.Web.APi.Blog.Services;
@@ -17,9 +19,14 @@ builder.Configuration
     ;
 
 builder.Services
+    .AddDbContext<BlogContext>();
+
+builder.Services
     .AddTransient<BlogOptionsDefaults>()
-    .AddSingleton<IBlogService, BlogService>()
+    //.AddTransient<BlogContext>()
     .AddSingleton<IMakeBlogPathService, MakeBlogPathService>()
+    .AddTransient<IBlogRepository, BlogRepository>()
+    .AddTransient<IBlogService, BlogService>()
     .AddHttpContextAccessor()
     .AddApplicationServices()
     .AddMediatR(new[] { typeof(BlogController).Assembly }, options =>

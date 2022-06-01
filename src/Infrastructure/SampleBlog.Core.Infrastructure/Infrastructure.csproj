@@ -13,6 +13,7 @@
     <Folder Include="Services\" />
     <Folder Include="Extensions\" />
     <Folder Include="Migrations\" />
+    <Folder Include="Repositories\" />
   </ItemGroup>
 
   <ItemGroup>
