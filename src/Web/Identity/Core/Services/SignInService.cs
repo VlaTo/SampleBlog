@@ -63,7 +63,31 @@ internal sealed class SignInService : ISignInService
         }
 
         var options = applicationOptions.Value;
-        AuthenticationProperties? properties = null;
+
+
+        var signInResult = await signInManager.PasswordSignInAsync(
+            user,
+            password,
+            options.Authentication.AllowRememberMe && rememberMe,
+            options.Authentication.AllowUserLockOut
+        );
+
+        if (signInResult.Succeeded)
+        {
+            user.RefreshToken = GenerateRefreshToken();
+            user.RefreshTokenExpiryTime = DateTime.Now.Add(options.Authentication.RefreshTokenDuration);
+
+            var token = await GenerateJwtAsync(user);
+
+            return new SignInResult
+            {
+                IsSuccess = true,
+                User = user,
+                Token = token
+            };
+        }
+
+        /*AuthenticationProperties? properties = null;
 
         if (options.Authentication.AllowRememberMe && rememberMe)
         {
@@ -77,18 +101,12 @@ internal sealed class SignInService : ISignInService
             };
         }
 
-        await signInManager.SignInAsync(user, properties, "Local");
-
-        user.RefreshToken = GenerateRefreshToken();
-        user.RefreshTokenExpiryTime = DateTime.Now.Add(options.Authentication.RefreshTokenDuration);
-
-        var token = await GenerateJwtAsync(user);
+        await signInManager.SignInAsync(user, properties);*/
 
         return new SignInResult
         {
-            IsSuccess = true,
-            User = user,
-            Token = token
+            IsSuccess = false,
+            User = user
         };
     }
 
@@ -172,10 +190,5 @@ internal sealed class SignInService : ISignInService
         var tokenHandler = new JwtSecurityTokenHandler();
 
         return tokenHandler.WriteToken(token);
-    }
-
-    Task<SampleBlog.Core.Application.Services.SignInResult> ISignInService.SignInAsync(string email, string password, bool rememberMe)
-    {
-        throw new NotImplementedException();
     }
 }

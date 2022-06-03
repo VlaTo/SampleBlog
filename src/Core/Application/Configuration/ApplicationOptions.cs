@@ -22,6 +22,12 @@ public sealed class AuthenticationOptions
         get;
         set;
     }
+    
+    public bool AllowUserLockOut
+    {
+        get;
+        set;
+    }
 
     public TimeSpan RememberMeSignInDuration
     {

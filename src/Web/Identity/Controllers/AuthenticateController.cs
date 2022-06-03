@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SampleBlog.Web.Identity.Core;
 using SampleBlog.Web.Identity.ViewModels;
 using SignInCommand = SampleBlog.Web.Identity.Core.Features.Commands.SignIn.SignInCommand;
 
@@ -17,16 +18,24 @@ namespace SampleBlog.Web.Identity.Controllers
 
         // GET: /authenticate/login
         [HttpGet("login")]
-        public IActionResult SignIn()
+        public IActionResult SignIn([FromQuery(Name = "returnUrl")] string returnUrl)
         {
-            var signIn = new SignInModel();
+            ViewData[Constants.ReturnUrl] = returnUrl;
+
+            var signIn = new SignInModel
+            {
+                Email = "superuser@sampleblog.net",
+                Password = "a1B2c.3",
+                RememberMe = false
+            };
+
             return View("SignIn", signIn);
         }
 
         // POST: /authenticate/login
         [Consumes("application/x-www-form-urlencoded")]
         [HttpPost("login")]
-        public async Task<IActionResult> SignIn([FromForm] SignInModel signIn)
+        public async Task<IActionResult> SignIn([FromForm] SignInModel signIn, [FromForm(Name = "returnUrl")] string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -35,16 +44,13 @@ namespace SampleBlog.Web.Identity.Controllers
 
                 if (result is { Succeeded: true })
                 {
-                    if (string.IsNullOrEmpty(signIn.RedirectUrl))
-                    {
-                        return Redirect("~/");
-                    }
-
-                    return Redirect(signIn.RedirectUrl);
+                    return RedirectToUrl(returnUrl);
                 }
 
                 ModelState.AddModelError("error_general", "General error");
             }
+
+            ViewData[Constants.ReturnUrl] = returnUrl;
 
             return View("SignIn", signIn);
         }
@@ -55,6 +61,16 @@ namespace SampleBlog.Web.Identity.Controllers
         {
             var passwordModel = new ResetPasswordModel();
             return View("ResetPassword", passwordModel);
+        }
+
+        private IActionResult RedirectToUrl(string url)
+        {
+            if (false == Url.IsLocalUrl(url))
+            {
+                return Redirect(url);
+            }
+
+            return RedirectToAction(nameof(SignIn));
         }
     }
 }

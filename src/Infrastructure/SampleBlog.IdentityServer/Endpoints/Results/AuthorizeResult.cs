@@ -1,5 +1,4 @@
-﻿using System.Text.Encodings.Web;
-using IdentityModel;
+﻿using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +9,7 @@ using SampleBlog.IdentityServer.Hosting;
 using SampleBlog.IdentityServer.Models;
 using SampleBlog.IdentityServer.Services;
 using SampleBlog.IdentityServer.Stores;
+using System.Text.Encodings.Web;
 
 namespace SampleBlog.IdentityServer.Endpoints.Results;
 
@@ -17,7 +17,7 @@ internal class AuthorizeResult : IEndpointResult
 {
     private IdentityServerOptions options;
     private IUserSession userSession;
-    private IMessageStore<ErrorMessage> _errorMessageStore;
+    private IMessageStore<ErrorMessage> errorMessageStore;
     private IServerUrls urls;
     private ISystemClock clock;
     
@@ -29,6 +29,22 @@ internal class AuthorizeResult : IEndpointResult
     public AuthorizeResult(AuthorizeResponse response)
     {
         Response = response ?? throw new ArgumentNullException(nameof(response));
+    }
+
+    internal AuthorizeResult(
+        AuthorizeResponse response,
+        IdentityServerOptions options,
+        IUserSession userSession,
+        IMessageStore<ErrorMessage> errorMessageStore,
+        IServerUrls urls,
+        ISystemClock clock)
+        : this(response)
+    {
+        this.options = options;
+        this.userSession = userSession;
+        this.errorMessageStore = errorMessageStore;
+        this.urls = urls;
+        this.clock = clock;
     }
 
     public async Task ExecuteAsync(HttpContext context)
@@ -43,22 +59,6 @@ internal class AuthorizeResult : IEndpointResult
         {
             await ProcessResponseAsync(context);
         }
-    }
-
-    internal AuthorizeResult(
-        AuthorizeResponse response,
-        IdentityServerOptions options,
-        IUserSession userSession,
-        IMessageStore<ErrorMessage> errorMessageStore,
-        IServerUrls urls,
-        ISystemClock clock)
-        : this(response)
-    {
-        this.options = options;
-        this.userSession = userSession;
-        _errorMessageStore = errorMessageStore;
-        this.urls = urls;
-        this.clock = clock;
     }
 
     protected async Task ProcessResponseAsync(HttpContext context)
@@ -101,7 +101,7 @@ internal class AuthorizeResult : IEndpointResult
     {
         options ??= context.RequestServices.GetRequiredService<IdentityServerOptions>();
         userSession ??= context.RequestServices.GetRequiredService<IUserSession>();
-        _errorMessageStore ??= context.RequestServices.GetRequiredService<IMessageStore<ErrorMessage>>();
+        errorMessageStore ??= context.RequestServices.GetRequiredService<IMessageStore<ErrorMessage>>();
         urls = urls ?? context.RequestServices.GetRequiredService<IServerUrls>();
         clock ??= context.RequestServices.GetRequiredService<ISystemClock>();
     }
@@ -194,7 +194,7 @@ internal class AuthorizeResult : IEndpointResult
         }
 
         var message = new Message<ErrorMessage>(errorModel, clock.UtcNow.UtcDateTime);
-        var id = await _errorMessageStore.WriteAsync(message);
+        var id = await errorMessageStore.WriteAsync(message);
         var errorUrl = options.UserInteraction.ErrorUrl;
         var url = errorUrl?.AddQueryString(options.UserInteraction.ErrorIdParameter, id);
 

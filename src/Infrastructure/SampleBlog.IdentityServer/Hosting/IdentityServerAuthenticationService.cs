@@ -1,4 +1,5 @@
-﻿using IdentityModel;
+﻿using System.Diagnostics;
+using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -51,10 +52,13 @@ internal class IdentityServerAuthenticationService : IAuthenticationService
             AugmentMissingClaims(principal, clock.UtcNow.UtcDateTime);
 
             properties ??= new AuthenticationProperties();
-            await session.CreateSessionIdAsync(principal, properties);
+
+            var sessionId = await session.CreateSessionIdAsync(principal, properties);
         }
 
         await service.SignInAsync(context, scheme, principal, properties);
+
+        var after = context.Response.Cookies;
     }
 
     public async Task SignOutAsync(HttpContext context, string? scheme, AuthenticationProperties? properties)
@@ -79,7 +83,10 @@ internal class IdentityServerAuthenticationService : IAuthenticationService
             throw new InvalidOperationException("only a single identity supported");
         }
 
-        if (principal.FindFirst(JwtClaimTypes.Subject) == null) throw new InvalidOperationException("sub claim is missing");
+        if (null == principal.FindFirst(JwtClaimTypes.Subject))
+        {
+            throw new InvalidOperationException("sub claim is missing");
+        }
     }
 
     private void AugmentMissingClaims(ClaimsPrincipal principal, DateTime authTime)

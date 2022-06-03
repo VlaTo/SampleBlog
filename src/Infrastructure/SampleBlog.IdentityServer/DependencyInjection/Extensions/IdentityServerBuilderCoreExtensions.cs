@@ -104,7 +104,13 @@ public static class IdentityServerBuilderCoreExtensions
         builder.Services
             .AddAuthentication(IdentityServerConstants.DefaultCookieAuthenticationScheme)
             .AddCookie(IdentityServerConstants.DefaultCookieAuthenticationScheme)
-            .AddCookie(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            .AddCookie(IdentityServerConstants.ExternalCookieAuthenticationScheme)
+            .AddCookie(".AspNetCore.Identity.Application", options =>
+            {
+
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
+            });
 
         builder.Services
             .AddSingleton<IConfigureOptions<CookieAuthenticationOptions>, ConfigureInternalCookieOptions>();

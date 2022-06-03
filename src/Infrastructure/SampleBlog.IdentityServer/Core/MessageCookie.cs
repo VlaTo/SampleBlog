@@ -43,7 +43,10 @@ internal class MessageCookie<TModel>
     {
         ClearOverflow();
 
-        if (message == null) throw new ArgumentNullException(nameof(message));
+        if (null == message)
+        {
+            throw new ArgumentNullException(nameof(message));
+        }
 
         var name = GetCookieFullName(id);
         var data = Protect(message);

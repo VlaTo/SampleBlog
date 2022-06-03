@@ -31,11 +31,4 @@ public sealed class SignInModel
         get;
         set;
     }
-
-    //[DataType(DataType.Url)]
-    public string? RedirectUrl
-    {
-        get;
-        set;
-    }
 }

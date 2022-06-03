@@ -8,13 +8,13 @@ using SignInResult = SampleBlog.Core.Application.Services.SignInResult;
 
 namespace SampleBlog.Web.Identity.Core.Features.Commands.SignIn;
 
-public sealed class SignInRequestHandler : IRequestHandler<SignInCommand, IResult<TokenResponse>>
+public sealed class SignInCommandRequestHandler : IRequestHandler<SignInCommand, IResult<TokenResponse>>
 {
     private readonly ISignInService signInService;
     private readonly IEventQueue eventQueue;
     private readonly ApplicationOptions options;
 
-    public SignInRequestHandler(
+    public SignInCommandRequestHandler(
         ISignInService signInService,
         IOptions<ApplicationOptions> options,
         IEventQueue eventQueue)

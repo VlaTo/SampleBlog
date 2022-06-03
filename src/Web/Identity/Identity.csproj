@@ -28,7 +28,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Core\Features\Commands\SignIn\" />
 	  <Folder Include="Core\Features\Queries\" />
 	  <Folder Include="ViewModels\" />
 	</ItemGroup>

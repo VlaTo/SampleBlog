@@ -61,6 +61,9 @@ builder.Services
             RaiseInformationEvents = true,
             RaiseSuccessEvents = true
         };
+        options.Authentication.CookieLifetime = TimeSpan.FromMinutes(10.0d);
+        options.Authentication.CookieSlidingExpiration = true;
+        options.Authentication.CookieSameSiteMode = SameSiteMode.Unspecified;
     })
     .AddApiAuthorization<BlogUser, BlogContext>(options =>
     {
