@@ -61,23 +61,12 @@ builder.Services
             RaiseInformationEvents = true,
             RaiseSuccessEvents = true
         };
+
         options.Authentication.CookieLifetime = TimeSpan.FromMinutes(10.0d);
         options.Authentication.CookieSlidingExpiration = true;
-        options.Authentication.CookieSameSiteMode = SameSiteMode.Unspecified;
     })
     .AddApiAuthorization<BlogUser, BlogContext>(options =>
     {
-        /*options.Clients.AddSPA("blog.spa.client", client =>
-            client
-                .WithScopes(
-                    DefinedScopes.Blog.Api.Blogs,
-                    DefinedScopes.Blog.Api.Comments,
-                    SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.OpenId,
-                    SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.Profile
-                )
-                .WithRedirectUri($"{builder.Environment.WebRootPath}/redirect")
-                .WithLogoutRedirectUri($"{builder.Environment.WebRootPath}/logout")
-        );*/
         options.Clients.AddSPA("blog.spa.client", client =>
             client
                 .WithScopes(
@@ -86,8 +75,6 @@ builder.Services
                     SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.OpenId,
                     SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.Profile
                 )
-                //.WithRedirectUri("https://localhost:5001/redirect")
-                //.WithLogoutRedirectUri("https://localhost:5001/logout")
         );
     })
     .AddConfigurationStore(options =>

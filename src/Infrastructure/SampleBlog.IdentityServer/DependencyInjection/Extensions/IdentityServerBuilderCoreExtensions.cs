@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using SampleBlog.IdentityServer.Contexts;
 using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
@@ -18,6 +19,8 @@ using SampleBlog.IdentityServer.Models;
 using SampleBlog.IdentityServer.ResponseHandling;
 using SampleBlog.IdentityServer.ResponseHandling.Defaults;
 using SampleBlog.IdentityServer.Services;
+using SampleBlog.IdentityServer.Services.KeyManagement;
+using SampleBlog.IdentityServer.Storage.Models;
 using SampleBlog.IdentityServer.Storage.Services;
 using SampleBlog.IdentityServer.Storage.Stores;
 using SampleBlog.IdentityServer.Storage.Stores.Serialization;
@@ -81,6 +84,20 @@ public static class IdentityServerBuilderCoreExtensions
     }
 
     /// <summary>
+    /// Adds a signing key store.
+    /// </summary>
+    /// <typeparam name="T">The type of the concrete store that is registered in DI.</typeparam>
+    /// <param name="builder">The builder.</param>
+    /// <returns>The builder.</returns>
+    public static IIdentityServerBuilder AddSigningKeyStore<T>(this IIdentityServerBuilder builder)
+        where T : class, ISigningKeyStore
+    {
+        builder.Services.AddTransient<ISigningKeyStore, T>();
+
+        return builder;
+    }
+
+    /// <summary>
     /// Adds the extension grant validator.
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -105,12 +122,13 @@ public static class IdentityServerBuilderCoreExtensions
             .AddAuthentication(IdentityServerConstants.DefaultCookieAuthenticationScheme)
             .AddCookie(IdentityServerConstants.DefaultCookieAuthenticationScheme)
             .AddCookie(IdentityServerConstants.ExternalCookieAuthenticationScheme)
-            .AddCookie(".AspNetCore.Identity.Application", options =>
+            /*.AddCookie(".AspNetCore.Identity.Application", options =>
             {
 
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
-            });
+            })*/
+            ;
 
         builder.Services
             .AddSingleton<IConfigureOptions<CookieAuthenticationOptions>, ConfigureInternalCookieOptions>();
@@ -174,7 +192,7 @@ public static class IdentityServerBuilderCoreExtensions
 
         //builder.Services.TryAddTransient<IBackchannelAuthenticationUserValidator, NopBackchannelAuthenticationUserValidator>();
 
-        //builder.Services.TryAddTransient(typeof(IConcurrencyLock<>), typeof(DefaultConcurrencyLock<>));
+        builder.Services.TryAddTransient(typeof(IConcurrencyLock<>), typeof(DefaultConcurrencyLock<>));
 
         return builder;
     }
@@ -372,6 +390,28 @@ public static class IdentityServerBuilderCoreExtensions
         return builder;
     }
 
+    /// <summary>
+    /// Adds key management services.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddKeyManagement(this IIdentityServerBuilder builder)
+    {
+        builder.Services.TryAddTransient<IAutomaticKeyManagerKeyStore, AutomaticKeyManagerKeyStore>();
+        builder.Services.TryAddTransient<IKeyManager, KeyManager>();
+        builder.Services.TryAddTransient<ISigningKeyProtector, DataProtectionKeyProtector>();
+        builder.Services.TryAddSingleton<ISigningKeyStoreCache, InMemoryKeyStoreCache>();
+        builder.Services.TryAddTransient(provider => provider.GetRequiredService<IdentityServerOptions>().KeyManagement);
+
+        builder.Services.TryAddSingleton<ISigningKeyStore>(x =>
+        {
+            var opts = x.GetRequiredService<IdentityServerOptions>();
+            return new FileSystemKeyStore(opts.KeyManagement.KeyPath, x.GetRequiredService<ILogger<FileSystemKeyStore>>());
+        });
+
+        return builder;
+    }
+
     // todo: check with later previews of ASP.NET Core if this is still required
     /// <summary>
     /// Adds configuration for the HttpClient used for JWT request_uri requests.
@@ -452,6 +492,75 @@ public static class IdentityServerBuilderCoreExtensions
     {
         builder.Services.AddTransient<ISecretParser, BasicAuthenticationSecretParser>();
         builder.Services.AddTransient<ISecretParser, PostBodySecretParser>();
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Sets the signing credential.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="credential">The credential.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddSigningCredential(this IIdentityServerBuilder builder, SigningCredentials credential)
+    {
+        if (credential.Key is not (AsymmetricSecurityKey or Microsoft.IdentityModel.Tokens.JsonWebKey { HasPrivateKey: true }))
+        {
+            throw new InvalidOperationException("Signing key is not asymmetric");
+        }
+
+        if (false == IdentityServerConstants.SupportedSigningAlgorithms.Contains(credential.Algorithm, StringComparer.Ordinal))
+        {
+            throw new InvalidOperationException($"Signing algorithm {credential.Algorithm} is not supported.");
+        }
+
+        if (credential.Key is ECDsaSecurityKey key && false == CryptoHelper.IsValidCurveForAlgorithm(key, credential.Algorithm))
+        {
+            throw new InvalidOperationException("Invalid curve for signing algorithm");
+        }
+
+        if (credential.Key is Microsoft.IdentityModel.Tokens.JsonWebKey jsonWebKey)
+        {
+            if (jsonWebKey.Kty == JsonWebAlgorithmsKeyTypes.EllipticCurve && false == CryptoHelper.IsValidCrvValueForAlgorithm(jsonWebKey.Crv))
+            {
+                throw new InvalidOperationException("Invalid crv value for signing algorithm");
+            }
+        }
+
+        builder.Services.AddSingleton<ISigningCredentialStore>(new InMemorySigningCredentialsStore(credential));
+
+        var keyInfo = new SecurityKeyInfo
+        {
+            Key = credential.Key,
+            SigningAlgorithm = credential.Algorithm
+        };
+
+        builder.Services.AddSingleton<IValidationKeysStore>(new InMemoryValidationKeysStore(new[] { keyInfo }));
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds the in memory clients.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <param name="clients">The clients.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddInMemoryClients(this IIdentityServerBuilder builder, IEnumerable<Client> clients)
+    {
+        builder.Services.AddSingleton(clients);
+
+        builder.AddClientStore<InMemoryClientStore>();
+
+        var existingCors = builder.Services.LastOrDefault(x => x.ServiceType == typeof(ICorsPolicyService));
+        if (null != existingCors &&
+            typeof(DefaultCorsPolicyService) == existingCors.ImplementationType &&
+            existingCors.Lifetime == ServiceLifetime.Transient)
+        {
+            // if our default is registered, then overwrite with the InMemoryCorsPolicyService
+            // otherwise don't overwrite with the InMemoryCorsPolicyService, which uses the custom one registered by the host
+            builder.Services.AddTransient<ICorsPolicyService, InMemoryCorsPolicyService>();
+        }
 
         return builder;
     }

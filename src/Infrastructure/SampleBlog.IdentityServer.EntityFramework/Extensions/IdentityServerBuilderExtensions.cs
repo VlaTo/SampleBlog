@@ -76,7 +76,7 @@ public static class IdentityServerBuilderExtensions
     {
         builder.Services.AddOperationalDbContext<TContext>(storeOptionsAction);
 
-        //builder.AddSigningKeyStore<SigningKeyStore>();
+        builder.AddSigningKeyStore<SigningKeyStore>();
         builder.AddPersistedGrantStore<PersistedGrantStore>();
         //builder.AddDeviceFlowStore<DeviceFlowStore>();
         //builder.AddServerSideSessionStore<ServerSideSessionStore>();

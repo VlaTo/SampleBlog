@@ -164,12 +164,33 @@ public class IdentityServerOptions
     }
 
     /// <summary>
+    /// Gets or sets the caching options.
+    /// </summary>
+    /// <value>
+    /// The caching options.
+    /// </value>
+    public CachingOptions Caching
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// Gets or sets the cors options.
     /// </summary>
     /// <value>
     /// The cors options.
     /// </value>
     public CorsOptions Cors
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// Gets or sets the signing key management options.
+    /// </summary>
+    public KeyManagementOptions KeyManagement
     {
         get;
         set;
@@ -196,7 +217,9 @@ public class IdentityServerOptions
         Csp = new CspOptions();
         Validation = new ValidationOptions();
         UserInteraction = new UserInteractionOptions();
+        Caching = new CachingOptions();
         Cors = new CorsOptions();
+        KeyManagement = new KeyManagementOptions();
         InputLengthRestrictions = new InputLengthRestrictions();
         DynamicProviders = new DynamicProviderOptions();
     }

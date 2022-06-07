@@ -15,7 +15,12 @@ using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.EntityFramework.Extensions;
 using SampleBlog.IdentityServer.EntityFramework.Storage;
 using SampleBlog.IdentityServer.Hosting;
+using SampleBlog.IdentityServer.Models;
+using SampleBlog.IdentityServer.Services;
+using SampleBlog.IdentityServer.Services.KeyManagement;
 using SampleBlog.IdentityServer.Storage.Models;
+using SampleBlog.IdentityServer.Storage.Stores;
+using SampleBlog.IdentityServer.Stores;
 using SampleBlog.IdentityServer.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -66,9 +71,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 .ConfigureReplacedServices()
                 .AddIdentityResources()
                 .AddApiResources()
-                //.AddClients()
-                //.AddSigningCredentials()
-                ;
+                .AddClients()
+                .AddSigningCredentials();
 
             builder.Services.Configure(configure);
 
@@ -139,7 +143,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IIdentityServerBuilder"/>.</param>
         /// <returns>The <see cref="IIdentityServerBuilder"/>.</returns>
-        public static IIdentityServerBuilder AddIdentityResources(this IIdentityServerBuilder builder) => builder.AddIdentityResources(configuration: null);
+        public static IIdentityServerBuilder AddIdentityResources(this IIdentityServerBuilder builder)
+            => builder.AddIdentityResources(configuration: null);
 
         /// <summary>
         /// Adds identity resources from the given <paramref name="configuration"/> instance.
@@ -181,8 +186,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IIdentityServerBuilder"/>.</param>
         /// <returns>The <see cref="IIdentityServerBuilder"/>.</returns>
-        /*public static IIdentityServerBuilder AddClients(
-            this IIdentityServerBuilder builder) => builder.AddClients(configuration: null);*/
+        public static IIdentityServerBuilder AddClients(this IIdentityServerBuilder builder)
+            => builder.AddClients(configuration: null);
 
         /// <summary>
         /// Adds clients from the given <paramref name="configuration"/> instance.
@@ -190,9 +195,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IIdentityServerBuilder"/>.</param>
         /// <param name="configuration">The <see cref="IConfiguration"/> instance containing the client definitions.</param>
         /// <returns>The <see cref="IIdentityServerBuilder"/>.</returns>
-        /*public static IIdentityServerBuilder AddClients(
-            this IIdentityServerBuilder builder,
-            IConfiguration configuration)
+        public static IIdentityServerBuilder AddClients(this IIdentityServerBuilder builder, IConfiguration? configuration)
         {
             builder.ConfigureReplacedServices();
             builder.AddInMemoryClients(Enumerable.Empty<Client>());
@@ -216,7 +219,7 @@ namespace Microsoft.Extensions.DependencyInjection
             });
 
             return builder;
-        }*/
+        }
 
         /// <summary>
         /// Adds a signing key from the default configuration to the server using the configuration key
@@ -224,8 +227,8 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         /// <param name="builder">The <see cref="IIdentityServerBuilder"/>.</param>
         /// <returns>The <see cref="IIdentityServerBuilder"/>.</returns>
-        /*public static IIdentityServerBuilder AddSigningCredentials(
-            this IIdentityServerBuilder builder) => builder.AddSigningCredentials(configuration: null);*/
+        public static IIdentityServerBuilder AddSigningCredentials(this IIdentityServerBuilder builder)
+            => builder.AddSigningCredentials(configuration: null);
 
         /// <summary>
         /// Adds a signing key from the given <paramref name="configuration"/> instance.
@@ -233,9 +236,9 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="builder">The <see cref="IIdentityServerBuilder"/>.</param>
         /// <param name="configuration">The <see cref="IConfiguration"/>.</param>
         /// <returns>The <see cref="IIdentityServerBuilder"/>.</returns>
-        /*public static IIdentityServerBuilder AddSigningCredentials(
+        public static IIdentityServerBuilder AddSigningCredentials(
             this IIdentityServerBuilder builder,
-            IConfiguration configuration)
+            IConfiguration? configuration)
         {
             const string KeySectionName = "IdentityServer:Key";
 
@@ -244,9 +247,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 ServiceDescriptor.Singleton<IConfigureOptions<ApiAuthorizationOptions>, ConfigureSigningCredentials>(sp =>
                 {
                     var logger = sp.GetRequiredService<ILogger<ConfigureSigningCredentials>>();
-                    var effectiveConfig = configuration ?? sp.GetRequiredService<IConfiguration>().GetSection(KeySectionName);
+                    var effectiveConfig = configuration ??
+                                          sp.GetRequiredService<IConfiguration>().GetSection(KeySectionName);
                     return new ConfigureSigningCredentials(effectiveConfig, logger);
-                }));
+                })
+            );
 
             // We take over the setup for the credentials store as Identity Server registers a singleton
             builder.Services.AddSingleton<ISigningCredentialStore>(sp =>
@@ -263,8 +268,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
                 if (signingCredential is null)
                 {
-                    throw new InvalidOperationException(
-                        $"No signing credential is configured by the '{KeySectionName}' configuration section.");
+                    throw new InvalidOperationException($"No signing credential is configured by the '{KeySectionName}' configuration section.");
                 }
 
                 return new InMemoryValidationKeysStore(new[]
@@ -278,7 +282,7 @@ namespace Microsoft.Extensions.DependencyInjection
             });
 
             return builder;
-        }*/
+        }
 
         internal static IIdentityServerBuilder ConfigureReplacedServices(this IIdentityServerBuilder builder)
         {

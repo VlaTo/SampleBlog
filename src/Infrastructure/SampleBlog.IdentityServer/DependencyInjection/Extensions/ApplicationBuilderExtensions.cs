@@ -9,6 +9,8 @@ using SampleBlog.IdentityServer.Hosting;
 using SampleBlog.IdentityServer.Storage.Stores;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Http;
 
 namespace SampleBlog.IdentityServer.DependencyInjection.Extensions;
 
@@ -52,6 +54,10 @@ public static class ApplicationBuilderExtensions
 
         app.UseMiddleware<MutualTlsEndpointMiddleware>();
         app.UseMiddleware<IdentityServerMiddleware>();
+        app.UseCookiePolicy(new CookiePolicyOptions
+        {
+            Secure = CookieSecurePolicy.Always
+        });
 
         return app;
     }

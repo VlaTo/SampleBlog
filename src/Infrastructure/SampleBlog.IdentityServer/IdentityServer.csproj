@@ -14,6 +14,7 @@
     <Folder Include="Endpoints\Results\" />
     <Folder Include="Hosting\FederatedSignOut\" />
     <Folder Include="ResponseHandling\Defaults\" />
+    <Folder Include="Services\KeyManagement\" />
     <Folder Include="Validation\Contexts\" />
     <Folder Include="Validation\Results\" />
   </ItemGroup>

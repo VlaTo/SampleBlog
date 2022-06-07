@@ -49,7 +49,7 @@ public class AuthorizeResponseGenerator : IAuthorizeResponseGenerator
     /// <summary>
     /// The key material service
     /// </summary>
-    //protected readonly IKeyMaterialService KeyMaterialService;
+    protected readonly IKeyMaterialService KeyMaterialService;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthorizeResponseGenerator"/> class.
@@ -65,7 +65,7 @@ public class AuthorizeResponseGenerator : IAuthorizeResponseGenerator
         IdentityServerOptions options,
         ISystemClock clock,
         //ITokenService tokenService,
-        //IKeyMaterialService keyMaterialService,
+        IKeyMaterialService keyMaterialService,
         IAuthorizationCodeStore authorizationCodeStore,
         ILogger<AuthorizeResponseGenerator> logger,
         IEventService events)
@@ -73,7 +73,7 @@ public class AuthorizeResponseGenerator : IAuthorizeResponseGenerator
         Options = options;
         Clock = clock;
         //TokenService = tokenService;
-        //KeyMaterialService = keyMaterialService;
+        KeyMaterialService = keyMaterialService;
         AuthorizationCodeStore = authorizationCodeStore;
         Events = events;
         Logger = logger;
@@ -143,7 +143,7 @@ public class AuthorizeResponseGenerator : IAuthorizeResponseGenerator
 
         if (Options.EmitStateHash && request.State.IsPresent())
         {
-            /*var credential = await KeyMaterialService.GetSigningCredentialsAsync(request.Client.AllowedIdentityTokenSigningAlgorithms);
+            var credential = await KeyMaterialService.GetSigningCredentialsAsync(request.Client.AllowedIdentityTokenSigningAlgorithms);
 
             if (null == credential)
             {
@@ -152,7 +152,7 @@ public class AuthorizeResponseGenerator : IAuthorizeResponseGenerator
 
             var algorithm = credential.Algorithm;
 
-            stateHash = CryptoHelper.CreateHashClaimValue(request.State, algorithm);*/
+            stateHash = CryptoHelper.CreateHashClaimValue(request.State, algorithm);
         }
 
         var code = new AuthorizationCode

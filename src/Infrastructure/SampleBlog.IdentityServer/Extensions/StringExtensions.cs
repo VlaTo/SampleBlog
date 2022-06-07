@@ -7,6 +7,27 @@ internal static class StringExtensions
 {
     private const string SlashStr = "/";
 
+    public static string? GetOrigin(this string? url)
+    {
+        if (null != url)
+        {
+            Uri uri;
+
+            try
+            {
+                uri = new Uri(url);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+            return $"{uri.Scheme}://{uri.Authority}";
+        }
+
+        return null;
+    }
+
     [DebuggerStepThrough]
     public static bool IsPresent(this string? value)
     {
