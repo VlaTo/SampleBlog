@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.Extensions;
@@ -16,18 +17,23 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
 
     public void Configure(CookieAuthenticationOptions options)
     {
-        throw new NotImplementedException();
     }
 
     public void Configure(string name, CookieAuthenticationOptions options)
     {
-        if (IdentityServerConstants.DefaultCookieAuthenticationScheme == name)
+        // actual name: Identity.Application
+        // default name: idsrv
+        // external name: idsrv.external
+        // cookie-name: AspNetCore.Identity.Application
+
+        if (String.Equals(IdentityServerConstants.DefaultCookieAuthenticationScheme, name))
         {
             options.SlidingExpiration = serverOptions.Authentication.CookieSlidingExpiration;
             options.ExpireTimeSpan = serverOptions.Authentication.CookieLifetime;
             options.Cookie.Name = IdentityServerConstants.DefaultCookieAuthenticationScheme;
             options.Cookie.IsEssential = true;
             options.Cookie.SameSite = serverOptions.Authentication.CookieSameSiteMode;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
 
             options.LoginPath = ExtractLocalUrl(serverOptions.UserInteraction.LoginUrl);
             options.LogoutPath = ExtractLocalUrl(serverOptions.UserInteraction.LogoutUrl);
@@ -38,7 +44,7 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
             }
         }
 
-        if (IdentityServerConstants.ExternalCookieAuthenticationScheme == name)
+        if (String.Equals(IdentityServerConstants.ExternalCookieAuthenticationScheme, name))
         {
             options.Cookie.Name = IdentityServerConstants.ExternalCookieAuthenticationScheme;
             options.Cookie.IsEssential = true;
@@ -50,6 +56,9 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
             // see: https://brockallen.com/2019/01/11/same-site-cookies-asp-net-core-and-external-authentication-providers/
             options.Cookie.SameSite = serverOptions.Authentication.CookieSameSiteMode;
         }
+
+        options.Cookie.SameSite = serverOptions.Authentication.CookieSameSiteMode;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     }
 
     private static string? ExtractLocalUrl(string? url)

@@ -54,10 +54,10 @@ public static class ApplicationBuilderExtensions
 
         app.UseMiddleware<MutualTlsEndpointMiddleware>();
         app.UseMiddleware<IdentityServerMiddleware>();
-        app.UseCookiePolicy(new CookiePolicyOptions
+        /*app.UseCookiePolicy(new CookiePolicyOptions
         {
             Secure = CookieSecurePolicy.Always
-        });
+        });*/
 
         return app;
     }

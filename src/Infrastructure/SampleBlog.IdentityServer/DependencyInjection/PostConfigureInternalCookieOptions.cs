@@ -28,11 +28,11 @@ internal class PostConfigureInternalCookieOptions : IPostConfigureOptions<Cookie
                      authOptions.Value.DefaultAuthenticateScheme ??
                      authOptions.Value.DefaultScheme;
 
-        if (name == scheme)
+        if (String.Equals(scheme, name))
         {
-            serverOptions.UserInteraction.LoginUrl = serverOptions.UserInteraction.LoginUrl ?? options.LoginPath;
-            serverOptions.UserInteraction.LoginReturnUrlParameter = serverOptions.UserInteraction.LoginReturnUrlParameter ?? options.ReturnUrlParameter;
-            serverOptions.UserInteraction.LogoutUrl = serverOptions.UserInteraction.LogoutUrl ?? options.LogoutPath;
+            serverOptions.UserInteraction.LoginUrl ??= options.LoginPath;
+            serverOptions.UserInteraction.LoginReturnUrlParameter ??= options.ReturnUrlParameter;
+            serverOptions.UserInteraction.LogoutUrl ??= options.LogoutPath;
 
             logger.LogDebug("Login Url: {url}", serverOptions.UserInteraction.LoginUrl);
             logger.LogDebug("Login Return Url Parameter: {param}", serverOptions.UserInteraction.LoginReturnUrlParameter);
