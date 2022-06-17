@@ -15,7 +15,7 @@ public class BaseUrlMiddleware
 
     public async Task Invoke(HttpContext context)
     {
-        var urls= context.RequestServices.GetRequiredService<IServerUrls>();
+        var urls = context.RequestServices.GetRequiredService<IServerUrls>();
 
         urls.BasePath = context.Request.PathBase.Value;
 

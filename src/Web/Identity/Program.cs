@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SampleBlog.Core.Application.Extensions;
 using SampleBlog.Core.Application.Services;
+using SampleBlog.IdentityServer;
 using SampleBlog.IdentityServer.DependencyInjection.Extensions;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
 using SampleBlog.IdentityServer.EntityFramework.Extensions;
@@ -44,6 +45,12 @@ builder.Services
     .AddDefaultTokenProviders();
 
 builder.Services
+    .AddCookiePolicy(options =>
+    {
+        options.MinimumSameSitePolicy = SameSiteMode.Lax;
+    });
+
+builder.Services
     .AddDbContext<BlogContext>(db =>
     {
         var connectionString = builder.Configuration.GetConnectionString("Database");
@@ -54,6 +61,7 @@ builder.Services
         //options.Cors.CorsPolicyName = Constants.ClientPolicy;
         options.UserInteraction.LoginUrl = "http://localhost:5276/Authenticate/login";
         //options.UserInteraction.ErrorUrl = "http://localhost:5001/error";
+        
         options.Events = new EventsOptions
         {
             RaiseErrorEvents = true,
@@ -62,6 +70,7 @@ builder.Services
             RaiseSuccessEvents = true
         };
 
+        options.Authentication.CookieAuthenticationScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
         options.Authentication.CookieLifetime = TimeSpan.FromMinutes(10.0d);
         options.Authentication.CookieSlidingExpiration = true;
     })
@@ -72,8 +81,8 @@ builder.Services
                 .WithScopes(
                     DefinedScopes.Blog.Api.Blogs,
                     DefinedScopes.Blog.Api.Comments,
-                    SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.OpenId,
-                    SampleBlog.IdentityServer.IdentityServerConstants.StandardScopes.Profile
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile
                 )
         );
     })

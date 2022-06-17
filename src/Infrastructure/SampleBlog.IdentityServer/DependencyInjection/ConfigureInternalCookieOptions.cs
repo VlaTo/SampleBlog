@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using SampleBlog.IdentityServer.DependencyInjection.Options;
@@ -26,6 +27,8 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
         // external name: idsrv.external
         // cookie-name: AspNetCore.Identity.Application
 
+        Debugger.Break();
+
         if (String.Equals(IdentityServerConstants.DefaultCookieAuthenticationScheme, name))
         {
             options.SlidingExpiration = serverOptions.Authentication.CookieSlidingExpiration;
@@ -38,7 +41,7 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
             options.LoginPath = ExtractLocalUrl(serverOptions.UserInteraction.LoginUrl);
             options.LogoutPath = ExtractLocalUrl(serverOptions.UserInteraction.LogoutUrl);
 
-            if (serverOptions.UserInteraction.LoginReturnUrlParameter != null)
+            if (null != serverOptions.UserInteraction.LoginReturnUrlParameter)
             {
                 options.ReturnUrlParameter = serverOptions.UserInteraction.LoginReturnUrlParameter;
             }
@@ -57,22 +60,12 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
             options.Cookie.SameSite = serverOptions.Authentication.CookieSameSiteMode;
         }
 
-        options.Cookie.SameSite = serverOptions.Authentication.CookieSameSiteMode;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        //options.Cookie.SameSite = serverOptions.Authentication.CookieSameSiteMode;
+        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     }
 
     private static string? ExtractLocalUrl(string? url)
     {
-        if (null != url && url.IsLocalUrl())
-        {
-            if (url.StartsWith("~/"))
-            {
-                url = url[1..];
-            }
-
-            return url;
-        }
-
-        return null;
+        return null != url && url.IsLocalUrl() && url.StartsWith("~/") ? url[1..] : url;
     }
 }
