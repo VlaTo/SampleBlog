@@ -190,7 +190,7 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
 
         client.RedirectUris = new List<ClientRedirectUri>(new[]
         {
-            new ClientRedirectUri { Client = client, RedirectUri = "http://localhost:5000/redirect" }
+            new ClientRedirectUri { Client = client, RedirectUri = "http://localhost:5001/authentication/login-callback" }
         });
 
         client.ClientSecrets = new List<ClientSecret>(new[]

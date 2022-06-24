@@ -80,7 +80,7 @@ public sealed class ValidatedTokenRequest : ValidatedRequest
     /// <value>
     /// The authorization code.
     /// </value>
-    public AuthorizationCode AuthorizationCode
+    public AuthorizationCode? AuthorizationCode
     {
         get;
         set;
@@ -116,7 +116,7 @@ public sealed class ValidatedTokenRequest : ValidatedRequest
     /// <value>
     /// The device code.
     /// </value>
-    public DeviceCode DeviceCode
+    public DeviceCode? DeviceCode
     {
         get;
         set;
@@ -128,9 +128,9 @@ public sealed class ValidatedTokenRequest : ValidatedRequest
     /// <value>
     /// The backchannel authentication request.
     /// </value>
-    /*public BackChannelAuthenticationRequest BackChannelAuthenticationRequest
+    public BackChannelAuthenticationRequest? BackChannelAuthenticationRequest
     {
         get;
         set;
-    }*/
+    }
 }

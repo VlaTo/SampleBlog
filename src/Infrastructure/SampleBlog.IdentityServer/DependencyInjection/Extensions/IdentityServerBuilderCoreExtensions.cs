@@ -53,6 +53,7 @@ public static class IdentityServerBuilderCoreExtensions
         builder.Services.AddSingleton(
             resolver => resolver.GetRequiredService<IOptions<IdentityServerOptions>>().Value.DynamicProviders
         );
+
         //builder.Services.AddTransient(
         //    resolver => resolver.GetRequiredService<IOptions<IdentityServerOptions>>().Value.PersistentGrants
         //);
@@ -121,14 +122,7 @@ public static class IdentityServerBuilderCoreExtensions
         builder.Services
             .AddAuthentication(IdentityServerConstants.DefaultCookieAuthenticationScheme)
             .AddCookie(IdentityServerConstants.DefaultCookieAuthenticationScheme)
-            .AddCookie(IdentityServerConstants.ExternalCookieAuthenticationScheme)
-            /*.AddCookie(".AspNetCore.Identity.Application", options =>
-            {
-
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-
-            })*/
-            ;
+            .AddCookie(IdentityServerConstants.ExternalCookieAuthenticationScheme);
 
         builder.Services
             .AddSingleton<IConfigureOptions<CookieAuthenticationOptions>, ConfigureInternalCookieOptions>();
@@ -187,8 +181,10 @@ public static class IdentityServerBuilderCoreExtensions
         builder.Services.TryAddTransient<IHandleGenerationService, DefaultHandleGenerationService>();
         builder.Services.TryAddTransient<ISessionCoordinationService, DefaultSessionCoordinationService>();
         builder.Services.TryAddTransient<IUserConsentStore, DefaultUserConsentStore>();
+        builder.Services.TryAddTransient<ITokenService, DefaultTokenService>();
 
         builder.AddJwtRequestUriHttpClient();
+        builder.AddValidators();
 
         //builder.Services.TryAddTransient<IBackchannelAuthenticationUserValidator, NopBackchannelAuthenticationUserValidator>();
 
@@ -217,8 +213,15 @@ public static class IdentityServerBuilderCoreExtensions
         //builder.AddEndpoint<EndSessionEndpoint>(EndpointNames.EndSession, ProtocolRoutePaths.EndSession.EnsureLeadingSlash());
         //builder.AddEndpoint<IntrospectionEndpoint>(EndpointNames.Introspection, ProtocolRoutePaths.Introspection.EnsureLeadingSlash());
         //builder.AddEndpoint<TokenRevocationEndpoint>(EndpointNames.Revocation, ProtocolRoutePaths.Revocation.EnsureLeadingSlash());
-        //builder.AddEndpoint<TokenEndpoint>(EndpointNames.Token, ProtocolRoutePaths.Token.EnsureLeadingSlash());
+        builder.AddEndpoint<TokenEndpoint>(Constants.EndpointNames.Token, Constants.ProtocolRoutePaths.Token.EnsureLeadingSlash());
         //builder.AddEndpoint<UserInfoEndpoint>(EndpointNames.UserInfo, ProtocolRoutePaths.UserInfo.EnsureLeadingSlash());
+
+        return builder;
+    }
+
+    public static IIdentityServerBuilder AddValidators(this IIdentityServerBuilder builder)
+    {
+        builder.Services.AddTransient<IClientSecretValidator, ClientSecretValidator>();
 
         return builder;
     }
@@ -233,6 +236,32 @@ public static class IdentityServerBuilderCoreExtensions
         where T : class, ISecretParser
     {
         builder.Services.AddTransient<ISecretParser, T>();
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds the secret validator.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="builder">The builder.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddSecretValidator<T>(this IIdentityServerBuilder builder)
+        where T : class, ISecretValidator
+    {
+        builder.Services.AddTransient<ISecretValidator, T>();
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds the default secret validators.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddDefaultSecretValidators(this IIdentityServerBuilder builder)
+    {
+        builder.Services.AddTransient<ISecretValidator, HashedSharedSecretValidator>();
 
         return builder;
     }
@@ -492,6 +521,20 @@ public static class IdentityServerBuilderCoreExtensions
     {
         builder.Services.AddTransient<ISecretParser, BasicAuthenticationSecretParser>();
         builder.Services.AddTransient<ISecretParser, PostBodySecretParser>();
+
+        return builder;
+    }
+
+    /// <summary>
+    /// Adds support for client authentication using JWT bearer assertions.
+    /// </summary>
+    /// <param name="builder">The builder.</param>
+    /// <returns></returns>
+    public static IIdentityServerBuilder AddJwtBearerClientAuthentication(this IIdentityServerBuilder builder)
+    {
+        builder.Services.TryAddTransient<IReplayCache, DefaultReplayCache>();
+        builder.AddSecretParser<JwtBearerClientAssertionSecretParser>();
+        builder.AddSecretValidator<PrivateKeyJwtSecretValidator>();
 
         return builder;
     }

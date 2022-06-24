@@ -40,7 +40,7 @@ public class ProfileDataRequestContext
     /// <value>
     /// The requested claim types.
     /// </value>
-    public IEnumerable<string> RequestedClaimTypes
+    public IReadOnlyCollection<string> RequestedClaimTypes
     {
         get;
         set;
@@ -116,9 +116,9 @@ public class ProfileDataRequestContext
         IEnumerable<string> requestedClaimTypes)
         : this()
     {
-        Subject = subject ?? throw new ArgumentNullException(nameof(subject));
-        Client = client ?? throw new ArgumentNullException(nameof(client));
-        Caller = caller ?? throw new ArgumentNullException(nameof(caller));
-        RequestedClaimTypes = requestedClaimTypes ?? throw new ArgumentNullException(nameof(requestedClaimTypes));
+        Subject = subject;
+        Client = client;
+        Caller = caller;
+        RequestedClaimTypes = requestedClaimTypes.ToArray();
     }
 }

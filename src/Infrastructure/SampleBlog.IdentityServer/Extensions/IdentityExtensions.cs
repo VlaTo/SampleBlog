@@ -1,12 +1,28 @@
-﻿using System.Diagnostics;
+﻿using IdentityModel;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Security.Principal;
-using IdentityModel;
 
 namespace SampleBlog.IdentityServer.Extensions;
 
 internal static class IdentityExtensions
 {
+    /// <summary>
+    /// Gets the authentication method claims.
+    /// </summary>
+    /// <param name="identity">The identity.</param>
+    /// <returns></returns>
+    [DebuggerStepThrough]
+    public static IEnumerable<Claim> GetAuthenticationMethods(this IIdentity? identity)
+    {
+        if (identity is ClaimsIdentity claimsIdentity)
+        {
+            return claimsIdentity.FindAll(JwtClaimTypes.AuthenticationMethod);
+        }
+
+        return Enumerable.Empty<Claim>();
+    }
+
     /// <summary>
     /// Gets the identity provider.
     /// </summary>

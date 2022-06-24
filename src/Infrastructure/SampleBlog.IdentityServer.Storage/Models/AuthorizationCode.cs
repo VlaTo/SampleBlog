@@ -29,7 +29,11 @@ public class AuthorizationCode
     /// <value>
     /// The ID of the client.
     /// </value>
-    public string ClientId { get; set; }
+    public string? ClientId
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the subject.

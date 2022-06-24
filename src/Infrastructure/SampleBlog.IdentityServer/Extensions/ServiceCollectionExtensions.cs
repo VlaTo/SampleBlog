@@ -25,6 +25,7 @@ public static class ServiceCollectionExtensions
             .AddDefaultEndpoints()
             .AddResponseGenerators()
             .AddDefaultSecretParsers()
+            .AddDefaultSecretValidators()
             ;
 
         return builder;

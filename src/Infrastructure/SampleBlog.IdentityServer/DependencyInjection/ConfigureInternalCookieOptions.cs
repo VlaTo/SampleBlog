@@ -22,13 +22,6 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
 
     public void Configure(string name, CookieAuthenticationOptions options)
     {
-        // actual name: Identity.Application
-        // default name: idsrv
-        // external name: idsrv.external
-        // cookie-name: AspNetCore.Identity.Application
-
-        Debugger.Break();
-
         if (String.Equals(IdentityServerConstants.DefaultCookieAuthenticationScheme, name))
         {
             options.SlidingExpiration = serverOptions.Authentication.CookieSlidingExpiration;
@@ -46,7 +39,7 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
                 options.ReturnUrlParameter = serverOptions.UserInteraction.LoginReturnUrlParameter;
             }
         }
-
+        else
         if (String.Equals(IdentityServerConstants.ExternalCookieAuthenticationScheme, name))
         {
             options.Cookie.Name = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -59,9 +52,6 @@ internal class ConfigureInternalCookieOptions : IConfigureNamedOptions<CookieAut
             // see: https://brockallen.com/2019/01/11/same-site-cookies-asp-net-core-and-external-authentication-providers/
             options.Cookie.SameSite = serverOptions.Authentication.CookieSameSiteMode;
         }
-
-        //options.Cookie.SameSite = serverOptions.Authentication.CookieSameSiteMode;
-        //options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     }
 
     private static string? ExtractLocalUrl(string? url)

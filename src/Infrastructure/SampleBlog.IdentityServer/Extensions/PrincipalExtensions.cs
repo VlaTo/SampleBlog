@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using System.Security.Principal;
 
 namespace SampleBlog.IdentityServer.Extensions;
@@ -15,7 +16,17 @@ public static class PrincipalExtensions
     {
         return principal?.Identity?.GetIdentityProvider();
     }
-    
+
+    /// <summary>
+    /// Gets the authentication method claims.
+    /// </summary>
+    /// <param name="principal">The principal.</param>
+    /// <returns></returns>
+    [DebuggerStepThrough]
+    public static IEnumerable<Claim> GetAuthenticationMethods(this IPrincipal principal)
+    {
+        return principal.Identity.GetAuthenticationMethods();
+    }
 
     /// <summary>
     /// Gets the authentication time.

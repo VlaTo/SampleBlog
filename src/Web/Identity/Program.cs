@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SampleBlog.Core.Application.Extensions;
@@ -45,9 +46,14 @@ builder.Services
     .AddDefaultTokenProviders();
 
 builder.Services
-    .AddCookiePolicy(options =>
+    /*.AddCookiePolicy(options =>
     {
+
         options.MinimumSameSitePolicy = SameSiteMode.Lax;
+    })*/
+    .Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
+    {
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     });
 
 builder.Services
@@ -60,7 +66,7 @@ builder.Services
     {
         //options.Cors.CorsPolicyName = Constants.ClientPolicy;
         options.UserInteraction.LoginUrl = "http://localhost:5276/Authenticate/login";
-        //options.UserInteraction.ErrorUrl = "http://localhost:5001/error";
+        //options.UserInteraction.ErrorUrl = "http://localhost:5000/error";
         
         options.Events = new EventsOptions
         {
@@ -86,6 +92,7 @@ builder.Services
                 )
         );
     })
+    .AddJwtBearerClientAuthentication()
     .AddConfigurationStore(options =>
     {
         /*
@@ -109,7 +116,7 @@ builder.Services
             configurePolicy: policy =>
             {
                 policy
-                    .WithOrigins("https://localhost:5001")
+                    .WithOrigins("https://localhost:5000")
                     .AllowAnyMethod();
             }
         );
@@ -153,7 +160,7 @@ using (var scope = app.Services.CreateScope())
 
         if (context.Database.IsSqlServer())
         {
-            /*await context.Database.EnsureCreatedAsync();
+            await context.Database.EnsureCreatedAsync();
             //await context.Database.MigrateAsync();
 
             var seeder = scope.ServiceProvider.GetService<IDatabaseSeeder>();
@@ -161,7 +168,7 @@ using (var scope = app.Services.CreateScope())
             if (null != seeder)
             {
                 await seeder.SeedAsync();
-            }*/
+            }
         }
     }
     catch (Exception ex)

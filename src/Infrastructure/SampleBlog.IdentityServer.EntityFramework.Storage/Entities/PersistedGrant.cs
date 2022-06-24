@@ -41,7 +41,7 @@ public class PersistedGrant
         set;
     }
 
-    public string Description
+    public string? Description
     {
         get;
         set;
@@ -65,7 +65,7 @@ public class PersistedGrant
         set;
     }
 
-    public string Data
+    public string? Data
     {
         get;
         set;

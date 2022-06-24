@@ -13,7 +13,11 @@ public class DeviceCode
     /// <value>
     /// The creation time.
     /// </value>
-    public DateTime CreationTime { get; set; }
+    public DateTime CreationTime
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the lifetime.
@@ -21,7 +25,11 @@ public class DeviceCode
     /// <value>
     /// The lifetime.
     /// </value>
-    public int Lifetime { get; set; }
+    public int Lifetime
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the client identifier.
@@ -29,7 +37,11 @@ public class DeviceCode
     /// <value>
     /// The client identifier.
     /// </value>
-    public string ClientId { get; set; }
+    public string? ClientId
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets the description the user assigned to the device being authorized.
@@ -37,7 +49,11 @@ public class DeviceCode
     /// <value>
     /// The description.
     /// </value>
-    public string Description { get; set; }
+    public string Description
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets a value indicating whether this instance is open identifier.
@@ -45,7 +61,11 @@ public class DeviceCode
     /// <value>
     ///   <c>true</c> if this instance is open identifier; otherwise, <c>false</c>.
     /// </value>
-    public bool IsOpenId { get; set; }
+    public bool IsOpenId
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets a value indicating whether this instance is authorized.
@@ -53,7 +73,11 @@ public class DeviceCode
     /// <value>
     ///   <c>true</c> if this instance is authorized; otherwise, <c>false</c>.
     /// </value>
-    public bool IsAuthorized { get; set; }
+    public bool IsAuthorized
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the requested scopes.
@@ -61,7 +85,11 @@ public class DeviceCode
     /// <value>
     /// The authorized scopes.
     /// </value>
-    public IEnumerable<string> RequestedScopes { get; set; }
+    public IEnumerable<string> RequestedScopes
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the authorized scopes.
@@ -69,7 +97,11 @@ public class DeviceCode
     /// <value>
     /// The authorized scopes.
     /// </value>
-    public IEnumerable<string> AuthorizedScopes { get; set; }
+    public IEnumerable<string> AuthorizedScopes
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the subject.
@@ -77,7 +109,11 @@ public class DeviceCode
     /// <value>
     /// The subject.
     /// </value>
-    public ClaimsPrincipal Subject { get; set; }
+    public ClaimsPrincipal Subject
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// Gets or sets the session identifier.
@@ -85,5 +121,9 @@ public class DeviceCode
     /// <value>
     /// The session identifier.
     /// </value>
-    public string SessionId { get; set; }
+    public string SessionId
+    {
+        get;
+        set;
+    }
 }

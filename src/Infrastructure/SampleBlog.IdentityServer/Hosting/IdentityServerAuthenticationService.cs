@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using IdentityModel;
+﻿using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -57,8 +56,6 @@ internal class IdentityServerAuthenticationService : IAuthenticationService
         }
 
         await service.SignInAsync(context, scheme, principal, properties);
-
-        var after = context.Response.Cookies;
     }
 
     public async Task SignOutAsync(HttpContext context, string? scheme, AuthenticationProperties? properties)
