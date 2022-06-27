@@ -1,4 +1,5 @@
-﻿using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using Microsoft.Extensions.Logging;
+using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using ApiResource = SampleBlog.IdentityServer.Storage.Models.ApiResource;
 using Secret = SampleBlog.IdentityServer.Storage.Models.Secret;
 
@@ -40,5 +41,28 @@ internal static class ApiResourceExtensions
         resource.AllowedAccessTokenSigningAlgorithms = new HashSet<string>(algorithms);
         
         return resource;
+    }
+    
+    internal static bool AreValidResourceIndicatorFormat(this IEnumerable<string>? list, ILogger logger)
+    {
+        if (null != list)
+        {
+            foreach (var item in list)
+            {
+                if (false == Uri.IsWellFormedUriString(item, UriKind.Absolute))
+                {
+                    logger.LogDebug("Resource indicator {resource} is not a valid URI.", item);
+                    return false;
+                }
+
+                if (item.Contains('#'))
+                {
+                    logger.LogDebug("Resource indicator {resource} must not contain a fragment component.", item);
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

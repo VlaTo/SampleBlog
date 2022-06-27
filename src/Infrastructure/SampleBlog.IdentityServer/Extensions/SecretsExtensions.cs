@@ -1,5 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography.X509Certificates;
+using SampleBlog.IdentityServer.Storage.Models;
+using JsonWebKey = Microsoft.IdentityModel.Tokens.JsonWebKey;
 
 namespace SampleBlog.IdentityServer.Extensions;
 
@@ -10,7 +12,7 @@ public static class SecretsExtensions
     /// </summary>
     /// <param name="secrets">The secrets</param>
     /// <returns></returns>
-    public static Task<List<SecurityKey>> GetKeysAsync(this IEnumerable<Storage.Models.Secret> secrets)
+    public static Task<List<SecurityKey>> GetKeysAsync(this IEnumerable<Secret> secrets)
     {
         var secretList = secrets.ToList().AsReadOnly();
         var keys = new List<SecurityKey>();
@@ -30,7 +32,7 @@ public static class SecretsExtensions
         return Task.FromResult(keys);
     }
 
-    private static ICollection<X509Certificate2> GetCertificates(IEnumerable<Storage.Models.Secret> secrets)
+    private static ICollection<X509Certificate2> GetCertificates(IEnumerable<Secret> secrets)
     {
         return secrets
             .Where(s => s.Type == IdentityServerConstants.SecretTypes.X509CertificateBase64)

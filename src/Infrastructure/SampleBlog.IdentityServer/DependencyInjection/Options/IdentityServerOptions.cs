@@ -97,9 +97,27 @@ public class IdentityServerOptions
     }
 
     /// <summary>
+    /// Specifies whether scopes in JWTs are emitted as array or string
+    /// </summary>
+    public bool EmitScopesAsSpaceDelimitedStringInJwt
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// Specifies whether the s_hash claim gets emitted in identity tokens. Defaults to false.
     /// </summary>
     public bool EmitStateHash
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
+    /// Emits an aud claim with the format issuer/resources. That's needed for some older access token validation plumbing. Defaults to false.
+    /// </summary>
+    public bool EmitStaticAudienceClaim
     {
         get;
         set;
@@ -222,5 +240,6 @@ public class IdentityServerOptions
         KeyManagement = new KeyManagementOptions();
         InputLengthRestrictions = new InputLengthRestrictions();
         DynamicProviders = new DynamicProviderOptions();
+        EmitScopesAsSpaceDelimitedStringInJwt = false;
     }
 }

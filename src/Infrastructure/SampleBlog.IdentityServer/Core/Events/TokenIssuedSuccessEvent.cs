@@ -1,7 +1,8 @@
 ﻿using IdentityModel;
-using IdentityModel.Client;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;
+using SampleBlog.IdentityServer.Validation.Results;
+using TokenResponse = SampleBlog.IdentityServer.ResponseHandling.Models.TokenResponse;
 
 namespace SampleBlog.IdentityServer.Core.Events;
 
@@ -147,46 +148,47 @@ public class TokenIssuedSuccessEvent : Event
     /// </summary>
     /// <param name="response">The response.</param>
     /// <param name="request">The request.</param>
-    /*public TokenIssuedSuccessEvent(TokenResponse response, TokenRequestValidationResult request)
+    public TokenIssuedSuccessEvent(TokenResponse response, TokenRequestValidationResult request)
         : this()
     {
-        ClientId = request.ValidatedRequest.Client.ClientId;
-        ClientName = request.ValidatedRequest.Client.ClientName;
+        ClientId = request.ValidatedRequest.Client?.ClientId;
+        ClientName = request.ValidatedRequest.Client?.ClientName;
         Endpoint = Constants.EndpointNames.Token;
         SubjectId = request.ValidatedRequest.Subject?.GetSubjectId();
         GrantType = request.ValidatedRequest.GrantType;
 
-        if (GrantType == OidcConstants.GrantTypes.RefreshToken)
+        if (OidcConstants.GrantTypes.RefreshToken == GrantType)
         {
             Scopes = request.ValidatedRequest.RefreshToken.AuthorizedScopes.ToSpaceSeparatedString();
         }
-        else if (GrantType == OidcConstants.GrantTypes.AuthorizationCode)
+        else if (OidcConstants.GrantTypes.AuthorizationCode == GrantType)
         {
-            Scopes = request.ValidatedRequest.AuthorizationCode.RequestedScopes.ToSpaceSeparatedString();
+            Scopes = request.ValidatedRequest.AuthorizationCode?.RequestedScopes.ToSpaceSeparatedString() ?? String.Empty;
         }
         else
         {
-            Scopes = request.ValidatedRequest.ValidatedResources?.RawScopeValues.ToSpaceSeparatedString();
+            Scopes = request.ValidatedRequest.ValidatedResources.RawScopeValues.ToSpaceSeparatedString();
         }
 
         var tokens = new List<Token>();
-        if (response.IdentityToken != null)
+
+        if (null != response.IdentityToken)
         {
             tokens.Add(new Token(OidcConstants.TokenTypes.IdentityToken, response.IdentityToken));
         }
 
-        if (response.RefreshToken != null)
+        if (null != response.RefreshToken)
         {
             tokens.Add(new Token(OidcConstants.TokenTypes.RefreshToken, response.RefreshToken));
         }
 
-        if (response.AccessToken != null)
+        if (null != response.AccessToken)
         {
             tokens.Add(new Token(OidcConstants.TokenTypes.AccessToken, response.AccessToken));
         }
 
         Tokens = tokens;
-    }*/
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TokenIssuedSuccessEvent"/> class.

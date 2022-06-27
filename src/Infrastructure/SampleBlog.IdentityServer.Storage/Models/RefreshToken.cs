@@ -58,7 +58,7 @@ public class RefreshToken
     /// <value>
     /// The session identifier.
     /// </value>
-    public string SessionId
+    public string? SessionId
     {
         get;
         set;
@@ -116,7 +116,7 @@ public class RefreshToken
     /// <value>
     /// The life time.
     /// </value>
-    public int Lifetime
+    public TimeSpan Lifetime
     {
         get;
         set;

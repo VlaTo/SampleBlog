@@ -14,7 +14,7 @@ public class ClientSecretValidationResult : ValidationResult
     /// <value>
     /// The client.
     /// </value>
-    public Client Client
+    public Client? Client
     {
         get;
         set;

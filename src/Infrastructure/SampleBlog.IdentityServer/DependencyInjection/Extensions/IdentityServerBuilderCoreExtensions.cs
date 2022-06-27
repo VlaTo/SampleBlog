@@ -149,7 +149,7 @@ public static class IdentityServerBuilderCoreExtensions
         builder.Services.AddTransient<IServerUrls, DefaultServerUrls>();
         builder.Services.AddTransient<IIssuerNameService, DefaultIssuerNameService>();
         builder.Services.AddTransient<ISecretsListParser, SecretParser>();
-        //builder.Services.AddTransient<ISecretsListValidator, SecretValidator>();
+        builder.Services.AddTransient<ISecretsListValidator, SecretValidator>();
         builder.Services.AddTransient<ExtensionGrantValidator>();
         //builder.Services.AddTransient<BearerTokenUsageValidator>();
         builder.Services.AddTransient<IJwtRequestValidator, JwtRequestValidator>();
@@ -172,16 +172,21 @@ public static class IdentityServerBuilderCoreExtensions
         builder.Services.TryAddTransient<IAuthorizationCodeStore, DefaultAuthorizationCodeStore>();
         builder.Services.TryAddTransient<IReferenceTokenStore, DefaultReferenceTokenStore>();
         builder.Services.TryAddTransient<IConsentMessageStore, ConsentMessageStore>();
+        builder.Services.TryAddTransient<IRefreshTokenStore, DefaultRefreshTokenStore>();
+        builder.Services.TryAddTransient<IUserConsentStore, DefaultUserConsentStore>();
         builder.Services.TryAddTransient<IKeyMaterialService, DefaultKeyMaterialService>();
         builder.Services.TryAddTransient<ILogoutNotificationService, LogoutNotificationService>();
         builder.Services.TryAddTransient<ICustomTokenValidator, DefaultCustomTokenValidator>();
-        builder.Services.TryAddTransient<ITokenValidator, TokenValidator>();
         builder.Services.TryAddTransient<IEndSessionRequestValidator, EndSessionRequestValidator>();
         builder.Services.TryAddTransient<IPersistentGrantSerializer, PersistentGrantSerializer>();
         builder.Services.TryAddTransient<IHandleGenerationService, DefaultHandleGenerationService>();
         builder.Services.TryAddTransient<ISessionCoordinationService, DefaultSessionCoordinationService>();
-        builder.Services.TryAddTransient<IUserConsentStore, DefaultUserConsentStore>();
         builder.Services.TryAddTransient<ITokenService, DefaultTokenService>();
+        builder.Services.TryAddTransient<ITokenCreationService, DefaultTokenCreationService>();
+        builder.Services.TryAddTransient<IClaimsService, DefaultClaimsService>();
+        builder.Services.TryAddTransient<IRefreshTokenService, DefaultRefreshTokenService>();
+        
+        builder.Services.AddTransient<IClientSecretValidator, ClientSecretValidator>();
 
         builder.AddJwtRequestUriHttpClient();
         builder.AddValidators();
@@ -221,7 +226,8 @@ public static class IdentityServerBuilderCoreExtensions
 
     public static IIdentityServerBuilder AddValidators(this IIdentityServerBuilder builder)
     {
-        builder.Services.AddTransient<IClientSecretValidator, ClientSecretValidator>();
+        builder.Services.TryAddTransient<ITokenValidator, TokenValidator>();
+        builder.Services.TryAddTransient<ICustomTokenRequestValidator, DefaultCustomTokenRequestValidator>();
 
         return builder;
     }
@@ -485,7 +491,7 @@ public static class IdentityServerBuilderCoreExtensions
     /// <returns></returns>
     public static IIdentityServerBuilder AddResponseGenerators(this IIdentityServerBuilder builder)
     {
-        //builder.Services.TryAddTransient<ITokenResponseGenerator, TokenResponseGenerator>();
+        builder.Services.TryAddTransient<ITokenResponseGenerator, TokenResponseGenerator>();
         //builder.Services.TryAddTransient<IUserInfoResponseGenerator, UserInfoResponseGenerator>();
         //builder.Services.TryAddTransient<IIntrospectionResponseGenerator, IntrospectionResponseGenerator>();
         builder.Services.TryAddTransient<IAuthorizeInteractionResponseGenerator, AuthorizeInteractionResponseGenerator>();

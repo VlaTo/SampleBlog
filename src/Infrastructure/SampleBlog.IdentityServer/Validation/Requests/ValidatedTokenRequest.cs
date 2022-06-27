@@ -1,5 +1,4 @@
-﻿using SampleBlog.IdentityServer.Models;
-using SampleBlog.IdentityServer.Storage.Models;
+﻿using SampleBlog.IdentityServer.Storage.Models;
 
 namespace SampleBlog.IdentityServer.Validation.Requests;
 

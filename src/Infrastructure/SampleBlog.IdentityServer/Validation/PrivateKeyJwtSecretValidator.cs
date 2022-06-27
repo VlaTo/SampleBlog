@@ -6,7 +6,6 @@ using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;
 using SampleBlog.IdentityServer.Services;
 using SampleBlog.IdentityServer.Validation.Results;
-using Secret = SampleBlog.IdentityServer.Storage.Models.Secret;
 
 namespace SampleBlog.IdentityServer.Validation;
 
@@ -49,7 +48,7 @@ public class PrivateKeyJwtSecretValidator : ISecretValidator
     /// A validation result
     /// </returns>
     /// <exception cref="System.ArgumentException">ParsedSecret.Credential is not a JWT token</exception>
-    public async Task<SecretValidationResult> ValidateAsync(IEnumerable<Secret> secrets, ParsedSecret parsedSecret)
+    public async Task<SecretValidationResult> ValidateAsync(IEnumerable<Storage.Models.Secret> secrets, ParsedSecret parsedSecret)
     {
         var fail = new SecretValidationResult { Success = false };
         var success = new SecretValidationResult { Success = true };
@@ -78,7 +77,7 @@ public class PrivateKeyJwtSecretValidator : ISecretValidator
             return fail;
         }
 
-        if (!trustedKeys.Any())
+        if (false == trustedKeys.Any())
         {
             logger.LogError("There are no keys available to validate client assertion.");
 

@@ -1,4 +1,7 @@
-﻿namespace SampleBlog.IdentityServer.Services;
+﻿using SampleBlog.IdentityServer.Models;
+using SampleBlog.IdentityServer.Storage.Models;
+
+namespace SampleBlog.IdentityServer.Services;
 
 /// <summary>
 /// Logic for creating security tokens

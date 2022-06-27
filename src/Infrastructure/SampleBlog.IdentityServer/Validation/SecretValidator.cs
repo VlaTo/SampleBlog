@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;
 using SampleBlog.IdentityServer.Validation.Results;
+using Secret = SampleBlog.IdentityServer.Storage.Models.Secret;
 
 namespace SampleBlog.IdentityServer.Validation;
 

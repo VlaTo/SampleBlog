@@ -1,6 +1,7 @@
 ﻿using SampleBlog.IdentityServer.Extensions;
 using SampleBlog.IdentityServer.Models;
 using SampleBlog.IdentityServer.Validation.Requests;
+using SampleBlog.IdentityServer.Validation.Results;
 
 namespace SampleBlog.IdentityServer.Core.Events;
 
@@ -100,7 +101,7 @@ public class TokenIssuedFailureEvent : Event
     /// <value>
     /// The error.
     /// </value>
-    public string Error
+    public string? Error
     {
         get;
         set;
@@ -153,17 +154,17 @@ public class TokenIssuedFailureEvent : Event
     /// Initializes a new instance of the <see cref="TokenIssuedFailureEvent"/> class.
     /// </summary>
     /// <param name="result">The result.</param>
-    /*public TokenIssuedFailureEvent(TokenRequestValidationResult result)
+    public TokenIssuedFailureEvent(TokenRequestValidationResult result)
         : this()
     {
-        if (result.ValidatedRequest != null)
+        if (null != result.ValidatedRequest)
         {
-            ClientId = result.ValidatedRequest.Client.ClientId;
-            ClientName = result.ValidatedRequest.Client.ClientName;
+            ClientId = result.ValidatedRequest.Client?.ClientId;
+            ClientName = result.ValidatedRequest.Client?.ClientName;
             GrantType = result.ValidatedRequest.GrantType;
-            Scopes = result.ValidatedRequest.RequestedScopes?.ToSpaceSeparatedString();
+            Scopes = result.ValidatedRequest.RequestedScopes.ToSpaceSeparatedString();
 
-            if (result.ValidatedRequest.Subject != null && result.ValidatedRequest.Subject.Identity.IsAuthenticated)
+            if (null != result.ValidatedRequest.Subject && result.ValidatedRequest.Subject.Identity.IsAuthenticated)
             {
                 SubjectId = result.ValidatedRequest.Subject.GetSubjectId();
             }
@@ -172,7 +173,7 @@ public class TokenIssuedFailureEvent : Event
         Endpoint = Constants.EndpointNames.Token;
         Error = result.Error;
         ErrorDescription = result.ErrorDescription;
-    }*/
+    }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="TokenIssuedFailureEvent"/> class.

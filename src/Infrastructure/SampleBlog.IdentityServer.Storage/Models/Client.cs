@@ -10,7 +10,7 @@ namespace SampleBlog.IdentityServer.Storage.Models;
 public sealed class Client
 {
     // setting grant types should be atomic
-    private ICollection<string> allowedGrantTypes = new GrantTypeValidatingHashSet();
+    private ICollection<string> allowedGrantTypes;
 
     /// <summary>
     /// Specifies if client is enabled (defaults to <c>true</c>)
@@ -522,8 +522,12 @@ public sealed class Client
         set;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public Client()
     {
+        allowedGrantTypes = new GrantTypeValidatingHashSet();
         Enabled = true;
         ProtocolType = IdentityServerConstants.ProtocolTypes.OpenIdConnect;
         ClientSecrets = new HashSet<Secret>();

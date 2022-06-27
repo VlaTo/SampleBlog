@@ -1,4 +1,4 @@
-﻿using IdentityModel.Client;
+﻿using SampleBlog.IdentityServer.ResponseHandling.Models;
 using SampleBlog.IdentityServer.Validation.Results;
 
 namespace SampleBlog.IdentityServer.ResponseHandling;

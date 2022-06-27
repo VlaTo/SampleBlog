@@ -21,4 +21,11 @@ internal static class DateTimeExtensions
     {
         return now > expirationTime;
     }
+
+    [DebuggerStepThrough]
+    public static TimeSpan GetLifetimeInSeconds(this DateTime creationTime, DateTime now)
+    {
+        //return ((int)(now - creationTime).TotalSeconds);
+        return now - creationTime;
+    }
 }

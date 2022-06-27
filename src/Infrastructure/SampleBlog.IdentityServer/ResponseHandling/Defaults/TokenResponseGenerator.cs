@@ -1,9 +1,11 @@
 ﻿using IdentityModel;
-using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using SampleBlog.IdentityServer.Core;
 using SampleBlog.IdentityServer.Extensions;
+using SampleBlog.IdentityServer.Models;
+using SampleBlog.IdentityServer.ResponseHandling.Models;
+using SampleBlog.IdentityServer.Services;
 using SampleBlog.IdentityServer.Storage.Models;
 using SampleBlog.IdentityServer.Storage.Stores;
 using SampleBlog.IdentityServer.Validation;
@@ -217,7 +219,7 @@ public class TokenResponseGenerator : ITokenResponseGenerator
         //////////////////////////
         // id token
         /////////////////////////
-        if (request.ValidatedRequest.AuthorizationCode.IsOpenId)
+        if (request.ValidatedRequest.AuthorizationCode is { IsOpenId: true })
         {
             // load the client that belongs to the authorization code
             Client? client = null;
@@ -294,9 +296,11 @@ public class TokenResponseGenerator : ITokenResponseGenerator
             MustUpdate = mustUpdate
         });
 
+        var tokenRequest = await CreateIdTokenFromRefreshTokenRequestAsync(request.ValidatedRequest, accessTokenString);
+
         return new TokenResponse
         {
-            IdentityToken = await CreateIdTokenFromRefreshTokenRequestAsync(request.ValidatedRequest, accessTokenString),
+            IdentityToken = tokenRequest,
             AccessToken = accessTokenString,
             AccessTokenLifetime = request.ValidatedRequest.AccessTokenLifetime,
             RefreshToken = handle,
@@ -338,7 +342,7 @@ public class TokenResponseGenerator : ITokenResponseGenerator
         //////////////////////////
         // id token
         /////////////////////////
-        if (request.ValidatedRequest.DeviceCode.IsOpenId)
+        if (request.ValidatedRequest.DeviceCode is { IsOpenId : true })
         {
             // load the client that belongs to the device code
             Client? client = null;
@@ -364,7 +368,7 @@ public class TokenResponseGenerator : ITokenResponseGenerator
 
             var idToken = await TokenService.CreateIdentityTokenAsync(tokenRequest);
             var jwt = await TokenService.CreateSecurityTokenAsync(idToken);
-            
+
             response.IdentityToken = jwt;
         }
 
@@ -408,7 +412,7 @@ public class TokenResponseGenerator : ITokenResponseGenerator
         // load the client that belongs to the device code
         Client? client = null;
 
-        if (null != request.ValidatedRequest.BackChannelAuthenticationRequest.ClientId)
+        if (null != request.ValidatedRequest.BackChannelAuthenticationRequest?.ClientId)
         {
             // todo: do we need this check?
             client = await Clients.FindEnabledClientByIdAsync(request.ValidatedRequest.BackChannelAuthenticationRequest.ClientId);
@@ -421,7 +425,7 @@ public class TokenResponseGenerator : ITokenResponseGenerator
 
         var tokenRequest = new TokenCreationRequest
         {
-            Subject = request.ValidatedRequest.BackChannelAuthenticationRequest.Subject,
+            Subject = request.ValidatedRequest.BackChannelAuthenticationRequest?.Subject,
             AccessTokenToHash = response.AccessToken,
             ValidatedResources = request.ValidatedRequest.ValidatedResources,
             ValidatedRequest = request.ValidatedRequest
@@ -454,7 +458,8 @@ public class TokenResponseGenerator : ITokenResponseGenerator
     /// <returns></returns>
     protected virtual async Task<TokenResponse> ProcessTokenRequestAsync(TokenRequestValidationResult validationResult)
     {
-        (var accessToken, var refreshToken) = await CreateAccessTokenAsync(validationResult.ValidatedRequest);
+        var (accessToken, refreshToken) = await CreateAccessTokenAsync(validationResult.ValidatedRequest);
+
         var response = new TokenResponse
         {
             AccessToken = accessToken,
@@ -477,7 +482,7 @@ public class TokenResponseGenerator : ITokenResponseGenerator
     /// <param name="request">The request.</param>
     /// <returns></returns>
     /// <exception cref="System.InvalidOperationException">Client does not exist anymore.</exception>
-    protected virtual async Task<(string accessToken, string refreshToken)> CreateAccessTokenAsync(ValidatedTokenRequest request)
+    protected virtual async Task<(string accessToken, string? refreshToken)> CreateAccessTokenAsync(ValidatedTokenRequest request)
     {
         var tokenRequest = new TokenCreationRequest
         {

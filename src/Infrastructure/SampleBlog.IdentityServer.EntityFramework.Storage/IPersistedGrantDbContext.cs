@@ -27,11 +27,11 @@ public interface IPersistedGrantDbContext
     /// <value>
     /// The device flow codes.
     /// </value>
-    /*DbSet<DeviceFlowCodes> DeviceFlowCodes
+    DbSet<DeviceFlowCodes> DeviceFlowCodes
     {
         get;
         set;
-    }*/
+    }
 
     /// <summary>
     /// Gets or sets the keys.

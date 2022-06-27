@@ -32,7 +32,7 @@ public class HashedSharedSecretValidator : ISecretValidator
     /// A validation result
     /// </returns>
     /// <exception cref="System.ArgumentNullException">Id or credential</exception>
-    public Task<SecretValidationResult> ValidateAsync(IEnumerable<Secret> secrets, ParsedSecret parsedSecret)
+    public Task<SecretValidationResult> ValidateAsync(IEnumerable<Storage.Models.Secret> secrets, ParsedSecret parsedSecret)
     {
         var fail = Task.FromResult(new SecretValidationResult { Success = false });
         var success = Task.FromResult(new SecretValidationResult { Success = true });
