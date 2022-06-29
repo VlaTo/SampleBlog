@@ -99,6 +99,19 @@ public static class IdentityServerBuilderCoreExtensions
     }
 
     /// <summary>
+    /// Adds a device flow store.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="builder">The builder.</param>
+    public static IIdentityServerBuilder AddDeviceFlowStore<T>(this IIdentityServerBuilder builder)
+        where T : class, IDeviceFlowStore
+    {
+        builder.Services.AddTransient<IDeviceFlowStore, T>();
+
+        return builder;
+    }
+
+    /// <summary>
     /// Adds the extension grant validator.
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -173,7 +186,9 @@ public static class IdentityServerBuilderCoreExtensions
         builder.Services.TryAddTransient<IReferenceTokenStore, DefaultReferenceTokenStore>();
         builder.Services.TryAddTransient<IConsentMessageStore, ConsentMessageStore>();
         builder.Services.TryAddTransient<IRefreshTokenStore, DefaultRefreshTokenStore>();
+        builder.Services.TryAddTransient<IBackChannelAuthenticationRequestStore, DefaultBackChannelAuthenticationRequestStore>();
         builder.Services.TryAddTransient<IUserConsentStore, DefaultUserConsentStore>();
+        builder.Services.TryAddTransient<IDeviceFlowCodeService, DefaultDeviceFlowCodeService>();
         builder.Services.TryAddTransient<IKeyMaterialService, DefaultKeyMaterialService>();
         builder.Services.TryAddTransient<ILogoutNotificationService, LogoutNotificationService>();
         builder.Services.TryAddTransient<ICustomTokenValidator, DefaultCustomTokenValidator>();
@@ -194,6 +209,12 @@ public static class IdentityServerBuilderCoreExtensions
         //builder.Services.TryAddTransient<IBackchannelAuthenticationUserValidator, NopBackchannelAuthenticationUserValidator>();
 
         builder.Services.TryAddTransient(typeof(IConcurrencyLock<>), typeof(DefaultConcurrencyLock<>));
+
+        builder.Services.TryAddTransient<IDeviceFlowThrottlingService, DistributedDeviceFlowThrottlingService>();
+        builder.Services.TryAddTransient<IBackChannelAuthenticationThrottlingService, DistributedBackChannelAuthenticationThrottlingService>();
+        builder.Services.TryAddTransient<IBackChannelAuthenticationRequestIdValidator, BackChannelAuthenticationRequestIdValidator>();
+
+        builder.Services.AddDistributedMemoryCache();
 
         return builder;
     }

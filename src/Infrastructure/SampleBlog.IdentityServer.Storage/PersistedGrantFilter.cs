@@ -10,54 +10,64 @@ public sealed class PersistedGrantFilter
     /// <summary>
     /// Subject id of the user.
     /// </summary>
-    public string SubjectId
+    public string? SubjectId
     {
         get;
-        set;
     }
 
     /// <summary>
     /// Session id used for the grant.
     /// </summary>
-    public string SessionId
+    public string? SessionId
     {
         get;
-        set;
     }
 
     /// <summary>
     /// Client id the grant was issued to.
     /// </summary>
-    public string ClientId
+    public string? ClientId
     {
         get;
-        set;
     }
 
     /// <summary>
     /// Client ids the grant was issued to.
     /// </summary>
-    public IEnumerable<string> ClientIds
+    public IEnumerable<string>? ClientIds
     {
         get;
-        set;
     }
 
     /// <summary>
     /// The type of grant.
     /// </summary>
-    public string Type
+    public string? Type
     {
         get;
-        set;
     }
 
     /// <summary>
     /// The types of grants.
     /// </summary>
-    public IEnumerable<string> Types
+    public IEnumerable<string>? Types
     {
         get;
-        set;
+    }
+
+    public PersistedGrantFilter(
+        string? subjectId = null,
+        string? sessionId = null,
+        string? clientId = null,
+        IEnumerable<string>? clientIds = null,
+        string? type = null,
+        IEnumerable<string>? types = null)
+    {
+        SubjectId = subjectId;
+        SessionId = sessionId;
+        ClientId = clientId;
+        ClientIds = clientIds;
+        Type = type;
+        Types = types;
     }
 }

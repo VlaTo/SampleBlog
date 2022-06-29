@@ -184,22 +184,24 @@ public class PersistedGrantStore : IPersistedGrantStore
         if (null != filter.ClientIds)
         {
             var ids = filter.ClientIds.ToList();
-            if (!String.IsNullOrWhiteSpace(filter.ClientId))
+
+            if (false == String.IsNullOrWhiteSpace(filter.ClientId))
             {
                 ids.Add(filter.ClientId);
             }
+
             query = query.Where(x => ids.Contains(x.ClientId));
         }
-        else if (!String.IsNullOrWhiteSpace(filter.ClientId))
+        else if (false == String.IsNullOrWhiteSpace(filter.ClientId))
         {
             query = query.Where(x => x.ClientId == filter.ClientId);
         }
 
-        if (!String.IsNullOrWhiteSpace(filter.SessionId))
+        if (false == String.IsNullOrWhiteSpace(filter.SessionId))
         {
             query = query.Where(x => x.SessionId == filter.SessionId);
         }
-        if (!String.IsNullOrWhiteSpace(filter.SubjectId))
+        if (false == String.IsNullOrWhiteSpace(filter.SubjectId))
         {
             query = query.Where(x => x.SubjectId == filter.SubjectId);
         }
@@ -207,13 +209,15 @@ public class PersistedGrantStore : IPersistedGrantStore
         if (null != filter.Types)
         {
             var types = filter.Types.ToList();
-            if (!String.IsNullOrWhiteSpace(filter.Type))
+
+            if (false == String.IsNullOrWhiteSpace(filter.Type))
             {
                 types.Add(filter.Type);
             }
+
             query = query.Where(x => types.Contains(x.Type));
         }
-        else if (!String.IsNullOrWhiteSpace(filter.Type))
+        else if (false == String.IsNullOrWhiteSpace(filter.Type))
         {
             query = query.Where(x => x.Type == filter.Type);
         }

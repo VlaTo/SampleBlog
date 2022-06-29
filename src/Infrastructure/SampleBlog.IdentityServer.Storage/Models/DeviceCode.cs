@@ -97,7 +97,7 @@ public class DeviceCode
     /// <value>
     /// The authorized scopes.
     /// </value>
-    public IEnumerable<string> AuthorizedScopes
+    public IEnumerable<string>? AuthorizedScopes
     {
         get;
         set;
@@ -109,7 +109,7 @@ public class DeviceCode
     /// <value>
     /// The subject.
     /// </value>
-    public ClaimsPrincipal Subject
+    public ClaimsPrincipal? Subject
     {
         get;
         set;

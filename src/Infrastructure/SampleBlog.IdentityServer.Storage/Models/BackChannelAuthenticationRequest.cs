@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace SampleBlog.IdentityServer.Validation.Requests;
+namespace SampleBlog.IdentityServer.Storage.Models;
 
 /// <summary>
 /// Models a backchannel authentication request.

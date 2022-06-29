@@ -28,14 +28,6 @@ public class DefaultGrantStore<T>
     }
 
     /// <summary>
-    /// The logger.
-    /// </summary>
-    protected ILogger Logger
-    {
-        get;
-    }
-
-    /// <summary>
     /// The PersistedGrantStore.
     /// </summary>
     protected IPersistedGrantStore Store
@@ -55,6 +47,14 @@ public class DefaultGrantStore<T>
     /// The HandleGenerationService.
     /// </summary>
     protected IHandleGenerationService HandleGenerationService
+    {
+        get;
+    }
+
+    /// <summary>
+    /// The logger.
+    /// </summary>
+    protected ILogger Logger
     {
         get;
     }
@@ -160,9 +160,9 @@ public class DefaultGrantStore<T>
     /// <summary>
     /// Gets the items.
     /// </summary>
-    protected virtual async Task<IEnumerable<T>> GetAllAsync(PersistedGrantFilter filter)
+    protected virtual async Task<IEnumerable<T>?> GetAllAsync(PersistedGrantFilter filter)
     {
-        filter.Type = GrantType;
+        //filter.Type = GrantType;
 
         var items = await Store.GetAllAsync(filter);
         var result = items.Select(x => Serializer.Deserialize<T>(x.Data)).ToArray();
@@ -239,7 +239,16 @@ public class DefaultGrantStore<T>
     /// <param name="expiration">The expiration.</param>
     /// <param name="consumedTime">The consumed time.</param>
     /// <returns></returns>
-    protected virtual async Task StoreItemByHashedKeyAsync(string hashedKey, T item, string clientId, string subjectId, string sessionId, string description, DateTime created, DateTime? expiration, DateTime? consumedTime = null)
+    protected virtual async Task StoreItemByHashedKeyAsync(
+        string hashedKey,
+        T item,
+        string clientId,
+        string subjectId,
+        string? sessionId,
+        string? description,
+        DateTime created,
+        DateTime? expiration,
+        DateTime? consumedTime = null)
     {
         var json = Serializer.Serialize(item);
 
@@ -289,11 +298,6 @@ public class DefaultGrantStore<T>
     /// <returns></returns>
     protected virtual async Task RemoveAllAsync(string subjectId, string clientId)
     {
-        await Store.RemoveAllAsync(new PersistedGrantFilter
-        {
-            SubjectId = subjectId,
-            ClientId = clientId,
-            Type = GrantType
-        });
+        await Store.RemoveAllAsync(new PersistedGrantFilter(subjectId: subjectId, clientId: clientId, type: GrantType));
     }
 }

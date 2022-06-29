@@ -88,7 +88,7 @@ public class DeviceFlowStore : IDeviceFlowStore
     /// </summary>
     /// <param name="userCode">The user code.</param>
     /// <returns></returns>
-    public virtual async Task<DeviceCode> FindByUserCodeAsync(string userCode)
+    public virtual async Task<DeviceCode?> FindByUserCodeAsync(string userCode)
     {
         using var activity = Tracing.StoreActivitySource.StartActivity("DeviceFlowStore.FindByUserCode");
 
@@ -98,9 +98,14 @@ public class DeviceFlowStore : IDeviceFlowStore
             .AsNoTracking()
             .SingleOrDefaultAsync(x => x.UserCode == userCode, CancellationTokenProvider.CancellationToken);
 
-        var model = ToModel(deviceFlowCode?.Data);
+        if (null == deviceFlowCode)
+        {
+            return null;
+        }
 
-        Logger.LogDebug("{userCode} found in database: {userCodeFound}", userCode, model != null);
+        var model = ToModel(deviceFlowCode.Data);
+
+        Logger.LogDebug("{userCode} found in database: {userCodeFound}", userCode, null != model);
 
         return model;
     }
@@ -110,18 +115,100 @@ public class DeviceFlowStore : IDeviceFlowStore
     /// </summary>
     /// <param name="deviceCode">The device code.</param>
     /// <returns></returns>
-    public virtual async Task<DeviceCode> FindByDeviceCodeAsync(string deviceCode)
+    public virtual async Task<DeviceCode?> FindByDeviceCodeAsync(string deviceCode)
     {
         using var activity = Tracing.StoreActivitySource.StartActivity("DeviceFlowStore.FindByDeviceCode");
 
-        var deviceFlowCodes = (await Context.DeviceFlowCodes.AsNoTracking().Where(x => x.DeviceCode == deviceCode)
-                .ToArrayAsync(CancellationTokenProvider.CancellationToken))
-            .SingleOrDefault(x => x.DeviceCode == deviceCode);
-        var model = ToModel(deviceFlowCodes?.Data);
+        var deviceFlowCodes = await Context.DeviceFlowCodes
+            .AsNoTracking()
+            .Where(x => x.DeviceCode == deviceCode)
+            //.ToArrayAsync(CancellationTokenProvider.CancellationToken)
+            .SingleOrDefaultAsync(x => x.DeviceCode == deviceCode, CancellationTokenProvider.CancellationToken);
 
-        Logger.LogDebug("{deviceCode} found in database: {deviceCodeFound}", deviceCode, model != null);
+        if (null == deviceFlowCodes)
+        {
+            return null;
+        }
+
+        var model = ToModel(deviceFlowCodes.Data);
+
+        Logger.LogDebug("{deviceCode} found in database: {deviceCodeFound}", deviceCode, null != model);
 
         return model;
+    }
+
+    /// <summary>
+    /// Updates device authorization, searching by user code.
+    /// </summary>
+    /// <param name="userCode">The user code.</param>
+    /// <param name="data">The data.</param>
+    /// <returns></returns>
+    public async Task UpdateByUserCodeAsync(string userCode, DeviceCode data)
+    {
+        using var activity = Tracing.StoreActivitySource.StartActivity("DeviceFlowStore.UpdateByUserCode");
+
+        var deviceFlowCode = await Context.DeviceFlowCodes
+            .Where(x => x.UserCode == userCode)
+            //.ToArrayAsync(CancellationTokenProvider.CancellationToken)
+            .SingleOrDefaultAsync(x => x.UserCode == userCode, CancellationTokenProvider.CancellationToken);
+
+        if (null == deviceFlowCode)
+        {
+            Logger.LogError("{userCode} not found in database", userCode);
+            throw new InvalidOperationException("Could not update device code");
+        }
+
+        var entity = ToEntity(data, deviceFlowCode.DeviceCode, userCode);
+        Logger.LogDebug("{userCode} found in database", userCode);
+
+        deviceFlowCode.SubjectId = data.Subject.FindFirst(JwtClaimTypes.Subject).Value;
+        deviceFlowCode.Data = entity.Data;
+        deviceFlowCode.SessionId = data.SessionId;
+        deviceFlowCode.Description = data.Description;
+
+        try
+        {
+            await Context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            Logger.LogWarning("exception updating {userCode} user code in database: {error}", userCode, ex.Message);
+        }
+    }
+
+    /// <summary>
+    /// Removes the device authorization, searching by device code.
+    /// </summary>
+    /// <param name="deviceCode">The device code.</param>
+    /// <returns></returns>
+    public async Task RemoveByDeviceCodeAsync(string deviceCode)
+    {
+        using var activity = Tracing.StoreActivitySource.StartActivity("DeviceFlowStore.RemoveByDeviceCode");
+
+        var deviceFlowCodes = await Context.DeviceFlowCodes
+            .Where(x => x.DeviceCode == deviceCode)
+            //.ToArrayAsync(CancellationTokenProvider.CancellationToken)
+            .SingleOrDefaultAsync(x => x.DeviceCode == deviceCode, CancellationTokenProvider.CancellationToken);
+
+        if (null != deviceFlowCodes)
+        {
+            Logger.LogDebug("removing {deviceCode} device code from database", deviceCode);
+
+            Context.DeviceFlowCodes.Remove(deviceFlowCodes);
+
+            try
+            {
+                await Context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Logger.LogInformation("exception removing {deviceCode} device code from database: {error}", deviceCode, ex.Message);
+            }
+        }
+        else
+        {
+            Logger.LogDebug("no {deviceCode} device code found in database", deviceCode);
+        }
     }
 
     /// <summary>
@@ -152,9 +239,12 @@ public class DeviceFlowStore : IDeviceFlowStore
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    protected DeviceCode ToModel(string entity)
+    protected DeviceCode? ToModel(string? entity)
     {
-        if (entity == null) return null;
+        if (String.IsNullOrEmpty(entity))
+        {
+            return null;
+        }
 
         return Serializer.Deserialize<DeviceCode>(entity);
     }

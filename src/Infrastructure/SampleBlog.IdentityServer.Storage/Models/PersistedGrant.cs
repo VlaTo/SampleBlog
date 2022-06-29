@@ -47,7 +47,7 @@ public class PersistedGrant
     /// <value>
     /// The session identifier.
     /// </value>
-    public string SessionId
+    public string? SessionId
     {
         get;
         set;
@@ -71,7 +71,7 @@ public class PersistedGrant
     /// <value>
     /// The description.
     /// </value>
-    public string Description
+    public string? Description
     {
         get;
         set;

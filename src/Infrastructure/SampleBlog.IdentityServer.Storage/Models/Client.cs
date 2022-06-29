@@ -478,7 +478,7 @@ public sealed class Client
     /// <summary>
     /// Gets or sets the backchannel polling interval in seconds.
     /// </summary>
-    public int? PollingInterval
+    public TimeSpan? PollingInterval
     {
         get;
         set;

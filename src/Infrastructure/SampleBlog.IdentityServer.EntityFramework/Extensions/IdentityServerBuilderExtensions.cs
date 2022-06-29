@@ -78,7 +78,7 @@ public static class IdentityServerBuilderExtensions
 
         builder.AddSigningKeyStore<SigningKeyStore>();
         builder.AddPersistedGrantStore<PersistedGrantStore>();
-        //builder.AddDeviceFlowStore<DeviceFlowStore>();
+        builder.AddDeviceFlowStore<DeviceFlowStore>();
         //builder.AddServerSideSessionStore<ServerSideSessionStore>();
 
         builder.Services.AddSingleton<IHostedService, TokenCleanupHostService>();
