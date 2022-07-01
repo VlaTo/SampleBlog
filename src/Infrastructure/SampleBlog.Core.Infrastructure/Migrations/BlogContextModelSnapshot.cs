@@ -25,170 +25,170 @@ namespace SampleBlog.Infrastructure.Migrations
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Client", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<TimeSpan>("AbsoluteRefreshTokenLifetime")
-                        //.HasColumnType("time")
-                        .HasConversion(timeSpanConvertion);
+                b.Property<TimeSpan>("AbsoluteRefreshTokenLifetime")
+                    //.HasColumnType("time")
+                    .HasConversion(timeSpanConvertion);
 
-                    b.Property<TimeSpan>("AccessTokenLifetime")
-                        //.HasColumnType("time")
-                        .HasConversion(timeSpanConvertion);
+                b.Property<TimeSpan>("AccessTokenLifetime")
+                    //.HasColumnType("time")
+                    .HasConversion(timeSpanConvertion);
 
-                    b.Property<int>("AccessTokenType")
-                        .HasColumnType("int");
+                b.Property<int>("AccessTokenType")
+                    .HasColumnType("int");
 
-                    b.Property<bool>("AllowAccessTokensViaBrowser")
-                        .HasColumnType("bit");
+                b.Property<bool>("AllowAccessTokensViaBrowser")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("AllowOfflineAccess")
-                        .HasColumnType("bit");
+                b.Property<bool>("AllowOfflineAccess")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("AllowPlainTextPkce")
-                        .HasColumnType("bit");
+                b.Property<bool>("AllowPlainTextPkce")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("AllowRememberConsent")
-                        .HasColumnType("bit");
+                b.Property<bool>("AllowRememberConsent")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("AllowedIdentityTokenSigningAlgorithms")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("AllowedIdentityTokenSigningAlgorithms")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
-                        .HasColumnType("bit");
+                b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("AlwaysSendClientClaims")
-                        .HasColumnType("bit");
+                b.Property<bool>("AlwaysSendClientClaims")
+                    .HasColumnType("bit");
 
-                    b.Property<TimeSpan>("AuthorizationCodeLifetime")
-                        //.HasColumnType("time")
-                        .HasConversion(timeSpanConvertion);
+                b.Property<TimeSpan>("AuthorizationCodeLifetime")
+                    //.HasColumnType("time")
+                    .HasConversion(timeSpanConvertion);
 
-                    b.Property<bool>("BackChannelLogoutSessionRequired")
-                        .HasColumnType("bit");
+                b.Property<bool>("BackChannelLogoutSessionRequired")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("BackChannelLogoutUri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("BackChannelLogoutUri")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CibaLifetime")
-                        .HasColumnType("int");
+                b.Property<int?>("CibaLifetime")
+                    .HasColumnType("int");
 
-                    b.Property<string>("ClientClaimsPrefix")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClientClaimsPrefix")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClientId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClientName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClientName")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ClientUri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClientUri")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ConsentLifetime")
-                        .HasColumnType("int");
+                b.Property<int?>("ConsentLifetime")
+                    .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("Created")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("DeviceCodeLifetime")
-                        //.HasColumnType("time")
-                        .HasConversion(timeSpanConvertion);
+                b.Property<TimeSpan>("DeviceCodeLifetime")
+                    //.HasColumnType("time")
+                    .HasConversion(timeSpanConvertion);
 
-                    b.Property<bool>("EnableLocalLogin")
-                        .HasColumnType("bit");
+                b.Property<bool>("EnableLocalLogin")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("bit");
+                b.Property<bool>("Enabled")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("FrontChannelLogoutSessionRequired")
-                        .HasColumnType("bit");
+                b.Property<bool>("FrontChannelLogoutSessionRequired")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("FrontChannelLogoutUri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("FrontChannelLogoutUri")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("IdentityTokenLifetime")
-                        //.HasColumnType("time")
-                        .HasConversion(timeSpanConvertion);
+                b.Property<TimeSpan>("IdentityTokenLifetime")
+                    //.HasColumnType("time")
+                    .HasConversion(timeSpanConvertion);
 
-                    b.Property<bool>("IncludeJwtId")
-                        .HasColumnType("bit");
+                b.Property<bool>("IncludeJwtId")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime?>("LastAccessed")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("LastAccessed")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("LogoUri")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("LogoUri")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("NonEditable")
-                        .HasColumnType("bit");
+                b.Property<bool>("NonEditable")
+                    .HasColumnType("bit");
 
-                    b.Property<string>("PairWiseSubjectSalt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("PairWiseSubjectSalt")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PollingInterval")
-                        .HasColumnType("int");
+                b.Property<int?>("PollingInterval")
+                    .HasColumnType("int");
 
-                    b.Property<string>("ProtocolType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ProtocolType")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RefreshTokenExpiration")
-                        .HasColumnType("int");
+                b.Property<int>("RefreshTokenExpiration")
+                    .HasColumnType("int");
 
-                    b.Property<int>("RefreshTokenUsage")
-                        .HasColumnType("int");
+                b.Property<int>("RefreshTokenUsage")
+                    .HasColumnType("int");
 
-                    b.Property<bool>("RequireClientSecret")
-                        .HasColumnType("bit");
+                b.Property<bool>("RequireClientSecret")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("RequireConsent")
-                        .HasColumnType("bit");
+                b.Property<bool>("RequireConsent")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("RequirePkce")
-                        .HasColumnType("bit");
+                b.Property<bool>("RequirePkce")
+                    .HasColumnType("bit");
 
-                    b.Property<bool>("RequireRequestObject")
-                        .HasColumnType("bit");
+                b.Property<bool>("RequireRequestObject")
+                    .HasColumnType("bit");
 
-                    b.Property<TimeSpan>("SlidingRefreshTokenLifetime")
-                        //.HasColumnType("time")
-                        .HasConversion(timeSpanConvertion);
+                b.Property<TimeSpan>("SlidingRefreshTokenLifetime")
+                    //.HasColumnType("time")
+                    .HasConversion(timeSpanConvertion);
 
-                    b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
-                        .HasColumnType("bit");
+                b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
+                    .HasColumnType("bit");
 
-                    b.Property<DateTime?>("Updated")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("Updated")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("UserCodeType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("UserCodeType")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserSsoLifetime")
-                        .HasColumnType("int");
+                b.Property<int?>("UserSsoLifetime")
+                    .HasColumnType("int");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Clients", "Identity");
-                });
+                b.ToTable("Clients", "Identity");
+            });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
@@ -965,6 +965,56 @@ namespace SampleBlog.Infrastructure.Migrations
 
                     b.ToTable("PersistedGrants", "Identity");
                 });
+            
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.DeviceFlowCodes", b =>
+            {
+                b.Property<string>("UserCode")
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.Property<string>("ClientId")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.Property<DateTime>("CreationTime")
+                    .HasColumnType("datetime2");
+
+                b.Property<string>("Data")
+                    .IsRequired()
+                    .HasMaxLength(50000)
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Description")
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.Property<string>("DeviceCode")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.Property<DateTime?>("Expiration")
+                    .IsRequired()
+                    .HasColumnType("datetime2");
+
+                b.Property<string>("SessionId")
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
+
+                b.Property<string>("SubjectId")
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.HasKey("UserCode");
+
+                b.HasIndex("DeviceCode")
+                    .IsUnique();
+
+                b.HasIndex("Expiration");
+
+                b.ToTable("DeviceCodes", "Identity");
+            });
 
             modelBuilder.Entity("SampleBlog.Infrastructure.Models.Identity.Blog", b =>
                 {

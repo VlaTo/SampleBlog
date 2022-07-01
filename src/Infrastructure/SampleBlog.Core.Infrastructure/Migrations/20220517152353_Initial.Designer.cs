@@ -911,54 +911,104 @@ namespace SampleBlog.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.PersistedGrant", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+            {
+                b.Property<long>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<string>("ClientId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("ClientId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ConsumedTime")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("ConsumedTime")
+                    .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime>("CreationTime")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Data")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Data")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Description")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("Expiration")
-                        .HasColumnType("datetime2");
+                b.Property<DateTime?>("Expiration")
+                    .HasColumnType("datetime2");
 
-                    b.Property<string>("Key")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Key")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SessionId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("SessionId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SubjectId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("SubjectId")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Type")
+                    .IsRequired()
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("PersistedGrants", "Identity");
-                });
+                b.ToTable("PersistedGrants", "Identity");
+            });
+
+            modelBuilder.Entity("SampleBlog.IdentityServer.EntityFramework.Storage.Entities.DeviceFlowCodes", b =>
+            {
+                b.Property<string>("UserCode")
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.Property<string>("ClientId")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.Property<DateTime>("CreationTime")
+                    .HasColumnType("datetime2");
+
+                b.Property<string>("Data")
+                    .IsRequired()
+                    .HasMaxLength(50000)
+                    .HasColumnType("nvarchar(max)");
+
+                b.Property<string>("Description")
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.Property<string>("DeviceCode")
+                    .IsRequired()
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.Property<DateTime?>("Expiration")
+                    .IsRequired()
+                    .HasColumnType("datetime2");
+
+                b.Property<string>("SessionId")
+                    .HasMaxLength(100)
+                    .HasColumnType("nvarchar(100)");
+
+                b.Property<string>("SubjectId")
+                    .HasMaxLength(200)
+                    .HasColumnType("nvarchar(200)");
+
+                b.HasKey("UserCode");
+
+                b.HasIndex("DeviceCode")
+                    .IsUnique();
+
+                b.HasIndex("Expiration");
+
+                b.ToTable("DeviceCodes", "Identity");
+            });
 
             modelBuilder.Entity("SampleBlog.Infrastructure.Models.Identity.Blog", b =>
                 {

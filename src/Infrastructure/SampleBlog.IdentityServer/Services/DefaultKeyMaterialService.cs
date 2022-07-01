@@ -92,9 +92,26 @@ public class DefaultKeyMaterialService : IKeyMaterialService
         return credential;
     }
 
-    public Task<IEnumerable<SigningCredentials>> GetAllSigningCredentialsAsync()
+    public async Task<IEnumerable<SigningCredentials>> GetAllSigningCredentialsAsync()
     {
+        using var activity = Tracing.ServiceActivitySource.StartActivity("DefaultKeyMaterialService.GetAllSigningCredentials");
+
         var credentials = new List<SigningCredentials>();
-        return Task.FromResult<IEnumerable<SigningCredentials>>(credentials);
+
+        foreach (var store in signingCredentialStores)
+        {
+            var signingKey = await store.GetSigningCredentialsAsync();
+
+            if (null != signingKey)
+            {
+                credentials.Add(signingKey);
+            }
+        }
+
+        var automaticSigningKeys = await keyManagerKeyStore.GetAllSigningCredentialsAsync();
+
+        credentials.AddRange(automaticSigningKeys);
+
+        return credentials;
     }
 }

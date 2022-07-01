@@ -565,8 +565,8 @@ public class TokenResponseGenerator : ITokenResponseGenerator
             authorizedScopes = request.ValidatedResources.RawScopeValues;
         }
 
-        var at = await TokenService.CreateAccessTokenAsync(tokenRequest);
-        var accessToken = await TokenService.CreateSecurityTokenAsync(at);
+        var token = await TokenService.CreateAccessTokenAsync(tokenRequest);
+        var accessToken = await TokenService.CreateSecurityTokenAsync(token);
 
         if (createRefreshToken)
         {
@@ -577,7 +577,7 @@ public class TokenResponseGenerator : ITokenResponseGenerator
                 Description = tokenRequest.Description,
                 AuthorizedScopes = authorizedScopes,
                 AuthorizedResourceIndicators = authorizedResourceIndicators,
-                AccessToken = at,
+                AccessToken = token,
                 RequestedResourceIndicator = request.RequestedResourceIndicator,
             };
 

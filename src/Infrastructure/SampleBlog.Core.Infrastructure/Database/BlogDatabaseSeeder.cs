@@ -6,6 +6,8 @@ using SampleBlog.Shared;
 using SampleBlog.Shared.Contracts;
 using SampleBlog.Shared.Contracts.Permissions;
 using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
+using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 using SampleBlog.IdentityServer.EntityFramework.Storage.Stores;
@@ -47,6 +49,7 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
         await TryAddClientsAsync();
         await TryAddApiResourcesAsync();
         await TryAddApiScopesAsync();
+        await AddIdentityResources();
     }
 
     private async Task TryAddAdministratorAsync()
@@ -137,6 +140,20 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
                     throw new Exception();
                 }
             }
+
+            if (userManager.SupportsUserClaim)
+            {
+                await userManager.AddClaimsAsync(
+                    superUser,
+                    new[]
+                    {
+                        new Claim(JwtClaimTypes.GivenName, "Super User"),
+                        new Claim(JwtClaimTypes.NickName, "superuser"),
+                        new Claim(JwtClaimTypes.Gender, "male"),
+                        new Claim(JwtClaimTypes.PhoneNumber, "+32(0652)223344")
+                    }
+                );
+            }
         }
     }
 
@@ -168,7 +185,8 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
             LogoUri = "http://localhost:5000/logo.png",
             PairWiseSubjectSalt = "k356hr3k45h6rl32kh456lk536h3k4lhr",
             UserCodeType = "Numeric",
-            EnableLocalLogin = true
+            EnableLocalLogin = true,
+            RequireClientSecret = false
         };
 
         client.AllowedGrantTypes = new List<ClientGrantType>(new[]
@@ -186,11 +204,12 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
             new ClientScope { Client = client, Scope = "address" },
             new ClientScope { Client = client, Scope = "blog.api.blogs" },
             new ClientScope { Client = client, Scope = "blog.api.comments" },
+            //new ClientScope { Client = client, Scope = "resource.1" },
         });
 
         client.RedirectUris = new List<ClientRedirectUri>(new[]
         {
-            new ClientRedirectUri { Client = client, RedirectUri = "http://localhost:5001/authentication/login-callback" }
+            new ClientRedirectUri { Client = client, RedirectUri = "http://localhost:5000/authentication/login-callback" }
         });
 
         client.ClientSecrets = new List<ClientSecret>(new[]
@@ -205,7 +224,7 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
             }
         });
 
-        var result = await context.Clients.AddAsync(client);
+        await context.Clients.AddAsync(client);
 
         await context.SaveChangesAsync();
     }
@@ -236,12 +255,14 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
 
         blogsApi.Scopes = new List<ApiResourceScope>(new[]
         {
+            //new ApiResourceScope { ApiResource = blogsApi, Scope = "openid" },
+            //new ApiResourceScope { ApiResource = blogsApi, Scope = "profile" },
             new ApiResourceScope { ApiResource = blogsApi, Scope = "blog.api.blogs" },
             new ApiResourceScope { ApiResource = blogsApi, Scope = "blog.api.comments" },
         });
 
         var result = await context.ApiResources.AddAsync(blogsApi);
-        
+
         await context.SaveChangesAsync();
     }
     
@@ -249,8 +270,8 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
     {
         const string apiBlogs = "blog.api.blogs";
         const string apiComments = "blog.api.comments";
-        const string openId = "openid";
-        const string profile = "profile";
+        //const string openId = "openid";
+        //const string profile = "profile";
 
         #region blog.api.blogs
 
@@ -300,7 +321,7 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
 
         #endregion
 
-        #region openid
+        /*#region openid
 
         apiScope = await context.ApiScopes
             .Where(scope => scope.Name == openId)
@@ -322,9 +343,9 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
             var result = await context.ApiScopes.AddAsync(apiScope);
         }
 
-        #endregion
+        #endregion*/
 
-        #region profile
+        /*#region profile
 
         apiScope = await context.ApiScopes
             .Where(scope => scope.Name == profile)
@@ -346,7 +367,7 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
             var result = await context.ApiScopes.AddAsync(apiScope);
         }
 
-        #endregion
+        #endregion*/
 
         // save changes
         await context.SaveChangesAsync();
@@ -363,5 +384,97 @@ public sealed class BlogDatabaseSeeder : IDatabaseSeeder
         }
 
         return IdentityResult.Failed();
+    }
+
+    private async Task AddIdentityResources()
+    {
+        const string profile = "profile";
+        const string openid = "openid";
+        const string email = "email";
+
+        var identityResource = await context.IdentityResources
+            .Where(x => x.Name == profile)
+            .SingleOrDefaultAsync();
+
+        if (null == identityResource)
+        {
+            identityResource = new IdentityServer.EntityFramework.Storage.Entities.IdentityResource
+            {
+                Name = profile,
+                DisplayName = "SimpleBlog OpenID Profile resource",
+                Description = "SimpleBlog OpenID Profile resource",
+                Created = DateTime.Now,
+                Required = false,
+                Enabled = true,
+                ShowInDiscoveryDocument = true
+            };
+
+            identityResource.UserClaims.AddRange(new[]
+            {
+                new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.Name },
+                new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.GivenName },
+                new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.NickName },
+                new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.Gender },
+                new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.PhoneNumber }
+            });
+
+            await context.IdentityResources.AddAsync(identityResource);
+        }
+
+        identityResource = await context.IdentityResources
+            .Where(x => x.Name == openid)
+            .SingleOrDefaultAsync();
+
+        if (null == identityResource)
+        {
+            identityResource = new IdentityServer.EntityFramework.Storage.Entities.IdentityResource
+            {
+                Name = openid,
+                DisplayName = "SimpleBlog OpenID General resource",
+                Description = "SimpleBlog OpenID General resource",
+                Created = DateTime.Now,
+                Required = false,
+                Enabled = true,
+                ShowInDiscoveryDocument = true
+            };
+
+            //identityResource.UserClaims.AddRange(new[]
+            //{
+            //    new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.Name },
+            //    new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.GivenName },
+            //    new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.NickName }
+            //});
+
+            await context.IdentityResources.AddAsync(identityResource);
+        }
+
+        identityResource = await context.IdentityResources
+            .Where(x => x.Name == email)
+            .SingleOrDefaultAsync();
+
+        if (null == identityResource)
+        {
+            identityResource = new IdentityServer.EntityFramework.Storage.Entities.IdentityResource
+            {
+                Name = email,
+                DisplayName = "SimpleBlog OpenID Email resource",
+                Description = "SimpleBlog OpenID Email resource",
+                Created = DateTime.Now,
+                Required = false,
+                Enabled = true,
+                ShowInDiscoveryDocument = true
+            };
+
+            identityResource.UserClaims.AddRange(new[]
+            {
+                new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.Email },
+                new IdentityResourceClaim { IdentityResource = identityResource, Type = JwtClaimTypes.EmailVerified }
+            });
+
+            await context.IdentityResources.AddAsync(identityResource);
+        }
+
+        // save changes
+        await context.SaveChangesAsync();
     }
 }

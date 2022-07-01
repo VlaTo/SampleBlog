@@ -28,7 +28,7 @@ public class ResourceValidationRequest
     /// <summary>
     /// The requested resource indicators.
     /// </summary>
-    public IEnumerable<string> ResourceIndicators
+    public IEnumerable<string>? ResourceIndicators
     {
         get;
         set;

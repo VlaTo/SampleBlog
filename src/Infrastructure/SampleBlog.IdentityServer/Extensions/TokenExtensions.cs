@@ -29,11 +29,12 @@ public static class TokenExtensions
             };
 
             // set times (nbf, exp, iat)
-            var now = clock.UtcNow - DateTimeOffset.UnixEpoch;
-            var exp = now + token.Lifetime;
+            var now = clock.UtcNow;
+            var now1 = now.ToUnixTimeSeconds();
+            var exp = (now + token.Lifetime).ToUnixTimeSeconds();
 
-            payload.Add(JwtClaimTypes.NotBefore, now);
-            payload.Add(JwtClaimTypes.IssuedAt, now);
+            payload.Add(JwtClaimTypes.NotBefore, now1);
+            payload.Add(JwtClaimTypes.IssuedAt, now1);
             payload.Add(JwtClaimTypes.Expiration, exp);
 
             // add audience claim(s)

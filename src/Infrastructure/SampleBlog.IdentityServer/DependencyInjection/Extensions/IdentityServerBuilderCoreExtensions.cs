@@ -164,7 +164,7 @@ public static class IdentityServerBuilderCoreExtensions
         builder.Services.AddTransient<ISecretsListParser, SecretParser>();
         builder.Services.AddTransient<ISecretsListValidator, SecretValidator>();
         builder.Services.AddTransient<ExtensionGrantValidator>();
-        //builder.Services.AddTransient<BearerTokenUsageValidator>();
+        builder.Services.AddTransient<BearerTokenUsageValidator>();
         builder.Services.AddTransient<IJwtRequestValidator, JwtRequestValidator>();
 
         builder.Services.AddTransient<ReturnUrlParser>();
@@ -231,7 +231,7 @@ public static class IdentityServerBuilderCoreExtensions
         builder.AddEndpoint<AuthorizeCallbackEndpoint>(Constants.EndpointNames.Authorize, Constants.ProtocolRoutePaths.AuthorizeCallback.EnsureLeadingSlash());
         builder.AddEndpoint<AuthorizeEndpoint>(Constants.EndpointNames.Authorize, Constants.ProtocolRoutePaths.Authorize.EnsureLeadingSlash());
         //builder.AddEndpoint<BackchannelAuthenticationEndpoint>(EndpointNames.BackchannelAuthentication, ProtocolRoutePaths.BackchannelAuthentication.EnsureLeadingSlash());
-        //builder.AddEndpoint<CheckSessionEndpoint>(EndpointNames.CheckSession, ProtocolRoutePaths.CheckSession.EnsureLeadingSlash());
+        builder.AddEndpoint<CheckSessionEndpoint>(Constants.EndpointNames.CheckSession, Constants.ProtocolRoutePaths.CheckSession.EnsureLeadingSlash());
         //builder.AddEndpoint<DeviceAuthorizationEndpoint>(EndpointNames.DeviceAuthorization, ProtocolRoutePaths.DeviceAuthorization.EnsureLeadingSlash());
         //builder.AddEndpoint<DiscoveryKeyEndpoint>(EndpointNames.Discovery, ProtocolRoutePaths.DiscoveryWebKeys.EnsureLeadingSlash());
         builder.AddEndpoint<DiscoveryEndpoint>(Constants.EndpointNames.Discovery, Constants.ProtocolRoutePaths.DiscoveryConfiguration.EnsureLeadingSlash());
@@ -240,7 +240,7 @@ public static class IdentityServerBuilderCoreExtensions
         //builder.AddEndpoint<IntrospectionEndpoint>(EndpointNames.Introspection, ProtocolRoutePaths.Introspection.EnsureLeadingSlash());
         //builder.AddEndpoint<TokenRevocationEndpoint>(EndpointNames.Revocation, ProtocolRoutePaths.Revocation.EnsureLeadingSlash());
         builder.AddEndpoint<TokenEndpoint>(Constants.EndpointNames.Token, Constants.ProtocolRoutePaths.Token.EnsureLeadingSlash());
-        //builder.AddEndpoint<UserInfoEndpoint>(EndpointNames.UserInfo, ProtocolRoutePaths.UserInfo.EnsureLeadingSlash());
+        builder.AddEndpoint<UserInfoEndpoint>(Constants.EndpointNames.UserInfo, Constants.ProtocolRoutePaths.UserInfo.EnsureLeadingSlash());
 
         return builder;
     }
@@ -249,6 +249,9 @@ public static class IdentityServerBuilderCoreExtensions
     {
         builder.Services.TryAddTransient<ITokenValidator, TokenValidator>();
         builder.Services.TryAddTransient<ICustomTokenRequestValidator, DefaultCustomTokenRequestValidator>();
+        builder.Services.TryAddTransient<ITokenRequestValidator, TokenRequestValidator>();
+        builder.Services.TryAddTransient<IDeviceCodeValidator, DeviceCodeValidator>();
+        builder.Services.TryAddTransient<IUserInfoRequestValidator, UserInfoRequestValidator>();
 
         return builder;
     }
@@ -513,7 +516,7 @@ public static class IdentityServerBuilderCoreExtensions
     public static IIdentityServerBuilder AddResponseGenerators(this IIdentityServerBuilder builder)
     {
         builder.Services.TryAddTransient<ITokenResponseGenerator, TokenResponseGenerator>();
-        //builder.Services.TryAddTransient<IUserInfoResponseGenerator, UserInfoResponseGenerator>();
+        builder.Services.TryAddTransient<IUserInfoResponseGenerator, UserInfoResponseGenerator>();
         //builder.Services.TryAddTransient<IIntrospectionResponseGenerator, IntrospectionResponseGenerator>();
         builder.Services.TryAddTransient<IAuthorizeInteractionResponseGenerator, AuthorizeInteractionResponseGenerator>();
         builder.Services.TryAddTransient<IAuthorizeResponseGenerator, AuthorizeResponseGenerator>();

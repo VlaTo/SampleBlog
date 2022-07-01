@@ -39,6 +39,18 @@ public static class ResourceStoreExtensions
         return resources.FilterEnabled();
     }
 
+    /// <summary>
+    /// Finds the enabled identity resources by scope.
+    /// </summary>
+    /// <param name="store">The store.</param>
+    /// <param name="scopeNames">The scope names.</param>
+    /// <returns></returns>
+    public static async Task<IReadOnlyCollection<IdentityResource>> FindEnabledIdentityResourcesByScopeAsync(this IResourceStore store, IEnumerable<string> scopeNames)
+    {
+        var identityResources = await store.FindIdentityResourcesByScopeNameAsync(scopeNames);
+        return identityResources.Where(x => x.Enabled).ToArray();
+    }
+
     private static void ValidateNameUniqueness(IEnumerable<IdentityResource> identity, IEnumerable<ApiResource> apiResources, IEnumerable<ApiScope> apiScopes)
     {
         // attempt to detect invalid configuration. this is about the only place

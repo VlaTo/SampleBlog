@@ -75,6 +75,35 @@ internal static class NameValueCollectionExtensions
 
         return builder.ToString();
     }
+    
+    public static Dictionary<string, string> ToScrubbedDictionary(this NameValueCollection? collection, params string[] nameFilter)
+    {
+        var dict = new Dictionary<string, string>();
+
+        if (null == collection || 0 == collection.Count)
+        {
+            return dict;
+        }
+
+        foreach (string name in collection)
+        {
+            var value = collection.Get(name);
+
+            if (null == value)
+            {
+                continue;
+            }
+
+            if (nameFilter.Contains(name, StringComparer.OrdinalIgnoreCase))
+            {
+                value = "***REDACTED***";
+            }
+            
+            dict.Add(name, value);
+        }
+
+        return dict;
+    }
 
     internal static string? ConvertFormUrlEncodedSpacesToUrlEncodedSpaces(string? str)
     {

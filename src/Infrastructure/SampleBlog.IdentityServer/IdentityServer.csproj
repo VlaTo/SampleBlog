@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Scripts\ChechSession.template.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\ChechSession.template.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Core\Events\" />
     <Folder Include="DependencyInjection\Extensions\" />
     <Folder Include="Endpoints\Results\" />

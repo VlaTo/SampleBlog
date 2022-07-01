@@ -90,6 +90,8 @@ public class IdentityResource
     {
         Enabled = true;
         ShowInDiscoveryDocument = true;
+        UserClaims = new List<IdentityResourceClaim>();
+        Properties = new List<IdentityResourceProperty>();
         //Created = DateTime.UtcNow;
     }
 }

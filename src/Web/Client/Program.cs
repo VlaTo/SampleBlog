@@ -6,7 +6,6 @@ using MudBlazor.Services;
 using SampleBlog.Web.Client;
 using SampleBlog.Web.Client.Middlewares;
 using SampleBlog.Web.Client.Services;
-using SampleBlog.Web.Shared.Extensions;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -28,7 +27,15 @@ builder.Services
 builder.Services
     .AddOidcAuthentication(options =>
     {
+        //options.ProviderOptions.ClientId
+        //options.ProviderOptions.Authority
+        //options.ProviderOptions.DefaultScopes
+        //options.ProviderOptions.ResponseType
+        //options.ProviderOptions.RedirectUri
+
         builder.Configuration.Bind("Local", options.ProviderOptions);
+
+        //Console.WriteLine($"Client name claim is: {options.UserOptions.NameClaim}");
     });
 
 /*builder.Services

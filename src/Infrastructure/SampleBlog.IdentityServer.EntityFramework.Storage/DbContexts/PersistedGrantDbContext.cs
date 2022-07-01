@@ -82,7 +82,11 @@ public class PersistedGrantDbContext<TContext> : DbContext, IPersistedGrantDbCon
     }
 
     /// <inheritdoc/>
-    //public DbSet<DeviceFlowCodes> DeviceFlowCodes { get; set; }
+    public DbSet<DeviceFlowCodes> DeviceFlowCodes
+    {
+        get;
+        set;
+    }
 
     /// <inheritdoc/>
     public DbSet<Key> Keys

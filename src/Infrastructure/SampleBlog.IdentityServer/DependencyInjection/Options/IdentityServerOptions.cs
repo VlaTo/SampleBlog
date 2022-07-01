@@ -188,6 +188,15 @@ public class IdentityServerOptions
     }
 
     /// <summary>
+    /// Gets or sets the logging options
+    /// </summary>
+    public LoggingOptions Logging
+    {
+        get;
+        set;
+    }
+
+    /// <summary>
     /// Gets or sets the options for the user interaction.
     /// </summary>
     /// <value>
@@ -253,6 +262,7 @@ public class IdentityServerOptions
         Csp = new CspOptions();
         Validation = new ValidationOptions();
         UserInteraction = new UserInteractionOptions();
+        Logging = new LoggingOptions();
         Ciba = new CibaOptions();
         DeviceFlow = new DeviceFlowOptions();
         Caching = new CachingOptions();

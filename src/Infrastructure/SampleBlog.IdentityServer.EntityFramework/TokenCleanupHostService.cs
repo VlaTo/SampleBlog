@@ -29,7 +29,7 @@ public class TokenCleanupHostService : IHostedService
         OperationalStoreOptions options,
         ILogger<TokenCleanupHostService> logger)
     {
-        cleanupInterval = TimeSpan.FromSeconds(options.TokenCleanupInterval);
+        cleanupInterval = options.TokenCleanupInterval;
 
         this.serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
         this.options = options ?? throw new ArgumentNullException(nameof(options));

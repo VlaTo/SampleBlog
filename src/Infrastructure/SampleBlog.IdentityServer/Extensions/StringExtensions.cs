@@ -200,4 +200,16 @@ internal static class StringExtensions
 
         return url + query;
     }
+
+    public static string Obfuscate(this string value)
+    {
+        var last4Chars = "****";
+
+        if (false == String.IsNullOrEmpty(value) && value.Length > 4)
+        {
+            last4Chars = value.Substring(value.Length - 4);
+        }
+
+        return "****" + last4Chars;
+    }
 }

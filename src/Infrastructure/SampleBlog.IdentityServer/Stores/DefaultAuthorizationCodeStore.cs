@@ -46,7 +46,7 @@ public class DefaultAuthorizationCodeStore : DefaultGrantStore<AuthorizationCode
     /// </summary>
     /// <param name="code">The code.</param>
     /// <returns></returns>
-    public Task<AuthorizationCode> GetAuthorizationCodeAsync(string code)
+    public Task<AuthorizationCode?> GetAuthorizationCodeAsync(string code)
     {
         using var activity = Tracing.StoreActivitySource.StartActivity("DefaultAuthorizationCodeStore.GetAuthorizationCode");
 

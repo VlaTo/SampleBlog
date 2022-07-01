@@ -1,8 +1,12 @@
-﻿namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace SampleBlog.IdentityServer.EntityFramework.Storage.Entities;
 
 /// <summary>
 /// Entity for device flow codes
 /// </summary>
+[Table("DeviceCodes", Schema = Database.Schemas.Identity)]
 public class DeviceFlowCodes
 {
     /// <summary>
@@ -11,6 +15,9 @@ public class DeviceFlowCodes
     /// <value>
     /// The device code.
     /// </value>
+    [Required]
+    [MaxLength(200)]
+    [DataType("nvarchar(200)")]
     public string DeviceCode
     {
         get;
@@ -23,6 +30,8 @@ public class DeviceFlowCodes
     /// <value>
     /// The user code.
     /// </value>
+    [Key]
+    [MaxLength(200)]
     public string UserCode
     {
         get;
@@ -35,6 +44,8 @@ public class DeviceFlowCodes
     /// <value>
     /// The subject identifier.
     /// </value>
+    [MaxLength(200)]
+    [DataType("nvarchar")]
     public string SubjectId
     {
         get;
@@ -47,7 +58,9 @@ public class DeviceFlowCodes
     /// <value>
     /// The session identifier.
     /// </value>
-    public string SessionId
+    [MaxLength(100)]
+    [DataType("nvarchar")]
+    public string? SessionId
     {
         get;
         set;
@@ -59,6 +72,8 @@ public class DeviceFlowCodes
     /// <value>
     /// The client identifier.
     /// </value>
+    [Required]
+    [MaxLength(200)]
     public string ClientId
     {
         get;
@@ -71,6 +86,7 @@ public class DeviceFlowCodes
     /// <value>
     /// The description.
     /// </value>
+    [MaxLength(200)]
     public string? Description
     {
         get;
@@ -95,7 +111,8 @@ public class DeviceFlowCodes
     /// <value>
     /// The expiration.
     /// </value>
-    public DateTime? Expiration
+    [Required]
+    public DateTime Expiration
     {
         get;
         set;
@@ -107,7 +124,9 @@ public class DeviceFlowCodes
     /// <value>
     /// The data.
     /// </value>
-    public string? Data
+    [Required]
+    [MaxLength(50000)]
+    public string Data
     {
         get;
         set;

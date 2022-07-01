@@ -21,6 +21,13 @@ public abstract class AuditableContext :
         set;
     }
 
+    /// <inheritdoc cref="DeviceFlowCodes" />
+    public DbSet<DeviceFlowCodes> DeviceFlowCodes
+    {
+        get;
+        set;
+    }
+
     /// <inheritdoc />
     public DbSet<Key> Keys
     {
@@ -48,6 +55,20 @@ public abstract class AuditableContext :
 
     /// <inheritdoc />
     public DbSet<IdentityResource> IdentityResources
+    {
+        get;
+        set;
+    }
+
+    /// <inheritdoc />
+    public DbSet<IdentityResourceClaim> IdentityResourceClaims
+    {
+        get;
+        set;
+    }
+
+    /// <inheritdoc />
+    public DbSet<IdentityResourceProperty> IdentityResourceProperties
     {
         get;
         set;

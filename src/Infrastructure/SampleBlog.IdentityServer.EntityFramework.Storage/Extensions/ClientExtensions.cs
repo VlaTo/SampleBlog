@@ -74,4 +74,14 @@ internal static class ClientExtensions
 
         return client;
     }
+
+    public static Client UseAllowedIdentityTokenSigningAlgorithms(this Client client, string signingAlgorithms)
+    {
+        client.AllowedIdentityTokenSigningAlgorithms = signingAlgorithms.Split(
+            new[] { ' ', ',' },
+            StringSplitOptions.RemoveEmptyEntries
+        );
+
+        return client;
+    }
 }

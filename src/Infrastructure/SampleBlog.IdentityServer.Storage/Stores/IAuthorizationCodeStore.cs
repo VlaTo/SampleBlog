@@ -19,7 +19,7 @@ public interface IAuthorizationCodeStore
     /// </summary>
     /// <param name="code">The code.</param>
     /// <returns></returns>
-    Task<AuthorizationCode> GetAuthorizationCodeAsync(string code);
+    Task<AuthorizationCode?> GetAuthorizationCodeAsync(string code);
 
     /// <summary>
     /// Removes the authorization code.

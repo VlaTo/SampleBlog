@@ -290,7 +290,7 @@ public static class ModelBuilderExtensions
             entity.HasIndex(x => x.ConsumedTime);
         });
 
-        /*modelBuilder.Entity<DeviceFlowCodes>(codes =>
+        modelBuilder.Entity<DeviceFlowCodes>(codes =>
         {
             codes.ToTable(storeOptions.DeviceFlowCodes);
 
@@ -306,11 +306,11 @@ public static class ModelBuilderExtensions
             // apparently anything over 4K converts to nvarchar(max) on SqlServer
             codes.Property(x => x.Data).HasMaxLength(50000).IsRequired();
 
-            codes.HasKey(x => new { x.UserCode });
+            codes.HasKey(x => x.UserCode);
 
             codes.HasIndex(x => x.DeviceCode).IsUnique();
             codes.HasIndex(x => x.Expiration);
-        });*/
+        });
 
         modelBuilder.Entity<Key>(entity =>
         {

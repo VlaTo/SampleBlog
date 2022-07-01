@@ -14,7 +14,7 @@ public class GrantValidationResult : ValidationResult
     /// <value>
     /// The principal.
     /// </value>
-    public ClaimsPrincipal Subject
+    public ClaimsPrincipal? Subject
     {
         get;
         set;

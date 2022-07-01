@@ -22,7 +22,7 @@ public sealed class ValidatedTokenRequest : ValidatedRequest
     /// <value>
     /// The scopes.
     /// </value>
-    public IEnumerable<string> RequestedScopes
+    public IEnumerable<string>? RequestedScopes
     {
         get;
         set;
@@ -31,7 +31,7 @@ public sealed class ValidatedTokenRequest : ValidatedRequest
     /// <summary>
     /// Gets or sets the resource indicator.
     /// </summary>
-    public string RequestedResourceIndicator
+    public string? RequestedResourceIndicator
     {
         get;
         set;

@@ -92,7 +92,7 @@ public class RefreshToken
     /// The resource indicators. Null indicates there was no authorization step, thus no restrictions.
     /// Non-null means there was an authorization step, and subsequent requested resource indicators must be in the original list.
     /// </summary>
-    public IEnumerable<string> AuthorizedResourceIndicators
+    public IEnumerable<string>? AuthorizedResourceIndicators
     {
         get;
         set;
