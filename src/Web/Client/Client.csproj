@@ -36,6 +36,7 @@
 	  <Folder Include="Middlewares\" />
 	  <Folder Include="Store\Identity\Effects\" />
 	  <Folder Include="Store\Identity\Reducers\" />
+	  <Folder Include="Models\" />
 	</ItemGroup>
 
 </Project>

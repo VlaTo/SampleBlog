@@ -33,6 +33,7 @@ builder.Services
         //options.ProviderOptions.ResponseType
         //options.ProviderOptions.RedirectUri
 
+        options.AuthenticationPaths.RemoteRegisterPath = "/register";
         builder.Configuration.Bind("Local", options.ProviderOptions);
 
         //Console.WriteLine($"Client name claim is: {options.UserOptions.NameClaim}");

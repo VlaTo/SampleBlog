@@ -12,12 +12,13 @@ namespace SampleBlog.IdentityServer.Endpoints.Results;
 internal sealed class CheckSessionResult : EmbeddedResourceProvider, IEndpointResult
 {
     private IdentityServerOptions options;
+    private readonly SemaphoreSlim gate;
     private static volatile string FormattedHtml;
-    private static readonly object Lock = new object();
     private static volatile string LastCheckSessionCookieName;
 
     public CheckSessionResult()
     {
+        gate = new SemaphoreSlim(1);
     }
 
     internal CheckSessionResult(IdentityServerOptions options)
@@ -31,7 +32,7 @@ internal sealed class CheckSessionResult : EmbeddedResourceProvider, IEndpointRe
 
         AddCspHeaders(context);
 
-        var html = await GetHtmlAsync(options.Authentication.CheckSessionCookieName);
+        var html = await GetHtmlAsync(options.Authentication.CheckSessionCookieName, context.RequestAborted);
         await context.Response.WriteHtmlAsync(html);
     }
 
@@ -45,13 +46,14 @@ internal sealed class CheckSessionResult : EmbeddedResourceProvider, IEndpointRe
         context.Response.AddScriptCspHeaders(options.Csp, "sha256-fa5rxHhZ799izGRP38+h4ud5QXNT0SFaFlh4eqDumBI=");
     }
 
-    private async Task<string> GetHtmlAsync(string cookieName)
+    private async Task<string> GetHtmlAsync(string cookieName, CancellationToken cancellationToken)
     {
         if (cookieName != LastCheckSessionCookieName)
         {
-            
-            //WARNING: lock (Lock)
-            //{
+            await gate.WaitAsync(cancellationToken);
+
+            try
+            {
                 if (cookieName != LastCheckSessionCookieName)
                 {
                     using (var stream = GetResourceStream("form"))
@@ -64,7 +66,11 @@ internal sealed class CheckSessionResult : EmbeddedResourceProvider, IEndpointRe
                     //FormattedHtml = Html.Replace("{cookieName}", cookieName);
                     LastCheckSessionCookieName = cookieName;
                 }
-            //}
+            }
+            finally
+            {
+                gate.Release();
+            }
         }
 
         return FormattedHtml;
