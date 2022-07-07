@@ -1,0 +1,43 @@
+﻿@page "/"
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+@using System.Globalization
+@using SampleBlog.Web.Shared.Models.Menu
+
+<PageTitle>Меню - Столовая "Мой Обед"</PageTitle>
+<MudText Typo="Typo.h5" GutterBottom="true">Меню на сегодня: @CurrentDateTimeProvider.CurrentDateTime.ToString("d", CultureInfo.CurrentUICulture)</MudText>
+
+@*<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
+<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
+<MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>*@
+
+<MudTable T="DishEntry" Hover=true Items=Dishes Loading=IsLoading HeaderClass="menu-table-header">
+    <ToolBarContent>
+        <MudText>Some text</MudText>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh Class="menu-table-leading-column">
+            <MudTableSortLabel SortBy=@(new Func<DishEntry, object>(x => x.Order)) InitialDirection=SortDirection.Ascending Enabled=false>Название продукта</MudTableSortLabel>
+        </MudTh>
+        <MudTh>Цена</MudTh>
+        <MudTh />
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>
+            <MudText Align="Align.Start">@context.ProductName</MudText>
+        </MudTd>
+        <MudTd>
+            <MudText Align="Align.Start">12.40 руб.</MudText>
+        </MudTd>
+        <MudTd>
+            <MudButton ButtonType=ButtonType.Button StartIcon=@Icons.Filled.Add Size=Size.Small Variant=Variant.Filled Color=Color.Primary Command=AddToMenu CommandParameter=@context>Добавить</MudButton>
+        </MudTd>
+    </RowTemplate>
+    <NoRecordsContent>
+        <MudText>No menu</MudText>
+    </NoRecordsContent>
+    <LoadingContent>
+        <MudText>Loading...</MudText>
+    </LoadingContent>
+</MudTable>
