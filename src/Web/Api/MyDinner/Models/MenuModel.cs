@@ -16,7 +16,15 @@ internal sealed class MenuModel : IMenu
         init;
     }
 
-    public IReadOnlyList<IDish> Dishes
+    public bool IsOpen
+    {
+        get;
+        init;
+    }
+
+    IReadOnlyList<IDish> IMenu.Dishes => Dishes;
+
+    public List<DishModel> Dishes
     {
         get;
         internal set;
@@ -24,6 +32,6 @@ internal sealed class MenuModel : IMenu
 
     public MenuModel()
     {
-        Dishes = new List<IDish>();
+        Dishes = new List<DishModel>();
     }
 }

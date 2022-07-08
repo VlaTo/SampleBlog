@@ -9,6 +9,11 @@ public interface IMenu : IEntity<long>
         get;
     }
 
+    bool IsOpen
+    {
+        get;
+    }
+
     IReadOnlyList<IDish> Dishes
     {
         get;

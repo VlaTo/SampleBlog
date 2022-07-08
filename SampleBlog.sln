@@ -54,7 +54,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{5AF22B5E-7
 		data\sampleblog_log.ldf = data\sampleblog_log.ldf
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "src\Web\MyDinner.Client\Client.csproj", "{56EDB4DC-3A4C-42F6-A34A-E5AA943AE145}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "src\Web\MyDinner.Client\Client.csproj", "{56EDB4DC-3A4C-42F6-A34A-E5AA943AE145}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

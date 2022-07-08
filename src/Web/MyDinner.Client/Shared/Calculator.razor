@@ -1,0 +1,23 @@
+﻿@using SampleBlog.Web.Client.Store
+
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<dish-calculator>
+    @HeadContent
+    <div>
+        @if (ModelState.Success == Order.Value.State)
+        {
+            <ul>
+            @for (var index = 0; index < Order.Value.Dishes.Length; index++)
+            {
+                var dish = Order.Value.Dishes[index];
+                <li>@RowTemplate.Invoke(dish)</li>
+            }
+            </ul>
+        }
+        else if (ModelState.Loading == Order.Value.State)
+        {
+
+        }
+    </div>
+</dish-calculator>

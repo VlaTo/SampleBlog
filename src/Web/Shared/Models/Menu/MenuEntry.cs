@@ -12,6 +12,13 @@ public class MenuEntry
         set;
     }
 
+    [JsonPropertyName("open")]
+    public bool IsOpen
+    {
+        get;
+        set;
+    }
+
     [JsonPropertyName("dishes")]
     public DishEntry[] Dishes
     {

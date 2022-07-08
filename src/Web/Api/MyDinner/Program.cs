@@ -5,9 +5,9 @@ using SampleBlog.Core.Application.Services;
 using SampleBlog.Core.Domain.Services;
 using SampleBlog.Infrastructure.Database.Contexts;
 using SampleBlog.Infrastructure.Repositories;
-using SampleBlog.Web.APi.Blog.Controllers.v1;
 using SampleBlog.Web.APi.Blog.Services;
 using SampleBlog.Web.APi.MyDinner.Configuration;
+using SampleBlog.Web.APi.MyDinner.Controllers.v1;
 using SampleBlog.Web.APi.MyDinner.Services;
 
 var builder = WebApplication.CreateBuilder(args);

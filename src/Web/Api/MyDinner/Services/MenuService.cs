@@ -16,23 +16,56 @@ internal sealed class MenuService : IMenuService
 
     public Task<IMenu?> GetMenuAsync(DateTime dateTime, CancellationToken cancellationToken = default)
     {
-        var dishes = new List<IDish>
-        {
-            new DishModel
-            {
-                Product = new ProductModel
-                {
-                    Id = 2,
-                    Name = "Sample product"
-                }
-            }
-        };
-
         var menu = new MenuModel
         {
             Id = 1,
             Date = dateTime,
-            Dishes = dishes
+            IsOpen = true,
+            Dishes = new List<DishModel>
+            {
+                new()
+                {
+                    IsEnabled = true,
+                    Product = new ProductModel
+                    {
+                        Id = 2,
+                        Name = "Sample product #2"
+                    },
+                    Price = 24.45m,
+                    Outcome = new Outcome(150.0f, Units.Grams),
+                    Group = new ProductGroup
+                    {
+                        Name = "Group #1"
+                    }
+                },
+                new()
+                {
+                    IsEnabled = true,
+                    Product = new ProductModel
+                    {
+                        Id = 3,
+                        Name = "Sample product #3"
+                    },
+                    Price = 110.00m,
+                    Outcome = new Outcome(125.0f, Units.Grams),
+                    Group = new ProductGroup
+                    {
+                        Name = "Group #2"
+                    }
+                },
+                new()
+                {
+                    IsEnabled = false,
+                    Product = new ProductModel
+                    {
+                        Id = 1,
+                        Name = "Sample product #1"
+                    },
+                    Price = 150.0m,
+                    Outcome = new Outcome(1.0f, Units.Pieces),
+                    Group = null
+                }
+            }
         };
 
         return Task.FromResult<IMenu?>(menu);

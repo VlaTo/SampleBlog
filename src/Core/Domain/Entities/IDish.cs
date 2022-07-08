@@ -8,4 +8,24 @@ public interface IDish : IEntity
     {
         get;
     }
+
+    bool IsEnabled
+    {
+        get;
+    }
+
+    Outcome Outcome
+    {
+        get;
+    }
+
+    decimal Price
+    {
+        get;
+    }
+
+    IProductGroup? Group
+    {
+        get;
+    }
 }

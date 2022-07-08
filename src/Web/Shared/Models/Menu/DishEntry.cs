@@ -12,8 +12,36 @@ public sealed class DishEntry
         set;
     }
 
+    [JsonPropertyName("enabled")]
+    public bool IsEnabled
+    {
+        get;
+        set;
+    }
+
     [JsonPropertyName("product")]
     public string ProductName
+    {
+        get;
+        set;
+    }
+
+    [JsonPropertyName("price")]
+    public decimal Price
+    {
+        get;
+        set;
+    }
+
+    [JsonPropertyName("outcome")]
+    public OutcomeEntry Outcome
+    {
+        get;
+        set;
+    }
+
+    [JsonPropertyName("group-name")]
+    public string? GroupName
     {
         get;
         set;

@@ -3,6 +3,7 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @using System.Globalization
+@using SampleBlog.Web.Client.Core.Extensions
 @using SampleBlog.Web.Shared.Models.Menu
 
 <PageTitle>Меню - Столовая "Мой Обед"</PageTitle>
@@ -12,32 +13,73 @@
 <MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
 <MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>*@
 
-<MudTable T="DishEntry" Hover=true Items=Dishes Loading=IsLoading HeaderClass="menu-table-header">
-    <ToolBarContent>
-        <MudText>Some text</MudText>
-    </ToolBarContent>
-    <HeaderContent>
-        <MudTh Class="menu-table-leading-column">
-            <MudTableSortLabel SortBy=@(new Func<DishEntry, object>(x => x.Order)) InitialDirection=SortDirection.Ascending Enabled=false>Название продукта</MudTableSortLabel>
-        </MudTh>
-        <MudTh>Цена</MudTh>
-        <MudTh />
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd>
-            <MudText Align="Align.Start">@context.ProductName</MudText>
-        </MudTd>
-        <MudTd>
-            <MudText Align="Align.Start">12.40 руб.</MudText>
-        </MudTd>
-        <MudTd>
-            <MudButton ButtonType=ButtonType.Button StartIcon=@Icons.Filled.Add Size=Size.Small Variant=Variant.Filled Color=Color.Primary Command=AddToMenu CommandParameter=@context>Добавить</MudButton>
-        </MudTd>
-    </RowTemplate>
-    <NoRecordsContent>
-        <MudText>No menu</MudText>
-    </NoRecordsContent>
-    <LoadingContent>
-        <MudText>Loading...</MudText>
-    </LoadingContent>
-</MudTable>
+<MudContainer MaxWidth=MaxWidth.Medium>
+    <MudTable
+        T="DishEntry"
+        Hover=true
+        Items=Dishes
+        Loading=IsLoading
+        GroupBy=ProductGroups
+        HeaderClass="menu-table-header">
+        <ToolBarContent>
+            <MudText>Some text</MudText>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh Class="menu-table-dish-name-column">
+                <MudTableSortLabel
+                    SortBy=@(new Func<DishEntry, object>(x => x.Order))
+                    InitialDirection=SortDirection.Ascending
+                    Enabled=false>
+                    <MudText Align="Align.Left">Название продукта</MudText>
+                </MudTableSortLabel>
+            </MudTh>
+            <MudTh Class="menu-table-dish-outcome-column">
+                <MudText Align="Align.Center">Выход</MudText>
+            </MudTh>
+            <MudTh Class="menu-table-dish-price-column">
+                <MudText Align="Align.Center">Цена</MudText>
+            </MudTh>
+            <MudTh Class="menu-table-dish-actions-column" />
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd Class="menu-table-dish-name-column">
+                <MudText Align="Align.Start">@context.ProductName</MudText>
+            </MudTd>
+            <MudTd Class="menu-table-dish-outcome-column">
+                <MudText Align="Align.Center">@context.Outcome.ToString("G", CultureInfo.CurrentUICulture)</MudText>
+            </MudTd>
+            <MudTd Class="menu-table-dish-price-column">
+                <MudText Align="Align.Center">@context.Price.ToString("C", CultureInfo.CurrentUICulture)</MudText>
+            </MudTd>
+            <MudTd Class="menu-table-dish-actions-column">
+                <MudButton
+                    ButtonType=ButtonType.Button
+                    StartIcon=@Icons.Filled.Add
+                    Size=Size.Small
+                    Variant=Variant.Filled
+                    Color=Color.Primary
+                    Disabled=@(false == context.IsEnabled)
+                    Command=AddToMenu
+                    CommandParameter=@context>
+                    Добавить
+                </MudButton>
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>No menu</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+    </MudTable>
+</MudContainer>
+<MudContainer MaxWidth=MaxWidth.Small>
+    <Calculator>
+        <HeadContent>
+            <div>Мой Обед</div>
+        </HeadContent>
+        <RowTemplate>
+            <MudText Inline=true Typo=Typo.h6>@context.ProductName</MudText>
+        </RowTemplate>
+    </Calculator>
+</MudContainer>

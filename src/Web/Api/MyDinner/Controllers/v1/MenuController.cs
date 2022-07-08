@@ -3,12 +3,12 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using SampleBlog.Core.Application.Services;
+using SampleBlog.Core.Domain.Entities;
 using SampleBlog.Web.APi.MyDinner.Configuration;
 using SampleBlog.Web.APi.MyDinner.Features.Queries.GetMenu;
 using SampleBlog.Web.Shared.Models.Menu;
-using System.Diagnostics;
 
-namespace SampleBlog.Web.APi.Blog.Controllers.v1
+namespace SampleBlog.Web.APi.MyDinner.Controllers.v1
 {
     //[AllowAnonymous]
     [ApiVersion("1")]
@@ -33,17 +33,16 @@ namespace SampleBlog.Web.APi.Blog.Controllers.v1
         [HttpGet("{hid:required}")]
         public async Task<IActionResult> Get([FromRoute] string hid)
         {
-            // Vd4n7zrM73YN -- blogId: 101
             var hash = new Hashids(salt: options.HashId.Salt, minHashLength: options.HashId.MinHashLength);
             
-            {
+            /*{
                 var temp0 = DateOnly.FromDateTime(DateTime.UtcNow);
                 var temp1 = temp0.ToDateTime(new TimeOnly());
                 var temp2 = temp1.ToBinary();
                 var temp3 = hash.EncodeLong(temp2);
 
                 Debug.WriteLine($"Current date hash: {temp3}");
-            }
+            }*/
 
             if (hash.TryDecodeSingleLong(hid, out var value))
             {
@@ -57,24 +56,24 @@ namespace SampleBlog.Web.APi.Blog.Controllers.v1
                     var menu = new MenuEntry
                     {
                         Date = result.Data.Date,
-                        Dishes = new []
-                        {
-                            new DishEntry
+                        IsOpen = result.Data.IsOpen,
+                        Dishes = result.Data.Dishes
+                            .Select((dish, index) => new DishEntry
                             {
-                                Order = 2,
-                                ProductName = "Sample Product #2"
-                            },
-                            new DishEntry
-                            {
-                                Order = 1,
-                                ProductName = "Sample Product #1"
-                            },
-                            new DishEntry
-                            {
-                                Order = 3,
-                                ProductName = "Sample Product #3"
-                            }
-                        }
+                                Order = index,
+                                ProductName = dish.Product.Name,
+                                IsEnabled = dish.IsEnabled,
+                                Price = dish.Price,
+                                Outcome = new OutcomeEntry
+                                {
+                                    Amount = dish.Outcome.Amount,
+                                    Units = Units.Custom == dish.Outcome.Units
+                                        ? dish.Outcome.CustomUnits!
+                                        : dish.Outcome.Units.ToString()
+                                },
+                                GroupName = dish.Group?.Name
+                            })
+                            .ToArray()
                     };
 
                     return Ok(menu);

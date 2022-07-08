@@ -2,6 +2,18 @@
     background-color: lightgrey;
 }
 
-.menu-table-leading-column {
+.menu-table-dish-name-column {
+    width: 70%;
+}
 
+.menu-table-dish-outcome-column {
+    width: 15%;
+}
+
+.menu-table-dish-price-column {
+    width: 10%;
+}
+
+.menu-table-dish-actions-column {
+    width: 10%;
 }
