@@ -19,20 +19,7 @@ public sealed class OrderState : StateBase
         get;
     }
 
-    public decimal TotalPrice
-    {
-        get
-        {
-            var price = 0.0m;
-
-            for (var index = 0; index < Dishes.Count; index++)
-            {
-                price += Dishes[index].Price;
-            }
-
-            return price;
-        }
-    }
+    public decimal TotalPrice => Dishes.Sum(entry => entry.Price);
 
     public OrderState(ModelState state, ImmutableArray<DishEntry> dishes)
         : base(state)
