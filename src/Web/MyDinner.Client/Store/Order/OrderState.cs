@@ -9,21 +9,27 @@ public sealed class OrderStateFeature : Feature<OrderState>
 {
     public override string GetName() => nameof(OrderState);
 
-    protected override OrderState GetInitialState() => new(ModelState.Success, ImmutableArray<DishEntry>.Empty);
+    protected override OrderState GetInitialState() => new(ModelState.Success, ImmutableDictionary<DishEntry, int>.Empty);
 }
 
 public sealed class OrderState : StateBase
 {
-    public ImmutableArray<DishEntry> Dishes
+    public ImmutableDictionary<DishEntry, int> Entries
     {
         get;
     }
 
-    public decimal TotalPrice => Dishes.Sum(entry => entry.Price);
+    public decimal TotalPrice
+    {
+        get
+        {
+            return Entries.Sum(kvp => kvp.Key.Price * kvp.Value);
+        }
+    }
 
-    public OrderState(ModelState state, ImmutableArray<DishEntry> dishes)
+    public OrderState(ModelState state, ImmutableDictionary<DishEntry, int> entries)
         : base(state)
     {
-        Dishes = dishes;
+        Entries = entries;
     }
 }

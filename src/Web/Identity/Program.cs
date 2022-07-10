@@ -1,6 +1,8 @@
+using System.Diagnostics;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SampleBlog.Core.Application.Extensions;
 using SampleBlog.Core.Application.Services;
@@ -60,7 +62,8 @@ builder.Services
     .AddDbContext<BlogContext>(db =>
     {
         var connectionString = builder.Configuration.GetConnectionString("Database");
-        db.UseSqlServer(connectionString);
+        //db.UseSqlServer(connectionString);
+        db.UseSqlite(connectionString);
     })
     .AddIdentityServer(options =>
     {
@@ -104,7 +107,8 @@ builder.Services
         options.ConfigureDbContext = db =>
         {
             var connectionString = builder.Configuration.GetConnectionString("Database");
-            db.UseSqlServer(connectionString);
+            //db.UseSqlServer(connectionString);
+            db.UseSqlite(connectionString);
         };
     });
 
@@ -161,7 +165,7 @@ using (var scope = app.Services.CreateScope())
         if (context.Database.IsSqlServer())
         {
             await context.Database.EnsureCreatedAsync();
-            //await context.Database.MigrateAsync();
+            await context.Database.MigrateAsync();
 
             var seeder = scope.ServiceProvider.GetService<IDatabaseSeeder>();
 
@@ -169,6 +173,18 @@ using (var scope = app.Services.CreateScope())
             {
                 await seeder.SeedAsync();
             }
+        }
+        else if (context.Database.IsSqlite())
+        {
+            /*await context.Database.EnsureCreatedAsync();
+            await context.Database.MigrateAsync();
+
+            var seeder = scope.ServiceProvider.GetService<IDatabaseSeeder>();
+
+            if (null != seeder)
+            {
+                await seeder.SeedAsync();
+            }*/
         }
     }
     catch (Exception ex)

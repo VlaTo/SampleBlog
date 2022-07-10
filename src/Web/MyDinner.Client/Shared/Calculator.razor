@@ -3,21 +3,34 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 <dish-calculator>
-    @HeadContent
+    @HeaderContent
     <div>
         @if (ModelState.Success == Order.Value.State)
         {
-            <ul>
-            @for (var index = 0; index < Order.Value.Dishes.Length; index++)
-            {
-                var dish = Order.Value.Dishes[index];
-                <li>@RowTemplate.Invoke(dish)</li>
-            }
-            </ul>
+            <MudElement HtmlTag="div">
+                @{
+                    var entries = Order.Value.Entries;
+
+                    if (0 == entries.Count)
+                    {
+                        @EmptyContent;
+                    }
+                    else
+                    {
+                        var list = entries.OrderBy(kvp => kvp.Key.Order);
+
+                        foreach (var kvp in list)
+                        {
+                            <MudGrid>@RowTemplate.Invoke((kvp.Key, kvp.Value))</MudGrid>
+                        }
+                    }
+                }
+            </MudElement>
         }
         else if (ModelState.Loading == Order.Value.State)
         {
 
         }
     </div>
+    @BottomContent.Invoke(Order.Value.TotalPrice)
 </dish-calculator>

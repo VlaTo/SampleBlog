@@ -61,7 +61,7 @@
                             Variant=Variant.Filled
                             Color=Color.Primary
                             Disabled=@(false == context.IsEnabled)
-                            Command=AddToMenu
+                            Command=IncrementDish
                             CommandParameter=@context>
                             Добавить
                         </MudButton>
@@ -79,12 +79,29 @@
     <MudItem xs="3">
         <MudPaper Elevation="25">
             <Calculator>
-                <HeadContent>
-                    <div>Мой Обед</div>
-                </HeadContent>
+                <HeaderContent>
+                    <MudText Align=Align.Center Typo=Typo.h6>Калькулятор</MudText>
+                    <MudText Align=Align.Center Typo=Typo.body1>Посчитай свой Обед</MudText>
+                </HeaderContent>
+                <EmptyContent>
+                    <MudText>No order yet</MudText>
+                </EmptyContent>
                 <RowTemplate>
-                    <MudText Inline=true Typo=Typo.h6>@context.ProductName</MudText>
+                    <MudItem xs="7" sm="6" md="7">
+                        <MudText Inline=true Typo=Typo.body2>@context.Item1.ProductName</MudText>
+                    </MudItem>
+                    <MudItem xs="3" sm="3" md="3">
+                        <MudIconButton Icon=@Icons.Material.Filled.Add Size=Size.Small Command=IncrementDish CommandParameter=@context.Item1></MudIconButton>
+                        <MudField Label=@context.Item2.ToString() Variant=Variant.Outlined></MudField>
+                        <MudIconButton Icon=@Icons.Material.Filled.Remove Size=Size.Small Command=DecrementDish CommandParameter=@context.Item1></MudIconButton>
+                    </MudItem>
+                    <MudItem xs="1" sm="2" md="1">
+                        <MudIconButton Icon=@Icons.Material.Filled.Delete Size=Size.Small aria-label="Delete" Command=RemoveDish CommandParameter=@context.Item1></MudIconButton>
+                    </MudItem>
                 </RowTemplate>
+                <BottomContent>
+                    <MudText Align=Align.Center Typo=Typo.body1>Итого: @context</MudText>
+                </BottomContent>
             </Calculator>
         </MudPaper>
     </MudItem>

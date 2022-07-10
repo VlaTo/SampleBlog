@@ -2,15 +2,21 @@
 
 namespace SampleBlog.Web.Client.Store.Order.Actions;
 
-public class AddToOrderAction
+public class DecrementDishAction
 {
     public DishEntry Entry
     {
         get;
     }
 
-    public AddToOrderAction(DishEntry entry)
+    public int Count
+    {
+        get;
+    }
+
+    public DecrementDishAction(DishEntry entry, int count)
     {
         Entry = entry;
+        Count = count;
     }
 }

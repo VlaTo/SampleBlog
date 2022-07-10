@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Windows.Input;
-using Fluxor;
-using Fluxor.Blazor.Web.Components;
+﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using SampleBlog.Web.Client.Core;
@@ -11,6 +8,7 @@ using SampleBlog.Web.Client.Store.Menu;
 using SampleBlog.Web.Client.Store.Menu.Actions;
 using SampleBlog.Web.Client.Store.Order.Actions;
 using SampleBlog.Web.Shared.Models.Menu;
+using System.Windows.Input;
 
 namespace SampleBlog.Web.Client.Pages;
 
@@ -46,14 +44,26 @@ public partial class Index
 
     public DishEntry[] Dishes => State.Value?.Dishes ?? Array.Empty<DishEntry>();
 
-    public ICommand AddToMenu
+    public ICommand IncrementDish
+    {
+        get;
+    }
+
+    public ICommand DecrementDish
+    {
+        get;
+    }
+
+    public ICommand RemoveDish
     {
         get;
     }
 
     public Index()
     {
-        AddToMenu = new DelegateCommand<DishEntry>(DoAddToMenu);
+        IncrementDish = new DelegateCommand<DishEntry>(DoIncrementDish);
+        DecrementDish = new DelegateCommand<DishEntry>(DoDecrementDish);
+        RemoveDish = new DelegateCommand<DishEntry>(DoRemoveDish);
         ProductGroups = new TableGroupDefinition<DishEntry>
         {
             GroupName = nameof(DishEntry.GroupName),
@@ -82,8 +92,18 @@ public partial class Index
         }
     }
 
-    private void DoAddToMenu(DishEntry entry)
+    private void DoIncrementDish(DishEntry entry)
     {
-        Dispatcher.Dispatch(new AddToOrderAction(entry));
+        Dispatcher.Dispatch(new IncrementDishAction(entry, 1));
+    }
+
+    private void DoDecrementDish(DishEntry entry)
+    {
+        Dispatcher.Dispatch(new DecrementDishAction(entry, 1));
+    }
+
+    private void DoRemoveDish(DishEntry entry)
+    {
+        Dispatcher.Dispatch(new RemoveDishFromOrderAction(entry));
     }
 }
