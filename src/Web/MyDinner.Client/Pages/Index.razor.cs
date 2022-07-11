@@ -1,4 +1,5 @@
-﻿using Fluxor;
+﻿using System.Globalization;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using SampleBlog.Web.Client.Core;
@@ -9,6 +10,7 @@ using SampleBlog.Web.Client.Store.Menu.Actions;
 using SampleBlog.Web.Client.Store.Order.Actions;
 using SampleBlog.Web.Shared.Models.Menu;
 using System.Windows.Input;
+using SampleBlog.Core.Domain.Entities;
 
 namespace SampleBlog.Web.Client.Pages;
 
@@ -66,7 +68,7 @@ public partial class Index
         RemoveDish = new DelegateCommand<DishEntry>(DoRemoveDish);
         ProductGroups = new TableGroupDefinition<DishEntry>
         {
-            GroupName = nameof(DishEntry.GroupName),
+            GroupName = "Group",
             Indentation = false,
             Expandable = false,
             Selector = dish => dish.GroupName

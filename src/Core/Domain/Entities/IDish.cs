@@ -19,6 +19,11 @@ public interface IDish : IEntity
         get;
     }
 
+    float Calories
+    {
+        get;
+    }
+
     decimal Price
     {
         get;

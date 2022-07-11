@@ -37,7 +37,7 @@ public partial class Calculator
     }
 
     [Parameter]
-    public RenderFragment<decimal> BottomContent
+    public RenderFragment<(float, decimal)> BottomContent
     {
         get;
         set;

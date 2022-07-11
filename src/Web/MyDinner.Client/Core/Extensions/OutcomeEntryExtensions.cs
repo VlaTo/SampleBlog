@@ -1,19 +1,36 @@
-﻿using SampleBlog.Web.Shared.Models.Menu;
+﻿using Microsoft.AspNetCore.Components;
+using SampleBlog.Core.Domain.Entities;
+using SampleBlog.Web.Shared.Models.Menu;
 
 namespace SampleBlog.Web.Client.Core.Extensions;
 
 internal static class OutcomeEntryExtensions
 {
-    public static string? ToString(this OutcomeEntry entry, string? format, IFormatProvider formatProvider)
+    public static MarkupString ToString(this OutcomeEntry outcome, IFormatProvider formatProvider)
     {
-        switch (format)
+        switch (outcome.Units)
         {
-            case "G":
+            case Units.Kilo:
             {
-                return String.Format(formatProvider, "{0:N} {1}", entry.Amount, entry.Units);
+                return new MarkupString(String.Format(formatProvider, "{0:N2} кг.", outcome.Amount));
+            }
+
+            case Units.Grams:
+            {
+                return new MarkupString(String.Format(formatProvider, "{0:N0} гр.", outcome.Amount));
+            }
+
+            case Units.Pieces:
+            {
+                return new MarkupString(String.Format(formatProvider, "{0:N0} кус.", outcome.Amount));
+            }
+
+            case Units.Portion:
+            {
+                return new MarkupString(String.Format(formatProvider, "{0:N0} шт.", outcome.Amount));
             }
         }
 
-        return String.Empty;
+        return new MarkupString();
     }
 }

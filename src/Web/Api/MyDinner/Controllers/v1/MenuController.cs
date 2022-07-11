@@ -67,10 +67,10 @@ namespace SampleBlog.Web.APi.MyDinner.Controllers.v1
                                 Outcome = new OutcomeEntry
                                 {
                                     Amount = dish.Outcome.Amount,
-                                    Units = Units.Custom == dish.Outcome.Units
-                                        ? dish.Outcome.CustomUnits!
-                                        : dish.Outcome.Units.ToString()
+                                    Units = dish.Outcome.Units,
+                                    CustomUnits = dish.Outcome.CustomUnits
                                 },
+                                Calories = dish.Calories,
                                 GroupName = dish.Group?.Name
                             })
                             .ToArray()

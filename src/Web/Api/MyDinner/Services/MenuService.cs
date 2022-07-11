@@ -33,6 +33,7 @@ internal sealed class MenuService : IMenuService
                     },
                     Price = 24.45m,
                     Outcome = new Outcome(150.0f, Units.Grams),
+                    Calories = 230.30f,
                     Group = new ProductGroup
                     {
                         Name = "Group #1"
@@ -48,6 +49,7 @@ internal sealed class MenuService : IMenuService
                     },
                     Price = 110.00m,
                     Outcome = new Outcome(125.0f, Units.Grams),
+                    Calories = 130.25f,
                     Group = new ProductGroup
                     {
                         Name = "Group #2"
@@ -62,9 +64,42 @@ internal sealed class MenuService : IMenuService
                         Name = "Sample product #1"
                     },
                     Price = 150.0m,
+                    Calories = 550.75f,
                     Outcome = new Outcome(1.0f, Units.Pieces),
                     Group = null
-                }
+                },
+                new()
+                {
+                    IsEnabled = true,
+                    Product = new ProductModel
+                    {
+                        Id = 5,
+                        Name = "Sample product #5"
+                    },
+                    Price = 93.20m,
+                    Outcome = new Outcome(90.0f, Units.Grams),
+                    Calories = 345.50f,
+                    Group = new ProductGroup
+                    {
+                        Name = "Group #1"
+                    }
+                },
+                new()
+                {
+                    IsEnabled = true,
+                    Product = new ProductModel
+                    {
+                        Id = 4,
+                        Name = "Sample product #4"
+                    },
+                    Price = 150.0m,
+                    Outcome = new Outcome(170.0f, Units.Grams),
+                    Calories = 768.0f,
+                    Group = new ProductGroup
+                    {
+                        Name = "Group #1"
+                    }
+                },
             }
         };
 

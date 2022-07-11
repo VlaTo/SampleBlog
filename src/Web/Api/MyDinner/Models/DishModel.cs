@@ -24,6 +24,12 @@ internal sealed class DishModel : IDish
         init;
     }
 
+    public float Calories
+    {
+        get;
+        init;
+    }
+
     public decimal Price
     {
         get;

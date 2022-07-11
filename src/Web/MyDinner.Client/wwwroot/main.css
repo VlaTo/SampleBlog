@@ -1,17 +1,25 @@
-﻿.menu-table-header {
+﻿.main-layout {
+    background-color: #F1F1F1;
+}
+
+
+.menu-table-header {
     background-color: lightgrey;
 }
 
 .menu-table-dish-name-column {
-    width: 70%;
+    width: 45%;
 }
 
 .menu-table-dish-outcome-column {
     width: 15%;
 }
+.menu-table-dish-calories-column {
+    width: 15%;
+}
 
 .menu-table-dish-price-column {
-    width: 10%;
+    width: 15%;
 }
 
 .menu-table-dish-actions-column {

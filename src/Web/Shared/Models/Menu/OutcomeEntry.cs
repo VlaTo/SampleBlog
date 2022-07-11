@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using SampleBlog.Core.Domain.Entities;
 
 namespace SampleBlog.Web.Shared.Models.Menu;
 
@@ -13,7 +14,14 @@ public class OutcomeEntry
     }
 
     [JsonPropertyName("units")]
-    public string Units
+    public Units Units
+    {
+        get;
+        set;
+    }
+
+    [JsonPropertyName("custom_units")]
+    public string? CustomUnits
     {
         get;
         set;

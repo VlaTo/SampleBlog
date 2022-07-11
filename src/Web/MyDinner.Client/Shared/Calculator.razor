@@ -2,35 +2,39 @@
 
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
-<dish-calculator>
+<MudElement HtmlTag="DishEntry-calculator" Style="min-height: 120px;">
     @HeaderContent
     <div>
         @if (ModelState.Success == Order.Value.State)
         {
-            <MudElement HtmlTag="div">
-                @{
-                    var entries = Order.Value.Entries;
+            var entries = Order.Value.Entries;
 
-                    if (0 == entries.Count)
-                    {
-                        @EmptyContent;
-                    }
-                    else
-                    {
+            if (0 == entries.Count)
+            {
+                @EmptyContent
+            }
+            else
+            {
+                <MudSimpleTable Hover=true Style="overflow-x: auto;">
+                    <tbody>
+                    @{
                         var list = entries.OrderBy(kvp => kvp.Key.Order);
 
                         foreach (var kvp in list)
                         {
-                            <MudGrid>@RowTemplate.Invoke((kvp.Key, kvp.Value))</MudGrid>
+                                <tr>
+                                    <td>@RowTemplate.Invoke((kvp.Key, kvp.Value))</td>
+                                </tr>
                         }
                     }
-                }
-            </MudElement>
+                    </tbody>
+                </MudSimpleTable>
+            }
         }
         else if (ModelState.Loading == Order.Value.State)
         {
 
         }
     </div>
-    @BottomContent.Invoke(Order.Value.TotalPrice)
-</dish-calculator>
+    @BottomContent.Invoke((Order.Value.TotalCalories, Order.Value.TotalPrice))
+</MudElement>

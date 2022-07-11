@@ -19,6 +19,14 @@ public sealed class OrderState : StateBase
         get;
     }
 
+    public float TotalCalories
+    {
+        get
+        {
+            return Entries.Sum(kvp => kvp.Key.Calories * kvp.Value);
+        }
+    }
+
     public decimal TotalPrice
     {
         get

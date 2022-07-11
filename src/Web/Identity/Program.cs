@@ -177,7 +177,7 @@ using (var scope = app.Services.CreateScope())
         else if (context.Database.IsSqlite())
         {
             /*await context.Database.EnsureCreatedAsync();
-            await context.Database.MigrateAsync();
+            //await context.Database.MigrateAsync();
 
             var seeder = scope.ServiceProvider.GetService<IDatabaseSeeder>();
 

@@ -26,15 +26,22 @@ public sealed class DishEntry
         set;
     }
 
-    [JsonPropertyName("price")]
-    public decimal Price
+    [JsonPropertyName("outcome")]
+    public OutcomeEntry Outcome
     {
         get;
         set;
     }
 
-    [JsonPropertyName("outcome")]
-    public OutcomeEntry Outcome
+    [JsonPropertyName("calories")]
+    public float Calories
+    {
+        get;
+        set;
+    }
+
+    [JsonPropertyName("price")]
+    public decimal Price
     {
         get;
         set;
