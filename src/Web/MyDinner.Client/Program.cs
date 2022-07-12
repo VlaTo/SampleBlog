@@ -13,7 +13,9 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services
-    .AddSingleton<ICurrentDateTimeProvider, CurrentDateTimeProvider>();
+    .AddSingleton<ICurrentDateTimeProvider, CurrentDateTimeProvider>()
+    .AddSingleton<IHashProvider, HashidsHashProvider>()
+    .AddScoped<IMenuClient, HttpMenuClient>();
 
 builder.Services
     .AddOidcAuthentication(options =>

@@ -9,6 +9,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Store\FilteredMenu\**" />
+	  <Content Remove="Store\FilteredMenu\**" />
+	  <EmbeddedResource Remove="Store\FilteredMenu\**" />
+	  <None Remove="Store\FilteredMenu\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Fluxor" Version="5.4.0" />
 		<PackageReference Include="Fluxor.Blazor.Web" Version="5.4.0" />
 		<PackageReference Include="Hashids.net" Version="1.6.1" />
@@ -22,13 +29,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\Core\Domain\Domain.csproj" />
 	  <ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Core\Authentication\" />
 	  <Folder Include="Core\Services\" />
-	  <Folder Include="Store\FilteredMenu\" />
 	</ItemGroup>
 	
 	

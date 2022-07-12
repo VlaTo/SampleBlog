@@ -1,4 +1,5 @@
-﻿using Fluxor;
+﻿using System.Collections.Immutable;
+using Fluxor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using MudBlazor;
@@ -11,17 +12,15 @@ using SampleBlog.Web.Client.Store.Menu.Actions;
 using SampleBlog.Web.Client.Store.Order.Actions;
 using SampleBlog.Web.Shared.Models.Menu;
 using System.Windows.Input;
-using SampleBlog.Web.Client.Store.OriginalMenu;
-using SampleBlog.Web.Client.Store.OriginalMenu.Actions;
 
 namespace SampleBlog.Web.Client.Pages;
 
 public partial class Index
 {
-    private MudChip? chip;
+    private MudChip? selectedFoodCategoryChip;
 
     [Inject]
-    public IState<OriginalMenuState> State
+    public IState<MenuState> State
     {
         get;
         set;
@@ -55,17 +54,29 @@ public partial class Index
         get;
     }
 
-    public Dish[] Dishes => State.Value?.Dishes ?? Array.Empty<Dish>();
+    public ImmutableList<Dish> Dishes => State.Value.Menu;
 
-    public MudChip Chip
+    public ImmutableArray<FoodCategory> FoodCategories => State.Value.FoodCategories;
+
+    public MudChip SelectedFoodCategoryChip
     {
-        get => chip!;
+        get => selectedFoodCategoryChip!;
         set
         {
-            chip = value;
+            selectedFoodCategoryChip = value;
 
-            var text = chip?.Text ?? "(no chip)";
-            Console.WriteLine($"Selected chip: {text}");
+            if (null == selectedFoodCategoryChip)
+            {
+                return;
+            }
+
+            if (String.IsNullOrEmpty(selectedFoodCategoryChip.Text))
+            {
+                Dispatcher.Dispatch(new ResetOriginalMenuFilterAction());
+                return;
+            }
+
+            Dispatcher.Dispatch(new FilterOriginalMenuAction(selectedFoodCategoryChip.Text));
         }
     }
 
@@ -84,6 +95,11 @@ public partial class Index
         get;
     }
 
+    public ICommand OrderNow
+    {
+        get;
+    }
+
     public MudTheme Theme
     {
         get;
@@ -94,12 +110,13 @@ public partial class Index
         IncrementDish = new DelegateCommand<Dish>(DoIncrementDish);
         DecrementDish = new DelegateCommand<Dish>(DoDecrementDish);
         RemoveDish = new DelegateCommand<Dish>(DoRemoveDish);
+        OrderNow = new DelegateCommand(DoOrderNow);
         ProductGroups = new TableGroupDefinition<Dish>
         {
-            GroupName = "Group",
+            GroupName = "FoodCategories",
             Indentation = false,
             Expandable = false,
-            Selector = dish => dish.GroupName
+            Selector = dish => dish.FoodCategory?.Name
         };
         Theme = new MudTheme();
     }
@@ -136,6 +153,11 @@ public partial class Index
     private void DoRemoveDish(Dish entry)
     {
         Dispatcher.Dispatch(new RemoveDishFromOrderAction(entry));
+    }
+
+    private void DoOrderNow()
+    {
+        ;
     }
 
     private void OnDishClick(MouseEventArgs e)

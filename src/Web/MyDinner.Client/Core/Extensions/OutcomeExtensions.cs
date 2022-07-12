@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using SampleBlog.Core.Domain.Entities;
-using SampleBlog.Web.Shared.Models.Menu;
 using Outcome = SampleBlog.Web.Shared.Models.Menu.Outcome;
 
 namespace SampleBlog.Web.Client.Core.Extensions;
 
-internal static class OutcomeEntryExtensions
+internal static class OutcomeExtensions
 {
     public static MarkupString ToString(this Outcome outcome, IFormatProvider formatProvider)
     {

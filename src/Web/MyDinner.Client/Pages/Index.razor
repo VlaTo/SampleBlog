@@ -7,18 +7,19 @@
 @using SampleBlog.Web.Shared.Models.Menu
 
 <PageTitle>Меню - Столовая "Мой Обед"</PageTitle>
-<MudText Typo="Typo.h5" GutterBottom="true">Меню на сегодня: @CurrentDateTimeProvider.CurrentDateTime.ToString("d", CultureInfo.CurrentUICulture)</MudText>
+<MudElement Class="d-flex align-items-center align-content-center align-center mb-6" HtmlTag="div">
+    <MudText Typo=Typo.h4 Align=Align.Left Inline=true>Меню на сегодня</MudText>
+    <MudText Typo=Typo.body2 Align=Align.Left GutterBottom=true Inline=true>@CurrentDateTimeProvider.CurrentDateTime.ToString("d", CultureInfo.CurrentUICulture)</MudText>
+</MudElement>
 
-@*<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
-<MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>*@
+<MudChipSet MultiSelection=false Mandatory=true Filter=true Class="mb-4 mb-lg-2" @bind-SelectedChip=SelectedFoodCategoryChip>
+    <MudChip Variant=Variant.Outlined>Все продукты</MudChip>
+    @for (var index = 0; index < FoodCategories.Length; index++)
+    {
+        var foodCategory = FoodCategories[index];
+        <MudChip Text=@foodCategory.Key Variant=Variant.Outlined>@foodCategory.Name</MudChip>
+    }
 
-<MudChipSet MultiSelection=false Mandatory=true Filter=true Class="mb-4 mb-lg-2" @bind-SelectedChip=Chip>
-    <MudChip Text="all-dihes" Variant=Variant.Outlined>Все блюда</MudChip>
-    <MudChip Text="category1" Variant=Variant.Outlined>Холодные закуски</MudChip>
-    <MudChip Text="category2" Variant=Variant.Outlined>Гарниры</MudChip>
-    <MudChip Text="category3" Variant=Variant.Outlined>Первые блюда</MudChip>
-    <MudChip Text="deserts" Variant=Variant.Outlined>Десерты</MudChip>
 </MudChipSet>
 
 <MudGrid>
@@ -33,16 +34,17 @@
                 ReadOnly=true
                 GroupBy=ProductGroups
                 HeaderClass="menu-table-header">
+
                 @*<ToolBarContent>
                     <MudText>Some text</MudText>
                 </ToolBarContent>*@
-                
+
                 <ColGroup>
-                    <col />
-                    <col />
-                    <col />
-                    <col />
-                    <col />
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
+                    <col/>
                 </ColGroup>
 
                 <GroupHeaderTemplate>
@@ -50,7 +52,7 @@
                         <MudText Align=Align.Left Typo=Typo.h6>@(context.Key ?? "(all other)")</MudText>
                     </MudTh>
                 </GroupHeaderTemplate>
-                
+
                 <HeaderContent>
                     <MudTh Class="menu-table-dish-name-column">
                         <MudTableSortLabel
@@ -71,10 +73,10 @@
                     </MudTh>
                     <MudTh Class="menu-table-dish-actions-column"/>
                 </HeaderContent>
-                
+
                 <RowTemplate>
                     <MudTd Class="menu-table-dish-name-column">
-                        <MudLink Href="#" Style="@($"color: {Theme.Palette.ActionDefault} !important;")" @onclick=OnDishClick>@context.ProductName</MudLink>
+                        <MudLink Style="@($"color: {Theme.Palette.ActionDefault} !important;")" @onclick=OnDishClick>@context.Product.Name</MudLink>
                     </MudTd>
                     <MudTd Class="menu-table-dish-outcome-column">
                         <MudText Align="Align.Center">@context.Outcome.ToString(CultureInfo.CurrentUICulture)</MudText>
@@ -98,7 +100,7 @@
                         </MudIconButton>
                     </MudTd>
                 </RowTemplate>
-                
+
                 <NoRecordsContent>
                     <MudText>No menu</MudText>
                 </NoRecordsContent>
@@ -123,7 +125,7 @@
                 </EmptyContent>
                 <RowTemplate>
                     <div class="d-block">
-                        <MudText Inline=true Typo=Typo.body1>@context.Item1.ProductName</MudText>
+                        <MudText Inline=true Typo=Typo.body1>@context.Item1.Product.Name</MudText>
                     </div>
                     <div class="d-flex justify-space-between">
                         <MudText Align=Align.Start Typo=Typo.body2 Inline=true Class="ml-4">@context.Item1.Calories.ToCalories(CultureInfo.CurrentUICulture)</MudText>
@@ -147,6 +149,7 @@
                     <div class="d-block ml-4 mr-4 pb-4">
                         <MudText Align=Align.Left Typo=Typo.body2 Inline=true>@context.Item1.ToCalories(CultureInfo.CurrentUICulture)</MudText>
                     </div>
+                    <MudButton ButtonType=ButtonType.Button Variant=Variant.Outlined Class="ma-2" Disabled=@(context.Item2 == 0.0m) FullWidth=true Command=OrderNow>Заказать</MudButton>
                 </BottomContent>
             </Calculator>
         </MudPaper>
