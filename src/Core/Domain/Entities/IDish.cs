@@ -29,7 +29,7 @@ public interface IDish : IEntity
         get;
     }
 
-    IProductGroup? Group
+    IFoodCategory? FoodCategory
     {
         get;
     }

@@ -4,7 +4,7 @@ namespace SampleBlog.Web.Client.Store.Order.Actions;
 
 public class IncrementDishAction
 {
-    public DishEntry Entry
+    public Dish Entry
     {
         get;
     }
@@ -14,7 +14,7 @@ public class IncrementDishAction
         get;
     }
 
-    public IncrementDishAction(DishEntry entry, int count)
+    public IncrementDishAction(Dish entry, int count)
     {
         Entry = entry;
         Count = count;

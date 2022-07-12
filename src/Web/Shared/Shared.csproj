@@ -15,7 +15,6 @@
 	<ItemGroup>
 	  <Folder Include="Models\Blog\" />
 	  <Folder Include="Extensions\" />
-	  <Folder Include="Models\Menu\" />
 	</ItemGroup>
 
 	<ItemGroup>

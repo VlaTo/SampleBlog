@@ -9,12 +9,12 @@ public sealed class OrderStateFeature : Feature<OrderState>
 {
     public override string GetName() => nameof(OrderState);
 
-    protected override OrderState GetInitialState() => new(ModelState.Success, ImmutableDictionary<DishEntry, int>.Empty);
+    protected override OrderState GetInitialState() => new(ModelState.Success, ImmutableDictionary<Dish, int>.Empty);
 }
 
 public sealed class OrderState : StateBase
 {
-    public ImmutableDictionary<DishEntry, int> Entries
+    public ImmutableDictionary<Dish, int> Entries
     {
         get;
     }
@@ -35,7 +35,7 @@ public sealed class OrderState : StateBase
         }
     }
 
-    public OrderState(ModelState state, ImmutableDictionary<DishEntry, int> entries)
+    public OrderState(ModelState state, ImmutableDictionary<Dish, int> entries)
         : base(state)
     {
         Entries = entries;

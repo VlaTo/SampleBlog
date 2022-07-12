@@ -7,6 +7,7 @@ using SampleBlog.Core.Domain.Entities;
 using SampleBlog.Web.APi.MyDinner.Configuration;
 using SampleBlog.Web.APi.MyDinner.Features.Queries.GetMenu;
 using SampleBlog.Web.Shared.Models.Menu;
+using Outcome = SampleBlog.Web.Shared.Models.Menu.Outcome;
 
 namespace SampleBlog.Web.APi.MyDinner.Controllers.v1
 {
@@ -53,25 +54,35 @@ namespace SampleBlog.Web.APi.MyDinner.Controllers.v1
 
                 if (result.Succeeded)
                 {
-                    var menu = new MenuEntry
+                    var menu = new Menu
                     {
                         Date = result.Data.Date,
                         IsOpen = result.Data.IsOpen,
                         Dishes = result.Data.Dishes
-                            .Select((dish, index) => new DishEntry
+                            .Select((dish, index) => new Dish
                             {
                                 Order = index,
-                                ProductName = dish.Product.Name,
+                                Product = new Product
+                                {
+                                    Id = dish.Product.Id,
+                                    Name = dish.Product.Name
+                                },
                                 IsEnabled = dish.IsEnabled,
                                 Price = dish.Price,
-                                Outcome = new OutcomeEntry
+                                Outcome = new Outcome
                                 {
                                     Amount = dish.Outcome.Amount,
                                     Units = dish.Outcome.Units,
                                     CustomUnits = dish.Outcome.CustomUnits
                                 },
                                 Calories = dish.Calories,
-                                GroupName = dish.Group?.Name
+                                FoodCategory = dish.FoodCategory != null
+                                    ? new FoodCategory
+                                    {
+                                        Key = dish.FoodCategory.Key,
+                                        Name = dish.FoodCategory.Name
+                                    }
+                                    : null
                             })
                             .ToArray()
                     };

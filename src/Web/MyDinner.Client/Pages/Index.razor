@@ -3,10 +3,8 @@
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
 
 @using System.Globalization
-@using SampleBlog.Core.Domain.Entities
 @using SampleBlog.Web.Client.Core.Extensions
 @using SampleBlog.Web.Shared.Models.Menu
-@using System.Data.SqlTypes
 
 <PageTitle>Меню - Столовая "Мой Обед"</PageTitle>
 <MudText Typo="Typo.h5" GutterBottom="true">Меню на сегодня: @CurrentDateTimeProvider.CurrentDateTime.ToString("d", CultureInfo.CurrentUICulture)</MudText>
@@ -15,19 +13,30 @@
 <MudText Class="mb-8">Welcome to your new app, powered by MudBlazor!</MudText>
 <MudAlert Severity="Severity.Normal">You can find documentation and examples on our website here: <MudLink Href="https://mudblazor.com" Typo="Typo.body2" Color="Color.Inherit"><b>www.mudblazor.com</b></MudLink></MudAlert>*@
 
+<MudChipSet MultiSelection=false Mandatory=true Filter=true Class="mb-4 mb-lg-2" @bind-SelectedChip=Chip>
+    <MudChip Text="all-dihes" Variant=Variant.Outlined>Все блюда</MudChip>
+    <MudChip Text="category1" Variant=Variant.Outlined>Холодные закуски</MudChip>
+    <MudChip Text="category2" Variant=Variant.Outlined>Гарниры</MudChip>
+    <MudChip Text="category3" Variant=Variant.Outlined>Первые блюда</MudChip>
+    <MudChip Text="deserts" Variant=Variant.Outlined>Десерты</MudChip>
+</MudChipSet>
+
 <MudGrid>
     <MudItem xs="9">
         <MudPaper Elevation="10">
             <MudTable
-                T="DishEntry"
+                T="Dish"
                 Hover=true
                 Items=Dishes
                 Loading=IsLoading
+                MultiSelection=false
+                ReadOnly=true
                 GroupBy=ProductGroups
                 HeaderClass="menu-table-header">
-                <ToolBarContent>
+                @*<ToolBarContent>
                     <MudText>Some text</MudText>
-                </ToolBarContent>
+                </ToolBarContent>*@
+                
                 <ColGroup>
                     <col />
                     <col />
@@ -35,15 +44,17 @@
                     <col />
                     <col />
                 </ColGroup>
+
                 <GroupHeaderTemplate>
                     <MudTh colspan="5">
                         <MudText Align=Align.Left Typo=Typo.h6>@(context.Key ?? "(all other)")</MudText>
                     </MudTh>
                 </GroupHeaderTemplate>
+                
                 <HeaderContent>
                     <MudTh Class="menu-table-dish-name-column">
                         <MudTableSortLabel
-                            SortBy=@(new Func<DishEntry, object>(x => x.Order))
+                            SortBy=@(new Func<Dish, object>(x => x.Order))
                             InitialDirection=SortDirection.Ascending
                             Enabled=false>
                             <MudText Align="Align.Left">Название продукта</MudText>
@@ -60,9 +71,10 @@
                     </MudTh>
                     <MudTh Class="menu-table-dish-actions-column"/>
                 </HeaderContent>
+                
                 <RowTemplate>
                     <MudTd Class="menu-table-dish-name-column">
-                        <MudText Align="Align.Start">@context.ProductName</MudText>
+                        <MudLink Href="#" Style="@($"color: {Theme.Palette.ActionDefault} !important;")" @onclick=OnDishClick>@context.ProductName</MudLink>
                     </MudTd>
                     <MudTd Class="menu-table-dish-outcome-column">
                         <MudText Align="Align.Center">@context.Outcome.ToString(CultureInfo.CurrentUICulture)</MudText>
@@ -86,9 +98,11 @@
                         </MudIconButton>
                     </MudTd>
                 </RowTemplate>
+                
                 <NoRecordsContent>
                     <MudText>No menu</MudText>
                 </NoRecordsContent>
+
                 <LoadingContent>
                     <MudText>Loading...</MudText>
                 </LoadingContent>

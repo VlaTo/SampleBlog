@@ -3,7 +3,7 @@
 namespace SampleBlog.Web.Shared.Models.Menu;
 
 [Serializable]
-public class MenuEntry
+public class Menu
 {
     [JsonPropertyName("date")]
     public DateTime Date
@@ -20,14 +20,14 @@ public class MenuEntry
     }
 
     [JsonPropertyName("dishes")]
-    public DishEntry[] Dishes
+    public Dish[] Dishes
     {
         get;
         set;
     }
 
-    public MenuEntry()
+    public Menu()
     {
-        Dishes = Array.Empty<DishEntry>();
+        Dishes = Array.Empty<Dish>();
     }
 }

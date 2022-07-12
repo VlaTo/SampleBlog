@@ -4,7 +4,7 @@ using SampleBlog.Core.Domain.Entities;
 namespace SampleBlog.Web.Shared.Models.Menu;
 
 [Serializable]
-public class OutcomeEntry
+public class Outcome
 {
     [JsonPropertyName("amount")]
     public float Amount

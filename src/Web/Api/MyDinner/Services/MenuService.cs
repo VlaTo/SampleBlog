@@ -16,17 +16,17 @@ internal sealed class MenuService : IMenuService
 
     public Task<IMenu?> GetMenuAsync(DateTime dateTime, CancellationToken cancellationToken = default)
     {
-        var menu = new MenuModel
+        var menu = new Menu
         {
             Id = 1,
             Date = dateTime,
             IsOpen = true,
-            Dishes = new List<DishModel>
+            Dishes = new List<Dish>
             {
                 new()
                 {
                     IsEnabled = true,
-                    Product = new ProductModel
+                    Product = new Product
                     {
                         Id = 2,
                         Name = "Sample product #2"
@@ -34,15 +34,16 @@ internal sealed class MenuService : IMenuService
                     Price = 24.45m,
                     Outcome = new Outcome(150.0f, Units.Grams),
                     Calories = 230.30f,
-                    Group = new ProductGroup
+                    Group = new FoodCategory
                     {
+                        Key = "group-1",
                         Name = "Group #1"
                     }
                 },
                 new()
                 {
                     IsEnabled = true,
-                    Product = new ProductModel
+                    Product = new Product
                     {
                         Id = 3,
                         Name = "Sample product #3"
@@ -50,15 +51,16 @@ internal sealed class MenuService : IMenuService
                     Price = 110.00m,
                     Outcome = new Outcome(125.0f, Units.Grams),
                     Calories = 130.25f,
-                    Group = new ProductGroup
+                    Group = new FoodCategory
                     {
+                        Key = "group-2",
                         Name = "Group #2"
                     }
                 },
                 new()
                 {
                     IsEnabled = false,
-                    Product = new ProductModel
+                    Product = new Product
                     {
                         Id = 1,
                         Name = "Sample product #1"
@@ -71,7 +73,7 @@ internal sealed class MenuService : IMenuService
                 new()
                 {
                     IsEnabled = true,
-                    Product = new ProductModel
+                    Product = new Product
                     {
                         Id = 5,
                         Name = "Sample product #5"
@@ -79,15 +81,16 @@ internal sealed class MenuService : IMenuService
                     Price = 93.20m,
                     Outcome = new Outcome(90.0f, Units.Grams),
                     Calories = 345.50f,
-                    Group = new ProductGroup
+                    Group = new FoodCategory
                     {
+                        Key = "group-1",
                         Name = "Group #1"
                     }
                 },
                 new()
                 {
                     IsEnabled = true,
-                    Product = new ProductModel
+                    Product = new Product
                     {
                         Id = 4,
                         Name = "Sample product #4"
@@ -95,8 +98,9 @@ internal sealed class MenuService : IMenuService
                     Price = 150.0m,
                     Outcome = new Outcome(170.0f, Units.Grams),
                     Calories = 768.0f,
-                    Group = new ProductGroup
+                    Group = new FoodCategory
                     {
+                        Key = "group-1",
                         Name = "Group #1"
                     }
                 },

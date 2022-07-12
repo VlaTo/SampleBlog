@@ -2,9 +2,9 @@
 
 namespace SampleBlog.Web.APi.MyDinner.Models;
 
-internal sealed class ProductModel : IProduct
+public class FoodCategory : IFoodCategory
 {
-    public long Id
+    public string Key
     {
         get;
         init;

@@ -2,9 +2,9 @@
 
 namespace SampleBlog.Web.APi.MyDinner.Models;
 
-internal sealed class DishModel : IDish
+internal sealed class Dish : IDish
 {
-    public ProductModel Product
+    public Product Product
     {
         get;
         init;
@@ -36,9 +36,9 @@ internal sealed class DishModel : IDish
         init;
     }
 
-    IProductGroup? IDish.Group => Group;
+    IFoodCategory? IDish.FoodCategory => Group;
 
-    public ProductGroup? Group
+    public FoodCategory? Group
     {
         get;
         init;

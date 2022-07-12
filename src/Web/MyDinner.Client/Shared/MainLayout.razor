@@ -1,7 +1,12 @@
 ﻿@inherits LayoutComponentBase
 
 <MudThemeProvider />
-<MudDialogProvider />
+<MudDialogProvider 
+    FullWidth=true
+    MaxWidth="MaxWidth.Small"
+    CloseButton=true
+    Position=DialogPosition.Center
+/>
 <MudSnackbarProvider />
 
 <MudLayout Class="main-layout">

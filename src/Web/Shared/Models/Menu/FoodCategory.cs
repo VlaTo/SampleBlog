@@ -3,16 +3,23 @@
 namespace SampleBlog.Web.Shared.Models.Menu;
 
 [Serializable]
-public class ProductGroupEntry : IEquatable<ProductGroupEntry>
+public class FoodCategory : IEquatable<FoodCategory>
 {
-    [JsonPropertyName("name")]
-    public string? Name
+    [JsonPropertyName("key")]
+    public string Key
     {
         get;
         set;
     }
 
-    public bool Equals(ProductGroupEntry? other)
+    [JsonPropertyName("name")]
+    public string Name
+    {
+        get;
+        set;
+    }
+
+    public bool Equals(FoodCategory? other)
     {
         if (ReferenceEquals(null, other))
         {
@@ -44,7 +51,7 @@ public class ProductGroupEntry : IEquatable<ProductGroupEntry>
             return false;
         }
 
-        return Equals((ProductGroupEntry)obj);
+        return Equals((FoodCategory)obj);
     }
 
     public override int GetHashCode()

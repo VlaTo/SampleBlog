@@ -3,7 +3,7 @@
 namespace SampleBlog.Web.Shared.Models.Menu;
 
 [Serializable]
-public sealed class DishEntry
+public sealed class Dish
 {
     [JsonPropertyName("order")]
     public int Order
@@ -20,14 +20,14 @@ public sealed class DishEntry
     }
 
     [JsonPropertyName("product")]
-    public string ProductName
+    public Product Product
     {
         get;
         set;
     }
 
     [JsonPropertyName("outcome")]
-    public OutcomeEntry Outcome
+    public Outcome Outcome
     {
         get;
         set;
@@ -47,8 +47,8 @@ public sealed class DishEntry
         set;
     }
 
-    [JsonPropertyName("group-name")]
-    public string? GroupName
+    [JsonPropertyName("food-category")]
+    public FoodCategory? FoodCategory
     {
         get;
         set;

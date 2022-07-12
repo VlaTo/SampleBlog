@@ -23,7 +23,7 @@ public partial class Calculator
     }
 
     [Parameter]
-    public RenderFragment<(DishEntry, int)> RowTemplate
+    public RenderFragment<(Dish, int)> RowTemplate
     {
         get;
         set;

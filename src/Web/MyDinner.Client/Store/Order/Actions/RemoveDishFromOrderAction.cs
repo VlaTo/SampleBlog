@@ -4,12 +4,12 @@ namespace SampleBlog.Web.Client.Store.Order.Actions;
 
 public sealed class RemoveDishFromOrderAction
 {
-    public DishEntry Entry
+    public Dish Entry
     {
         get;
     }
 
-    public RemoveDishFromOrderAction(DishEntry entry)
+    public RemoveDishFromOrderAction(Dish entry)
     {
         Entry = entry;
     }

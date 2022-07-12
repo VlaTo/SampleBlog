@@ -2,7 +2,7 @@
 
 namespace SampleBlog.Web.APi.MyDinner.Models;
 
-internal sealed class MenuModel : IMenu
+internal sealed class Menu : IMenu
 {
     public long Id
     {
@@ -24,14 +24,14 @@ internal sealed class MenuModel : IMenu
 
     IReadOnlyList<IDish> IMenu.Dishes => Dishes;
 
-    public List<DishModel> Dishes
+    public List<Dish> Dishes
     {
         get;
         internal set;
     }
 
-    public MenuModel()
+    public Menu()
     {
-        Dishes = new List<DishModel>();
+        Dishes = new List<Dish>();
     }
 }
